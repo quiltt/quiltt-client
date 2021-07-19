@@ -19,7 +19,6 @@ yarn add @quiltt/client
 ```tsx
 import * as React from 'react'
 
-import { gql, useQuery } from '@apollo/client'
 import { QuilttProvider } from '@quiltt/client'
 
 export const App: React.FC = () => {
