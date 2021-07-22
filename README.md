@@ -16,7 +16,14 @@ yarn add @quiltt/client
 
 ## Usage
 
+```yaml
+# .env file
+VITE_APP_QUILTT_APP_ID=xxxx-xxxx-xxxx # React app scaffolded with Vite 2
+REACT_APP_QUILTT_APP_ID=xxxx-xxxx-xxxx # React app scaffolded with Create React App
+```
+
 ```tsx
+// App entrypoint
 import * as React from 'react'
 
 import { QuilttProvider } from '@quiltt/client'
@@ -30,6 +37,14 @@ export const App: React.FC = () => {
 }
 export default App
 ```
+
+## Exported Hooks/Providers/Components
+
+- `useQuilttAuth`
+- `useQuilttClient`
+- `useQuilttContext`
+- `QuilttProvider`
+- `PlaidLinkButton`
 
 ## License
 

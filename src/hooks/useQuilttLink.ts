@@ -13,9 +13,6 @@ const useQuilttLink = (token: string | undefined) => {
   const previewLink = usePreviewLink(graphqlEndpoint.toString())
   const batchLink = new BatchHttpLink({ uri: graphqlEndpoint.toString() })
 
-  // errorLink -> authLink -> previewLink &-> httpLink
-  //                                      |-> batchLink
-
   const quilttLink = ApolloLink.from([
     errorLink,
     authLink,
