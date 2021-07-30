@@ -1,9 +1,12 @@
 import Axios from 'axios'
+import type { AxiosResponse } from 'axios'
 
-const ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
-const CONFIG = {
+const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
+
+const DEFAULT_CONFIG = {
   headers: {
     'Content-Type': 'application/json',
+    Authorization: '',
   },
   validateStatus: (status: number) => status < 500,
 }
@@ -17,24 +20,45 @@ export type PasscodePayload = {
   passcode: string
 }
 
-const useQuilttAuth = (appId: string) => {
+export type AuthAPI = {
+  ping: (token: string) => Promise<AxiosResponse<any>>
+  identify: (user: UsernamePayload) => Promise<AxiosResponse<any>>
+  authenticate: (
+    user: UsernamePayload,
+    passcode: string
+  ) => Promise<AxiosResponse<any>>
+  revoke: (token: string) => Promise<AxiosResponse<any>>
+}
+
+export const useQuilttAuth = (
+  appId: string,
+  endpoint = DEFAULT_ENDPOINT,
+  appConfig = DEFAULT_CONFIG
+): AuthAPI => {
   const AuthAPI = {
-    ping: () => {
-      return Axios.get(ENDPOINT, CONFIG)
+    ping: (token: string) => {
+      const config = { ...appConfig }
+      config.headers.Authorization = `Bearer ${token}`
+
+      return Axios.get(endpoint, config)
     },
     identify: (username: UsernamePayload) => {
-      return Axios.post(
-        ENDPOINT,
-        { session: { app_id: appId, ...username } },
-        CONFIG
-      )
+      const config = { ...appConfig }
+      return Axios.post(endpoint, { session: { appId, ...username } }, config)
     },
     authenticate: (username: UsernamePayload, passcode: string) => {
+      const config = { ...appConfig }
       return Axios.put(
-        ENDPOINT,
-        { session: { app_id: appId, ...username, passcode } },
-        CONFIG
+        endpoint,
+        { session: { appId, ...username, passcode } },
+        config
       )
+    },
+    revoke: (token: string) => {
+      const config = { ...appConfig }
+      config.headers.Authorization = `Bearer ${token}`
+
+      return Axios.delete(endpoint, config)
     },
   }
 
