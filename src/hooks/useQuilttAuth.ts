@@ -11,9 +11,9 @@ const DEFAULT_CONFIG = {
   validateStatus: (status: number) => status < 500,
 }
 
-export type UsernamePayload = {
-  email: string
-}
+export type Strategies = 'phone' | 'email'
+
+export type UsernamePayload = { email: string } | { phone: string }
 
 export type PasscodePayload = {
   email: string
