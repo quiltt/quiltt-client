@@ -9,6 +9,11 @@ const DEFAULT_CONFIG = {
     Authorization: '',
   },
   validateStatus: (status: number) => status < 500,
+} as AuthConfig
+
+export type AuthConfig = {
+  headers: Record<string, unknown>
+  validateStatus: (status: number) => boolean
 }
 
 export type Strategies = 'phone' | 'email'
@@ -32,8 +37,8 @@ export type AuthAPI = {
 
 export const useQuilttAuth = (
   appId: string,
-  endpoint = DEFAULT_ENDPOINT,
-  appConfig = DEFAULT_CONFIG
+  endpoint: string = DEFAULT_ENDPOINT,
+  appConfig: AuthConfig = DEFAULT_CONFIG
 ): AuthAPI => {
   const AuthAPI = {
     ping: (token: string) => {
