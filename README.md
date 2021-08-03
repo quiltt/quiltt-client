@@ -1,6 +1,6 @@
 # @quiltt/client
 
-[![NPM](https://img.shields.io/npm/v/@quiltt/client.svg)](https://www.npmjs.com/package/@quiltt/client) ![Tests](https://github.com/quiltt/quiltt-client/workflows/Tests/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/5eaa96b14406f6e71103/maintainability)](https://codeclimate.com/github/quiltt/quiltt-client/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/5eaa96b14406f6e71103/test_coverage)](https://codeclimate.com/github/quiltt/quiltt-client/test_coverage) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/tree/master/react)
+[![NPM](https://img.shields.io/npm/v/@quiltt/client.svg)](https://www.npmjs.com/package/@quiltt/client) ![Tests](https://github.com/quiltt/quiltt-client/workflows/Tests/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/c460e568ab8d141a9ea4/maintainability)](https://codeclimate.com/github/quiltt/quiltt-client/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/c460e568ab8d141a9ea4/test_coverage)](https://codeclimate.com/github/quiltt/quiltt-client/test_coverage) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-airbnb-brightgreen.svg)](https://github.com/airbnb/javascript/tree/master/react)
 
 |                      |                                                                        |
 | -------------------- | ---------------------------------------------------------------------- |
