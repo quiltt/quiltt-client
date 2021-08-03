@@ -1,6 +1,6 @@
 import { setContext } from '@apollo/client/link/context'
 
-const useAuthLink = (token: string | undefined) => {
+const useAuthLink = (token: string | null) => {
   return setContext((_, { headers }) => {
     return {
       headers: {

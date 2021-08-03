@@ -1,5 +1,5 @@
-import Axios from 'axios'
 import type { AxiosResponse } from 'axios'
+import Axios from 'axios'
 
 const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
 
@@ -28,10 +28,7 @@ export type PasscodePayload = {
 export type AuthAPI = {
   ping: (token: string) => Promise<AxiosResponse<any>>
   identify: (user: UsernamePayload) => Promise<AxiosResponse<any>>
-  authenticate: (
-    user: UsernamePayload,
-    passcode: string
-  ) => Promise<AxiosResponse<any>>
+  authenticate: (user: UsernamePayload, passcode: string) => Promise<AxiosResponse<any>>
   revoke: (token: string) => Promise<AxiosResponse<any>>
 }
 
@@ -53,11 +50,7 @@ export const useQuilttAuth = (
     },
     authenticate: (username: UsernamePayload, passcode: string) => {
       const config = { ...appConfig }
-      return Axios.put(
-        endpoint,
-        { session: { appId, ...username, passcode } },
-        config
-      )
+      return Axios.put(endpoint, { session: { appId, ...username, passcode } }, config)
     },
     revoke: (token: string) => {
       const config = { ...appConfig }

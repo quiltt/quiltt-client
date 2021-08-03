@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { PlaidItemStatus, usePlaidItemSyncStatusQuery } from '../../types'
 import { timeDifference } from '../../utils/date'
-
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 import DefaultSyncingComponent from '../DefaultSyncingComponent'
 

@@ -28,7 +28,7 @@ const NewConnectionButton: React.FC<Props> = ({
   children,
   onSuccess,
 }) => {
-  const [linkToken, setLinkToken] = React.useState<string | null>()
+  const [linkToken, setLinkToken] = React.useState<string | null>(null)
   const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateMutation({
     variables: {
       input: {
@@ -39,8 +39,7 @@ const NewConnectionButton: React.FC<Props> = ({
       },
     },
     onCompleted(data: PlaidLinkTokenCreateMutation) {
-      const { record, errors } =
-        data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
+      const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
 
       if (errors) {
         errors.map((err) => {

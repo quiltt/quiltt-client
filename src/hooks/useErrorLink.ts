@@ -6,6 +6,7 @@ const useErrorLink = () => {
       graphQLErrors.map((error) => {
         // eslint-disable-next-line no-console
         console.log(
+          // eslint-disable-next-line max-len
           `[GraphQL error]: Message: ${error.message}, Location: ${error.locations}, Path: ${error.path}`
         )
 

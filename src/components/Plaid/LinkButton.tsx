@@ -1,10 +1,9 @@
 import * as React from 'react'
-
 import type {
-  PlaidLinkOnSuccess,
   PlaidLinkOnEvent,
   PlaidLinkOnExit,
   PlaidLinkOnLoad,
+  PlaidLinkOnSuccess,
 } from 'react-plaid-link'
 
 import {
@@ -21,7 +20,6 @@ export type PlaidLinkButtonProps = PlaidLinkTokenCreateInput & {
   onExit?: PlaidLinkOnExit
   onEvent?: PlaidLinkOnEvent
   onLoad?: PlaidLinkOnLoad
-  callback?: (data: any) => void
 }
 
 export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = (props) => {
@@ -32,16 +30,14 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = (props) => {
     children,
     onSuccess,
     onEvent,
-    callback,
     onLoad = null,
     ...buttonProps
   } = props
 
-  const [linkToken, setLinkToken] = React.useState<string | undefined>()
+  const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
   const handlePlaidTokenCreated = (data: PlaidLinkTokenCreateMutation) => {
-    const { record, errors } =
-      data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
+    const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
     if (errors)
       errors.map((error) => {
         throw new Error(`${error.code}: ${error.message}`)

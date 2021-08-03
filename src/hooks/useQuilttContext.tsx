@@ -1,12 +1,12 @@
 import * as React from 'react'
 
 export type QuilttContextType = {
-  authorizationToken: string | undefined
-  setAuthorizationToken: (token: string | undefined) => void
+  authorizationToken: string | null
+  setAuthorizationToken: (token: string | null) => void
 }
 
 export const QuilttContext = React.createContext<QuilttContextType>({
-  authorizationToken: undefined,
+  authorizationToken: null,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setAuthorizationToken: (_token) => {},
 })

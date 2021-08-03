@@ -1,15 +1,13 @@
+/* eslint-disable max-len */
 import { gql } from '@apollo/client'
-
 import * as Apollo from '@apollo/client'
 
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
   [K in keyof T]: T[K]
 }
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> }
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
 const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -1335,9 +1333,7 @@ export type MerchantsQueryVariables = Exact<{
 }>
 
 export type MerchantsQuery = { __typename?: 'Query' } & {
-  merchants?: Maybe<
-    Array<{ __typename?: 'Merchant' } & Pick<Merchant, 'name' | 'id'>>
-  >
+  merchants?: Maybe<Array<{ __typename?: 'Merchant' } & Pick<Merchant, 'name' | 'id'>>>
 }
 
 export type CategoriesQueryVariables = Exact<{ [key: string]: never }>
@@ -1366,10 +1362,7 @@ export type BillDetailQuery = { __typename?: 'Query' } & {
     { __typename?: 'Bill' } & {
       account?: Maybe<{ __typename?: 'Account' } & Pick<Account, 'id' | 'name'>>
       transactions: Array<
-        { __typename?: 'Transaction' } & Pick<
-          Transaction,
-          'id' | 'amount' | 'date'
-        >
+        { __typename?: 'Transaction' } & Pick<Transaction, 'id' | 'amount' | 'date'>
       >
     } & BillFragmentFragment
   >
@@ -1383,10 +1376,7 @@ export type BillTemplateQueryVariables = Exact<{
 
 export type BillTemplateQuery = { __typename?: 'Query' } & {
   recurrence?: Maybe<
-    { __typename?: 'Recurrence' } & Pick<
-      Recurrence,
-      'name' | 'frequency' | 'amount'
-    > & {
+    { __typename?: 'Recurrence' } & Pick<Recurrence, 'name' | 'frequency' | 'amount'> & {
         merchant?: Maybe<{ __typename?: 'Merchant' } & Pick<Merchant, 'id'>>
         category?: Maybe<{ __typename?: 'Category' } & Pick<Category, 'id'>>
       }
@@ -1401,9 +1391,7 @@ export type CreateBillMutation = { __typename?: 'Mutation' } & {
   billCreate?: Maybe<
     { __typename?: 'BillCreatePayload' } & {
       record?: Maybe<{ __typename?: 'Bill' } & BillFragmentFragment>
-      errors?: Maybe<
-        Array<{ __typename?: 'Error' } & Pick<Error, 'message' | 'path'>>
-      >
+      errors?: Maybe<Array<{ __typename?: 'Error' } & Pick<Error, 'message' | 'path'>>>
     }
   >
 }
@@ -1416,9 +1404,7 @@ export type UpdateBillMutation = { __typename?: 'Mutation' } & {
   billUpdate?: Maybe<
     { __typename?: 'BillUpdatePayload' } & {
       record?: Maybe<{ __typename?: 'Bill' } & BillFragmentFragment>
-      errors?: Maybe<
-        Array<{ __typename?: 'Error' } & Pick<Error, 'message' | 'path'>>
-      >
+      errors?: Maybe<Array<{ __typename?: 'Error' } & Pick<Error, 'message' | 'path'>>>
     }
   >
 }
@@ -1437,16 +1423,10 @@ export type RoundUpActivateMutationVariables = Exact<{
 
 export type RoundUpActivateMutation = { __typename?: 'Mutation' } & {
   roundUpSetStartTime?: Maybe<
-    { __typename?: 'RoundUpSetStartTimePayload' } & Pick<
-      RoundUpSetStartTimePayload,
-      'success'
-    > & {
+    { __typename?: 'RoundUpSetStartTimePayload' } & Pick<RoundUpSetStartTimePayload, 'success'> & {
         record?: Maybe<
           { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-              balance: { __typename?: 'LedgerBalance' } & Pick<
-                LedgerBalance,
-                'id' | 'available'
-              >
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
               transactionsConnection: {
                 __typename?: 'TransactionConnection'
               } & {
@@ -1502,14 +1482,9 @@ export type RoundUpsBankConnectionsAccountsListQuery = {
       }
   >
   plaidItem?: Maybe<
-    { __typename?: 'PlaidItem' } & Pick<
-      PlaidItem,
-      'id' | 'name' | 'status' | 'syncedAt'
-    > & {
+    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
         logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
-        accounts: Array<
-          { __typename?: 'Account' } & Pick<Account, 'id' | 'name'>
-        >
+        accounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id' | 'name'>>
       }
   >
 }
@@ -1525,17 +1500,11 @@ export type RoundUpsBankConnectionsAccountsListItemQuery = {
   roundUp?: Maybe<
     { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
         fundingAccount?: Maybe<{ __typename?: 'Account' } & Pick<Account, 'id'>>
-        subscribedAccounts: Array<
-          { __typename?: 'Account' } & Pick<Account, 'id'>
-        >
-        availableAccounts: Array<
-          { __typename?: 'Account' } & Pick<Account, 'id'>
-        >
+        subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+        availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
       }
   >
-  account?: Maybe<
-    { __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'lastFourDigits'>
-  >
+  account?: Maybe<{ __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'lastFourDigits'>>
 }
 
 export type RoundUpsAccountsSubscribeMutationVariables = Exact<{
@@ -1548,12 +1517,8 @@ export type RoundUpsAccountsSubscribeMutation = { __typename?: 'Mutation' } & {
     { __typename?: 'RoundUpSubscribedAccountsAddPayload' } & {
       record?: Maybe<
         { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-            subscribedAccounts: Array<
-              { __typename?: 'Account' } & Pick<Account, 'id'>
-            >
-            availableAccounts: Array<
-              { __typename?: 'Account' } & Pick<Account, 'id'>
-            >
+            subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+            availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
           }
       >
     }
@@ -1572,12 +1537,8 @@ export type RoundUpsAccountsUnsubscribeMutation = {
     { __typename?: 'RoundUpSubscribedAccountsRemovePayload' } & {
       record?: Maybe<
         { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-            subscribedAccounts: Array<
-              { __typename?: 'Account' } & Pick<Account, 'id'>
-            >
-            availableAccounts: Array<
-              { __typename?: 'Account' } & Pick<Account, 'id'>
-            >
+            subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+            availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
           }
       >
     }
@@ -1630,10 +1591,7 @@ export type RoundUpsRecentActivityQueryVariables = Exact<{
 export type RoundUpsRecentActivityQuery = { __typename?: 'Query' } & {
   roundUp?: Maybe<
     { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-        recentActivity: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'current'
-        >
+        recentActivity: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'current'>
       }
   >
 }
@@ -1659,9 +1617,7 @@ export type RoundUpsBankConnectionsSummaryCardHeaderQueryVariables = Exact<{
 export type RoundUpsBankConnectionsSummaryCardHeaderQuery = {
   __typename?: 'Query'
 } & {
-  plaidItems?: Maybe<
-    Array<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>>
-  >
+  plaidItems?: Maybe<Array<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>>>
 }
 
 export type RoundUpsBankConnectionsCardQueryVariables = Exact<{
@@ -1685,17 +1641,14 @@ export type RoundUpsBankConnectionsListQueryVariables = Exact<{
 export type RoundUpsBankConnectionsListQuery = { __typename?: 'Query' } & {
   roundUp?: Maybe<
     { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-        fundingAccount?: Maybe<
-          { __typename?: 'Account' } & AccountFragmentFragment
-        >
+        fundingAccount?: Maybe<{ __typename?: 'Account' } & AccountFragmentFragment>
       }
   >
   plaidItems?: Maybe<
     Array<
-      { __typename?: 'PlaidItem' } & Pick<
-        PlaidItem,
-        'id' | 'name' | 'status' | 'syncedAt'
-      > & { logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>> }
+      { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
+          logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
+        }
     >
   >
 }
@@ -1708,16 +1661,13 @@ export type RoundUpsBankConnectionsListItemQueryVariables = Exact<{
 export type RoundUpsBankConnectionsListItemQuery = { __typename?: 'Query' } & {
   roundUp?: Maybe<
     { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-        fundingAccount?: Maybe<
-          { __typename?: 'Account' } & AccountFragmentFragment
-        >
+        fundingAccount?: Maybe<{ __typename?: 'Account' } & AccountFragmentFragment>
       }
   >
   plaidItem?: Maybe<
-    { __typename?: 'PlaidItem' } & Pick<
-      PlaidItem,
-      'id' | 'name' | 'status' | 'syncedAt'
-    > & { logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>> }
+    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
+        logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
+      }
   >
 }
 
@@ -1747,9 +1697,7 @@ export type RoundUpsPauseMutationVariables = Exact<{
 export type RoundUpsPauseMutation = { __typename?: 'Mutation' } & {
   roundUpPause?: Maybe<
     { __typename?: 'RoundUpPausePayload' } & {
-      record?: Maybe<
-        { __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>
-      >
+      record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
     }
   >
 }
@@ -1761,9 +1709,7 @@ export type RoundUpsResumeMutationVariables = Exact<{
 export type RoundUpsResumeMutation = { __typename?: 'Mutation' } & {
   roundUpResume?: Maybe<
     { __typename?: 'RoundUpResumePayload' } & {
-      record?: Maybe<
-        { __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>
-      >
+      record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
     }
   >
 }
@@ -1802,34 +1748,13 @@ export type RoundUpHistoryQueryVariables = Exact<{
 export type RoundUpHistoryQuery = { __typename?: 'Query' } & {
   roundUp?: Maybe<
     { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
-        day0: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day1: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day2: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day3: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day4: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day5: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
-        day6: { __typename?: 'LedgerBalance' } & Pick<
-          LedgerBalance,
-          'id' | 'available'
-        >
+        day0: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day1: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day2: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day3: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day4: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day5: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day6: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
       }
   >
 }
@@ -1883,13 +1808,8 @@ export type CreateRoundUpMutationVariables = Exact<{ [key: string]: never }>
 
 export type CreateRoundUpMutation = { __typename?: 'Mutation' } & {
   roundUpCreate?: Maybe<
-    { __typename?: 'RoundUpCreatePayload' } & Pick<
-      RoundUpCreatePayload,
-      'success'
-    > & {
-        record?: Maybe<
-          { __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>
-        >
+    { __typename?: 'RoundUpCreatePayload' } & Pick<RoundUpCreatePayload, 'success'> & {
+        record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
       }
   >
 }
@@ -1897,9 +1817,7 @@ export type CreateRoundUpMutation = { __typename?: 'Mutation' } & {
 export type PlaidItemsQueryVariables = Exact<{ [key: string]: never }>
 
 export type PlaidItemsQuery = { __typename?: 'Query' } & {
-  plaidItems?: Maybe<
-    Array<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>
-  >
+  plaidItems?: Maybe<Array<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>>
 }
 
 export type PlaidItemSyncStatusQueryVariables = Exact<{
@@ -1907,9 +1825,7 @@ export type PlaidItemSyncStatusQueryVariables = Exact<{
 }>
 
 export type PlaidItemSyncStatusQuery = { __typename?: 'Query' } & {
-  plaidItem?: Maybe<
-    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'status' | 'syncedAt'>
-  >
+  plaidItem?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'status' | 'syncedAt'>>
 }
 
 export type PlaidLinkTokenCreateMutationVariables = Exact<{
@@ -1920,10 +1836,7 @@ export type PlaidLinkTokenCreateMutation = { __typename?: 'Mutation' } & {
   plaidLinkTokenCreate?: Maybe<
     { __typename?: 'PlaidLinkTokenCreatePayload' } & {
       record?: Maybe<
-        { __typename?: 'PlaidLinkToken' } & Pick<
-          PlaidLinkToken,
-          'linkToken' | 'expiration'
-        >
+        { __typename?: 'PlaidLinkToken' } & Pick<PlaidLinkToken, 'linkToken' | 'expiration'>
       >
       errors?: Maybe<
         Array<
@@ -1947,10 +1860,7 @@ export type PlaidLinkTokenCreateForUpdateMutation = {
   plaidLinkTokenCreateForUpdate?: Maybe<
     { __typename?: 'PlaidLinkTokenCreateForUpdatePayload' } & {
       record?: Maybe<
-        { __typename?: 'PlaidLinkToken' } & Pick<
-          PlaidLinkToken,
-          'linkToken' | 'expiration'
-        >
+        { __typename?: 'PlaidLinkToken' } & Pick<PlaidLinkToken, 'linkToken' | 'expiration'>
       >
       errors?: Maybe<
         Array<
@@ -1973,12 +1883,7 @@ export type PlaidItemCreateMutation = { __typename?: 'Mutation' } & {
     { __typename?: 'PlaidItemCreatePayload' } & {
       record?: Maybe<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>
       errors?: Maybe<
-        Array<
-          { __typename?: 'PlaidAPIError' } & Pick<
-            PlaidApiError,
-            'displayMessage'
-          >
-        >
+        Array<{ __typename?: 'PlaidAPIError' } & Pick<PlaidApiError, 'displayMessage'>>
       >
     }
   >
@@ -1990,10 +1895,9 @@ export type PlaidItemUnlinkMutationVariables = Exact<{
 
 export type PlaidItemUnlinkMutation = { __typename?: 'Mutation' } & {
   plaidItemDelete?: Maybe<
-    { __typename?: 'PlaidItemDeletePayload' } & Pick<
-      PlaidItemDeletePayload,
-      'success'
-    > & { record?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>> }
+    { __typename?: 'PlaidItemDeletePayload' } & Pick<PlaidItemDeletePayload, 'success'> & {
+        record?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>>
+      }
   >
 }
 
@@ -2026,9 +1930,7 @@ export type ProfileUpdateMutation = { __typename?: 'Mutation' } & {
   profileUpdate?: Maybe<
     { __typename?: 'ProfileUpdatePayload' } & {
       record?: Maybe<{ __typename?: 'Profile' } & ProfileFragmentFragment>
-      errors?: Maybe<
-        Array<{ __typename?: 'Error' } & Pick<Error, 'path' | 'message'>>
-      >
+      errors?: Maybe<Array<{ __typename?: 'Error' } & Pick<Error, 'path' | 'message'>>>
     }
   >
 }
@@ -2042,9 +1944,7 @@ export type BillFragmentFragment = { __typename?: 'Bill' } & Pick<
   Bill,
   'id' | 'name' | 'amount' | 'frequency' | 'nextPaymentDate' | 'status'
 > & {
-    category?: Maybe<
-      { __typename?: 'Category' } & Pick<Category, 'name' | 'id' | 'emoji'>
-    >
+    category?: Maybe<{ __typename?: 'Category' } & Pick<Category, 'name' | 'id' | 'emoji'>>
   }
 
 export type PlaidItemFragmentFragment = { __typename?: 'PlaidItem' } & Pick<
@@ -2053,14 +1953,8 @@ export type PlaidItemFragmentFragment = { __typename?: 'PlaidItem' } & Pick<
 > & {
     logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
     accounts: Array<
-      { __typename?: 'Account' } & Pick<
-        Account,
-        'id' | 'name' | 'lastFourDigits' | 'type'
-      > & {
-          balance: { __typename?: 'LedgerBalance' } & Pick<
-            LedgerBalance,
-            'current'
-          >
+      { __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'lastFourDigits' | 'type'> & {
+          balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
         }
     >
   }
@@ -2147,31 +2041,17 @@ export function useMerchantsQuery(
   baseOptions: Apollo.QueryHookOptions<MerchantsQuery, MerchantsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<MerchantsQuery, MerchantsQueryVariables>(
-    MerchantsDocument,
-    options
-  )
+  return Apollo.useQuery<MerchantsQuery, MerchantsQueryVariables>(MerchantsDocument, options)
 }
 export function useMerchantsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    MerchantsQuery,
-    MerchantsQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<MerchantsQuery, MerchantsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<MerchantsQuery, MerchantsQueryVariables>(
-    MerchantsDocument,
-    options
-  )
+  return Apollo.useLazyQuery<MerchantsQuery, MerchantsQueryVariables>(MerchantsDocument, options)
 }
 export type MerchantsQueryHookResult = ReturnType<typeof useMerchantsQuery>
-export type MerchantsLazyQueryHookResult = ReturnType<
-  typeof useMerchantsLazyQuery
->
-export type MerchantsQueryResult = Apollo.QueryResult<
-  MerchantsQuery,
-  MerchantsQueryVariables
->
+export type MerchantsLazyQueryHookResult = ReturnType<typeof useMerchantsLazyQuery>
+export type MerchantsQueryResult = Apollo.QueryResult<MerchantsQuery, MerchantsQueryVariables>
 export const CategoriesDocument = gql`
   query Categories {
     categories {
@@ -2200,37 +2080,20 @@ export const CategoriesDocument = gql`
  * });
  */
 export function useCategoriesQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    CategoriesQuery,
-    CategoriesQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<CategoriesQuery, CategoriesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(
-    CategoriesDocument,
-    options
-  )
+  return Apollo.useQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options)
 }
 export function useCategoriesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CategoriesQuery,
-    CategoriesQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<CategoriesQuery, CategoriesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(
-    CategoriesDocument,
-    options
-  )
+  return Apollo.useLazyQuery<CategoriesQuery, CategoriesQueryVariables>(CategoriesDocument, options)
 }
 export type CategoriesQueryHookResult = ReturnType<typeof useCategoriesQuery>
-export type CategoriesLazyQueryHookResult = ReturnType<
-  typeof useCategoriesLazyQuery
->
-export type CategoriesQueryResult = Apollo.QueryResult<
-  CategoriesQuery,
-  CategoriesQueryVariables
->
+export type CategoriesLazyQueryHookResult = ReturnType<typeof useCategoriesLazyQuery>
+export type CategoriesQueryResult = Apollo.QueryResult<CategoriesQuery, CategoriesQueryVariables>
 export const BillsDocument = gql`
   query Bills {
     bills {
@@ -2259,26 +2122,17 @@ export function useBillsQuery(
   baseOptions?: Apollo.QueryHookOptions<BillsQuery, BillsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<BillsQuery, BillsQueryVariables>(
-    BillsDocument,
-    options
-  )
+  return Apollo.useQuery<BillsQuery, BillsQueryVariables>(BillsDocument, options)
 }
 export function useBillsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<BillsQuery, BillsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<BillsQuery, BillsQueryVariables>(
-    BillsDocument,
-    options
-  )
+  return Apollo.useLazyQuery<BillsQuery, BillsQueryVariables>(BillsDocument, options)
 }
 export type BillsQueryHookResult = ReturnType<typeof useBillsQuery>
 export type BillsLazyQueryHookResult = ReturnType<typeof useBillsLazyQuery>
-export type BillsQueryResult = Apollo.QueryResult<
-  BillsQuery,
-  BillsQueryVariables
->
+export type BillsQueryResult = Apollo.QueryResult<BillsQuery, BillsQueryVariables>
 export const BillDetailDocument = gql`
   query BillDetail($id: ID!) {
     bill(id: $id) {
@@ -2314,37 +2168,20 @@ export const BillDetailDocument = gql`
  * });
  */
 export function useBillDetailQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    BillDetailQuery,
-    BillDetailQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<BillDetailQuery, BillDetailQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<BillDetailQuery, BillDetailQueryVariables>(
-    BillDetailDocument,
-    options
-  )
+  return Apollo.useQuery<BillDetailQuery, BillDetailQueryVariables>(BillDetailDocument, options)
 }
 export function useBillDetailLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    BillDetailQuery,
-    BillDetailQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<BillDetailQuery, BillDetailQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<BillDetailQuery, BillDetailQueryVariables>(
-    BillDetailDocument,
-    options
-  )
+  return Apollo.useLazyQuery<BillDetailQuery, BillDetailQueryVariables>(BillDetailDocument, options)
 }
 export type BillDetailQueryHookResult = ReturnType<typeof useBillDetailQuery>
-export type BillDetailLazyQueryHookResult = ReturnType<
-  typeof useBillDetailLazyQuery
->
-export type BillDetailQueryResult = Apollo.QueryResult<
-  BillDetailQuery,
-  BillDetailQueryVariables
->
+export type BillDetailLazyQueryHookResult = ReturnType<typeof useBillDetailLazyQuery>
+export type BillDetailQueryResult = Apollo.QueryResult<BillDetailQuery, BillDetailQueryVariables>
 export const BillTemplateDocument = gql`
   query BillTemplate($categoryId: ID, $merchantId: ID, $name: String) {
     recurrence(categoryId: $categoryId, merchantId: $merchantId, name: $name) {
@@ -2380,10 +2217,7 @@ export const BillTemplateDocument = gql`
  * });
  */
 export function useBillTemplateQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    BillTemplateQuery,
-    BillTemplateQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<BillTemplateQuery, BillTemplateQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<BillTemplateQuery, BillTemplateQueryVariables>(
@@ -2392,10 +2226,7 @@ export function useBillTemplateQuery(
   )
 }
 export function useBillTemplateLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    BillTemplateQuery,
-    BillTemplateQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<BillTemplateQuery, BillTemplateQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<BillTemplateQuery, BillTemplateQueryVariables>(
@@ -2403,12 +2234,8 @@ export function useBillTemplateLazyQuery(
     options
   )
 }
-export type BillTemplateQueryHookResult = ReturnType<
-  typeof useBillTemplateQuery
->
-export type BillTemplateLazyQueryHookResult = ReturnType<
-  typeof useBillTemplateLazyQuery
->
+export type BillTemplateQueryHookResult = ReturnType<typeof useBillTemplateQuery>
+export type BillTemplateLazyQueryHookResult = ReturnType<typeof useBillTemplateLazyQuery>
 export type BillTemplateQueryResult = Apollo.QueryResult<
   BillTemplateQuery,
   BillTemplateQueryVariables
@@ -2450,10 +2277,7 @@ export type CreateBillMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useCreateBillMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateBillMutation,
-    CreateBillMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<CreateBillMutation, CreateBillMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<CreateBillMutation, CreateBillMutationVariables>(
@@ -2461,9 +2285,7 @@ export function useCreateBillMutation(
     options
   )
 }
-export type CreateBillMutationHookResult = ReturnType<
-  typeof useCreateBillMutation
->
+export type CreateBillMutationHookResult = ReturnType<typeof useCreateBillMutation>
 export type CreateBillMutationResult = Apollo.MutationResult<CreateBillMutation>
 export type CreateBillMutationOptions = Apollo.BaseMutationOptions<
   CreateBillMutation,
@@ -2506,10 +2328,7 @@ export type UpdateBillMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useUpdateBillMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateBillMutation,
-    UpdateBillMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<UpdateBillMutation, UpdateBillMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useMutation<UpdateBillMutation, UpdateBillMutationVariables>(
@@ -2517,9 +2336,7 @@ export function useUpdateBillMutation(
     options
   )
 }
-export type UpdateBillMutationHookResult = ReturnType<
-  typeof useUpdateBillMutation
->
+export type UpdateBillMutationHookResult = ReturnType<typeof useUpdateBillMutation>
 export type UpdateBillMutationResult = Apollo.MutationResult<UpdateBillMutation>
 export type UpdateBillMutationOptions = Apollo.BaseMutationOptions<
   UpdateBillMutation,
@@ -2549,35 +2366,25 @@ export const NextPaycheckQueryDocument = gql`
  * });
  */
 export function useNextPaycheckQueryQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    NextPaycheckQueryQuery,
-    NextPaycheckQueryQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<NextPaycheckQueryQuery, NextPaycheckQueryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    NextPaycheckQueryQuery,
-    NextPaycheckQueryQueryVariables
-  >(NextPaycheckQueryDocument, options)
+  return Apollo.useQuery<NextPaycheckQueryQuery, NextPaycheckQueryQueryVariables>(
+    NextPaycheckQueryDocument,
+    options
+  )
 }
 export function useNextPaycheckQueryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    NextPaycheckQueryQuery,
-    NextPaycheckQueryQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<NextPaycheckQueryQuery, NextPaycheckQueryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    NextPaycheckQueryQuery,
-    NextPaycheckQueryQueryVariables
-  >(NextPaycheckQueryDocument, options)
+  return Apollo.useLazyQuery<NextPaycheckQueryQuery, NextPaycheckQueryQueryVariables>(
+    NextPaycheckQueryDocument,
+    options
+  )
 }
-export type NextPaycheckQueryQueryHookResult = ReturnType<
-  typeof useNextPaycheckQueryQuery
->
-export type NextPaycheckQueryLazyQueryHookResult = ReturnType<
-  typeof useNextPaycheckQueryLazyQuery
->
+export type NextPaycheckQueryQueryHookResult = ReturnType<typeof useNextPaycheckQueryQuery>
+export type NextPaycheckQueryLazyQueryHookResult = ReturnType<typeof useNextPaycheckQueryLazyQuery>
 export type NextPaycheckQueryQueryResult = Apollo.QueryResult<
   NextPaycheckQueryQuery,
   NextPaycheckQueryQueryVariables
@@ -2635,16 +2442,13 @@ export function useRoundUpActivateMutation(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RoundUpActivateMutation,
-    RoundUpActivateMutationVariables
-  >(RoundUpActivateDocument, options)
+  return Apollo.useMutation<RoundUpActivateMutation, RoundUpActivateMutationVariables>(
+    RoundUpActivateDocument,
+    options
+  )
 }
-export type RoundUpActivateMutationHookResult = ReturnType<
-  typeof useRoundUpActivateMutation
->
-export type RoundUpActivateMutationResult =
-  Apollo.MutationResult<RoundUpActivateMutation>
+export type RoundUpActivateMutationHookResult = ReturnType<typeof useRoundUpActivateMutation>
+export type RoundUpActivateMutationResult = Apollo.MutationResult<RoundUpActivateMutation>
 export type RoundUpActivateMutationOptions = Apollo.BaseMutationOptions<
   RoundUpActivateMutation,
   RoundUpActivateMutationVariables
@@ -2689,10 +2493,10 @@ export function useRoundUpActivateDateSearchQuery(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    RoundUpActivateDateSearchQuery,
-    RoundUpActivateDateSearchQueryVariables
-  >(RoundUpActivateDateSearchDocument, options)
+  return Apollo.useQuery<RoundUpActivateDateSearchQuery, RoundUpActivateDateSearchQueryVariables>(
+    RoundUpActivateDateSearchDocument,
+    options
+  )
 }
 export function useRoundUpActivateDateSearchLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -2717,10 +2521,7 @@ export type RoundUpActivateDateSearchQueryResult = Apollo.QueryResult<
   RoundUpActivateDateSearchQueryVariables
 >
 export const RoundUpsBankConnectionsAccountsListDocument = gql`
-  query RoundUpsBankConnectionsAccountsList(
-    $roundUpId: ID!
-    $bankConnectionId: ID!
-  ) {
+  query RoundUpsBankConnectionsAccountsList($roundUpId: ID!, $bankConnectionId: ID!) {
     roundUp(id: $roundUpId) {
       id
       fundingAccount {
@@ -2795,10 +2596,7 @@ export type RoundUpsBankConnectionsAccountsListQueryResult = Apollo.QueryResult<
   RoundUpsBankConnectionsAccountsListQueryVariables
 >
 export const RoundUpsBankConnectionsAccountsListItemDocument = gql`
-  query RoundUpsBankConnectionsAccountsListItem(
-    $roundUpId: ID!
-    $accountId: ID!
-  ) {
+  query RoundUpsBankConnectionsAccountsListItem($roundUpId: ID!, $accountId: ID!) {
     roundUp(id: $roundUpId) {
       id
       fundingAccount {
@@ -2863,13 +2661,13 @@ export function useRoundUpsBankConnectionsAccountsListItemLazyQuery(
 export type RoundUpsBankConnectionsAccountsListItemQueryHookResult = ReturnType<
   typeof useRoundUpsBankConnectionsAccountsListItemQuery
 >
-export type RoundUpsBankConnectionsAccountsListItemLazyQueryHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsAccountsListItemLazyQuery>
-export type RoundUpsBankConnectionsAccountsListItemQueryResult =
-  Apollo.QueryResult<
-    RoundUpsBankConnectionsAccountsListItemQuery,
-    RoundUpsBankConnectionsAccountsListItemQueryVariables
-  >
+export type RoundUpsBankConnectionsAccountsListItemLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAccountsListItemLazyQuery
+>
+export type RoundUpsBankConnectionsAccountsListItemQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsAccountsListItemQuery,
+  RoundUpsBankConnectionsAccountsListItemQueryVariables
+>
 export const RoundUpsAccountsSubscribeDocument = gql`
   mutation RoundUpsAccountsSubscribe($id: ID!, $accountId: ID!) {
     roundUpSubscribedAccountsAdd(input: { id: $id, accountIds: [$accountId] }) {
@@ -2925,16 +2723,13 @@ export type RoundUpsAccountsSubscribeMutationHookResult = ReturnType<
 >
 export type RoundUpsAccountsSubscribeMutationResult =
   Apollo.MutationResult<RoundUpsAccountsSubscribeMutation>
-export type RoundUpsAccountsSubscribeMutationOptions =
-  Apollo.BaseMutationOptions<
-    RoundUpsAccountsSubscribeMutation,
-    RoundUpsAccountsSubscribeMutationVariables
-  >
+export type RoundUpsAccountsSubscribeMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsAccountsSubscribeMutation,
+  RoundUpsAccountsSubscribeMutationVariables
+>
 export const RoundUpsAccountsUnsubscribeDocument = gql`
   mutation RoundUpsAccountsUnsubscribe($id: ID!, $accountId: ID!) {
-    roundUpSubscribedAccountsRemove(
-      input: { id: $id, accountIds: [$accountId] }
-    ) {
+    roundUpSubscribedAccountsRemove(input: { id: $id, accountIds: [$accountId] }) {
       record {
         id
         subscribedAccounts {
@@ -2987,11 +2782,10 @@ export type RoundUpsAccountsUnsubscribeMutationHookResult = ReturnType<
 >
 export type RoundUpsAccountsUnsubscribeMutationResult =
   Apollo.MutationResult<RoundUpsAccountsUnsubscribeMutation>
-export type RoundUpsAccountsUnsubscribeMutationOptions =
-  Apollo.BaseMutationOptions<
-    RoundUpsAccountsUnsubscribeMutation,
-    RoundUpsAccountsUnsubscribeMutationVariables
-  >
+export type RoundUpsAccountsUnsubscribeMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsAccountsUnsubscribeMutation,
+  RoundUpsAccountsUnsubscribeMutationVariables
+>
 export const RoundUpsBankConnectionsAddFundingDocument = gql`
   mutation RoundUpsBankConnectionsAddFunding($roundUpId: ID!, $accountId: ID!) {
     roundUpSetFundingAccount(input: { id: $roundUpId, accountId: $accountId }) {
@@ -3000,9 +2794,7 @@ export const RoundUpsBankConnectionsAddFundingDocument = gql`
         id
       }
     }
-    roundUpSubscribedAccountsAdd(
-      input: { id: $roundUpId, accountIds: [$accountId] }
-    ) {
+    roundUpSubscribedAccountsAdd(input: { id: $roundUpId, accountIds: [$accountId] }) {
       success
       record {
         id
@@ -3010,11 +2802,10 @@ export const RoundUpsBankConnectionsAddFundingDocument = gql`
     }
   }
 `
-export type RoundUpsBankConnectionsAddFundingMutationFn =
-  Apollo.MutationFunction<
-    RoundUpsBankConnectionsAddFundingMutation,
-    RoundUpsBankConnectionsAddFundingMutationVariables
-  >
+export type RoundUpsBankConnectionsAddFundingMutationFn = Apollo.MutationFunction<
+  RoundUpsBankConnectionsAddFundingMutation,
+  RoundUpsBankConnectionsAddFundingMutationVariables
+>
 
 /**
  * __useRoundUpsBankConnectionsAddFundingMutation__
@@ -3051,19 +2842,13 @@ export type RoundUpsBankConnectionsAddFundingMutationHookResult = ReturnType<
 >
 export type RoundUpsBankConnectionsAddFundingMutationResult =
   Apollo.MutationResult<RoundUpsBankConnectionsAddFundingMutation>
-export type RoundUpsBankConnectionsAddFundingMutationOptions =
-  Apollo.BaseMutationOptions<
-    RoundUpsBankConnectionsAddFundingMutation,
-    RoundUpsBankConnectionsAddFundingMutationVariables
-  >
+export type RoundUpsBankConnectionsAddFundingMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsBankConnectionsAddFundingMutation,
+  RoundUpsBankConnectionsAddFundingMutationVariables
+>
 export const RoundUpsBankConnectionsAddSubscriptionDocument = gql`
-  mutation RoundUpsBankConnectionsAddSubscription(
-    $roundUpId: ID!
-    $accountIds: [ID!]!
-  ) {
-    roundUpSubscribedAccountsAdd(
-      input: { id: $roundUpId, accountIds: $accountIds }
-    ) {
+  mutation RoundUpsBankConnectionsAddSubscription($roundUpId: ID!, $accountIds: [ID!]!) {
+    roundUpSubscribedAccountsAdd(input: { id: $roundUpId, accountIds: $accountIds }) {
       success
       record {
         id
@@ -3071,11 +2856,10 @@ export const RoundUpsBankConnectionsAddSubscriptionDocument = gql`
     }
   }
 `
-export type RoundUpsBankConnectionsAddSubscriptionMutationFn =
-  Apollo.MutationFunction<
-    RoundUpsBankConnectionsAddSubscriptionMutation,
-    RoundUpsBankConnectionsAddSubscriptionMutationVariables
-  >
+export type RoundUpsBankConnectionsAddSubscriptionMutationFn = Apollo.MutationFunction<
+  RoundUpsBankConnectionsAddSubscriptionMutation,
+  RoundUpsBankConnectionsAddSubscriptionMutationVariables
+>
 
 /**
  * __useRoundUpsBankConnectionsAddSubscriptionMutation__
@@ -3107,15 +2891,15 @@ export function useRoundUpsBankConnectionsAddSubscriptionMutation(
     RoundUpsBankConnectionsAddSubscriptionMutationVariables
   >(RoundUpsBankConnectionsAddSubscriptionDocument, options)
 }
-export type RoundUpsBankConnectionsAddSubscriptionMutationHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsAddSubscriptionMutation>
+export type RoundUpsBankConnectionsAddSubscriptionMutationHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAddSubscriptionMutation
+>
 export type RoundUpsBankConnectionsAddSubscriptionMutationResult =
   Apollo.MutationResult<RoundUpsBankConnectionsAddSubscriptionMutation>
-export type RoundUpsBankConnectionsAddSubscriptionMutationOptions =
-  Apollo.BaseMutationOptions<
-    RoundUpsBankConnectionsAddSubscriptionMutation,
-    RoundUpsBankConnectionsAddSubscriptionMutationVariables
-  >
+export type RoundUpsBankConnectionsAddSubscriptionMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsBankConnectionsAddSubscriptionMutation,
+  RoundUpsBankConnectionsAddSubscriptionMutationVariables
+>
 export const RoundUpsRecentActivityDocument = gql`
   query RoundUpsRecentActivity($roundUpId: ID!, $since: Date!) {
     roundUp(id: $roundUpId) {
@@ -3152,10 +2936,10 @@ export function useRoundUpsRecentActivityQuery(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    RoundUpsRecentActivityQuery,
-    RoundUpsRecentActivityQueryVariables
-  >(RoundUpsRecentActivityDocument, options)
+  return Apollo.useQuery<RoundUpsRecentActivityQuery, RoundUpsRecentActivityQueryVariables>(
+    RoundUpsRecentActivityDocument,
+    options
+  )
 }
 export function useRoundUpsRecentActivityLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -3164,10 +2948,10 @@ export function useRoundUpsRecentActivityLazyQuery(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    RoundUpsRecentActivityQuery,
-    RoundUpsRecentActivityQueryVariables
-  >(RoundUpsRecentActivityDocument, options)
+  return Apollo.useLazyQuery<RoundUpsRecentActivityQuery, RoundUpsRecentActivityQueryVariables>(
+    RoundUpsRecentActivityDocument,
+    options
+  )
 }
 export type RoundUpsRecentActivityQueryHookResult = ReturnType<
   typeof useRoundUpsRecentActivityQuery
@@ -3230,15 +3014,16 @@ export function useRoundUpsBankConnectionsSummaryCardFooterLazyQuery(
     RoundUpsBankConnectionsSummaryCardFooterQueryVariables
   >(RoundUpsBankConnectionsSummaryCardFooterDocument, options)
 }
-export type RoundUpsBankConnectionsSummaryCardFooterQueryHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsSummaryCardFooterQuery>
-export type RoundUpsBankConnectionsSummaryCardFooterLazyQueryHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsSummaryCardFooterLazyQuery>
-export type RoundUpsBankConnectionsSummaryCardFooterQueryResult =
-  Apollo.QueryResult<
-    RoundUpsBankConnectionsSummaryCardFooterQuery,
-    RoundUpsBankConnectionsSummaryCardFooterQueryVariables
-  >
+export type RoundUpsBankConnectionsSummaryCardFooterQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardFooterQuery
+>
+export type RoundUpsBankConnectionsSummaryCardFooterLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardFooterLazyQuery
+>
+export type RoundUpsBankConnectionsSummaryCardFooterQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsSummaryCardFooterQuery,
+  RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+>
 export const RoundUpsBankConnectionsSummaryCardHeaderDocument = gql`
   query RoundUpsBankConnectionsSummaryCardHeader {
     plaidItems {
@@ -3286,15 +3071,16 @@ export function useRoundUpsBankConnectionsSummaryCardHeaderLazyQuery(
     RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
   >(RoundUpsBankConnectionsSummaryCardHeaderDocument, options)
 }
-export type RoundUpsBankConnectionsSummaryCardHeaderQueryHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsSummaryCardHeaderQuery>
-export type RoundUpsBankConnectionsSummaryCardHeaderLazyQueryHookResult =
-  ReturnType<typeof useRoundUpsBankConnectionsSummaryCardHeaderLazyQuery>
-export type RoundUpsBankConnectionsSummaryCardHeaderQueryResult =
-  Apollo.QueryResult<
-    RoundUpsBankConnectionsSummaryCardHeaderQuery,
-    RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
-  >
+export type RoundUpsBankConnectionsSummaryCardHeaderQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardHeaderQuery
+>
+export type RoundUpsBankConnectionsSummaryCardHeaderLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardHeaderLazyQuery
+>
+export type RoundUpsBankConnectionsSummaryCardHeaderQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsSummaryCardHeaderQuery,
+  RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+>
 export const RoundUpsBankConnectionsCardDocument = gql`
   query RoundUpsBankConnectionsCard($roundUpId: ID!, $id: ID!) {
     roundUp(id: $roundUpId) {
@@ -3604,22 +3390,16 @@ export type RoundUpsPauseMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useRoundUpsPauseMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RoundUpsPauseMutation,
-    RoundUpsPauseMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<RoundUpsPauseMutation, RoundUpsPauseMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RoundUpsPauseMutation,
-    RoundUpsPauseMutationVariables
-  >(RoundUpsPauseDocument, options)
+  return Apollo.useMutation<RoundUpsPauseMutation, RoundUpsPauseMutationVariables>(
+    RoundUpsPauseDocument,
+    options
+  )
 }
-export type RoundUpsPauseMutationHookResult = ReturnType<
-  typeof useRoundUpsPauseMutation
->
-export type RoundUpsPauseMutationResult =
-  Apollo.MutationResult<RoundUpsPauseMutation>
+export type RoundUpsPauseMutationHookResult = ReturnType<typeof useRoundUpsPauseMutation>
+export type RoundUpsPauseMutationResult = Apollo.MutationResult<RoundUpsPauseMutation>
 export type RoundUpsPauseMutationOptions = Apollo.BaseMutationOptions<
   RoundUpsPauseMutation,
   RoundUpsPauseMutationVariables
@@ -3657,22 +3437,16 @@ export type RoundUpsResumeMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useRoundUpsResumeMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RoundUpsResumeMutation,
-    RoundUpsResumeMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<RoundUpsResumeMutation, RoundUpsResumeMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    RoundUpsResumeMutation,
-    RoundUpsResumeMutationVariables
-  >(RoundUpsResumeDocument, options)
+  return Apollo.useMutation<RoundUpsResumeMutation, RoundUpsResumeMutationVariables>(
+    RoundUpsResumeDocument,
+    options
+  )
 }
-export type RoundUpsResumeMutationHookResult = ReturnType<
-  typeof useRoundUpsResumeMutation
->
-export type RoundUpsResumeMutationResult =
-  Apollo.MutationResult<RoundUpsResumeMutation>
+export type RoundUpsResumeMutationHookResult = ReturnType<typeof useRoundUpsResumeMutation>
+export type RoundUpsResumeMutationResult = Apollo.MutationResult<RoundUpsResumeMutation>
 export type RoundUpsResumeMutationOptions = Apollo.BaseMutationOptions<
   RoundUpsResumeMutation,
   RoundUpsResumeMutationVariables
@@ -3713,10 +3487,7 @@ export const RoundUpSummaryDocument = gql`
  * });
  */
 export function useRoundUpSummaryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RoundUpSummaryQuery,
-    RoundUpSummaryQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>(
@@ -3725,10 +3496,7 @@ export function useRoundUpSummaryQuery(
   )
 }
 export function useRoundUpSummaryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RoundUpSummaryQuery,
-    RoundUpSummaryQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>(
@@ -3736,12 +3504,8 @@ export function useRoundUpSummaryLazyQuery(
     options
   )
 }
-export type RoundUpSummaryQueryHookResult = ReturnType<
-  typeof useRoundUpSummaryQuery
->
-export type RoundUpSummaryLazyQueryHookResult = ReturnType<
-  typeof useRoundUpSummaryLazyQuery
->
+export type RoundUpSummaryQueryHookResult = ReturnType<typeof useRoundUpSummaryQuery>
+export type RoundUpSummaryLazyQueryHookResult = ReturnType<typeof useRoundUpSummaryLazyQuery>
 export type RoundUpSummaryQueryResult = Apollo.QueryResult<
   RoundUpSummaryQuery,
   RoundUpSummaryQueryVariables
@@ -3815,10 +3579,7 @@ export const RoundUpHistoryDocument = gql`
  * });
  */
 export function useRoundUpHistoryQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RoundUpHistoryQuery,
-    RoundUpHistoryQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useQuery<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>(
@@ -3827,10 +3588,7 @@ export function useRoundUpHistoryQuery(
   )
 }
 export function useRoundUpHistoryLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RoundUpHistoryQuery,
-    RoundUpHistoryQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>(
@@ -3838,12 +3596,8 @@ export function useRoundUpHistoryLazyQuery(
     options
   )
 }
-export type RoundUpHistoryQueryHookResult = ReturnType<
-  typeof useRoundUpHistoryQuery
->
-export type RoundUpHistoryLazyQueryHookResult = ReturnType<
-  typeof useRoundUpHistoryLazyQuery
->
+export type RoundUpHistoryQueryHookResult = ReturnType<typeof useRoundUpHistoryQuery>
+export type RoundUpHistoryLazyQueryHookResult = ReturnType<typeof useRoundUpHistoryLazyQuery>
 export type RoundUpHistoryQueryResult = Apollo.QueryResult<
   RoundUpHistoryQuery,
   RoundUpHistoryQueryVariables
@@ -3883,16 +3637,13 @@ export const RoundUpTransactionsDocument = gql`
  * });
  */
 export function useRoundUpTransactionsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RoundUpTransactionsQuery,
-    RoundUpTransactionsQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    RoundUpTransactionsQuery,
-    RoundUpTransactionsQueryVariables
-  >(RoundUpTransactionsDocument, options)
+  return Apollo.useQuery<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>(
+    RoundUpTransactionsDocument,
+    options
+  )
 }
 export function useRoundUpTransactionsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -3901,14 +3652,12 @@ export function useRoundUpTransactionsLazyQuery(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    RoundUpTransactionsQuery,
-    RoundUpTransactionsQueryVariables
-  >(RoundUpTransactionsDocument, options)
+  return Apollo.useLazyQuery<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>(
+    RoundUpTransactionsDocument,
+    options
+  )
 }
-export type RoundUpTransactionsQueryHookResult = ReturnType<
-  typeof useRoundUpTransactionsQuery
->
+export type RoundUpTransactionsQueryHookResult = ReturnType<typeof useRoundUpTransactionsQuery>
 export type RoundUpTransactionsLazyQueryHookResult = ReturnType<
   typeof useRoundUpTransactionsLazyQuery
 >
@@ -3943,31 +3692,17 @@ export function useRoundUpsQuery(
   baseOptions?: Apollo.QueryHookOptions<RoundUpsQuery, RoundUpsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<RoundUpsQuery, RoundUpsQueryVariables>(
-    RoundUpsDocument,
-    options
-  )
+  return Apollo.useQuery<RoundUpsQuery, RoundUpsQueryVariables>(RoundUpsDocument, options)
 }
 export function useRoundUpsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RoundUpsQuery,
-    RoundUpsQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpsQuery, RoundUpsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<RoundUpsQuery, RoundUpsQueryVariables>(
-    RoundUpsDocument,
-    options
-  )
+  return Apollo.useLazyQuery<RoundUpsQuery, RoundUpsQueryVariables>(RoundUpsDocument, options)
 }
 export type RoundUpsQueryHookResult = ReturnType<typeof useRoundUpsQuery>
-export type RoundUpsLazyQueryHookResult = ReturnType<
-  typeof useRoundUpsLazyQuery
->
-export type RoundUpsQueryResult = Apollo.QueryResult<
-  RoundUpsQuery,
-  RoundUpsQueryVariables
->
+export type RoundUpsLazyQueryHookResult = ReturnType<typeof useRoundUpsLazyQuery>
+export type RoundUpsQueryResult = Apollo.QueryResult<RoundUpsQuery, RoundUpsQueryVariables>
 export const RoundUpHomeDocument = gql`
   query RoundUpHome($id: ID!) {
     roundUp(id: $id) {
@@ -3997,22 +3732,13 @@ export const RoundUpHomeDocument = gql`
  * });
  */
 export function useRoundUpHomeQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    RoundUpHomeQuery,
-    RoundUpHomeQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<RoundUpHomeQuery, RoundUpHomeQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<RoundUpHomeQuery, RoundUpHomeQueryVariables>(
-    RoundUpHomeDocument,
-    options
-  )
+  return Apollo.useQuery<RoundUpHomeQuery, RoundUpHomeQueryVariables>(RoundUpHomeDocument, options)
 }
 export function useRoundUpHomeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    RoundUpHomeQuery,
-    RoundUpHomeQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpHomeQuery, RoundUpHomeQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useLazyQuery<RoundUpHomeQuery, RoundUpHomeQueryVariables>(
@@ -4021,13 +3747,8 @@ export function useRoundUpHomeLazyQuery(
   )
 }
 export type RoundUpHomeQueryHookResult = ReturnType<typeof useRoundUpHomeQuery>
-export type RoundUpHomeLazyQueryHookResult = ReturnType<
-  typeof useRoundUpHomeLazyQuery
->
-export type RoundUpHomeQueryResult = Apollo.QueryResult<
-  RoundUpHomeQuery,
-  RoundUpHomeQueryVariables
->
+export type RoundUpHomeLazyQueryHookResult = ReturnType<typeof useRoundUpHomeLazyQuery>
+export type RoundUpHomeQueryResult = Apollo.QueryResult<RoundUpHomeQuery, RoundUpHomeQueryVariables>
 export const CreateRoundUpDocument = gql`
   mutation CreateRoundUp {
     roundUpCreate(input: {}) {
@@ -4061,22 +3782,16 @@ export type CreateRoundUpMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useCreateRoundUpMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateRoundUpMutation,
-    CreateRoundUpMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<CreateRoundUpMutation, CreateRoundUpMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    CreateRoundUpMutation,
-    CreateRoundUpMutationVariables
-  >(CreateRoundUpDocument, options)
+  return Apollo.useMutation<CreateRoundUpMutation, CreateRoundUpMutationVariables>(
+    CreateRoundUpDocument,
+    options
+  )
 }
-export type CreateRoundUpMutationHookResult = ReturnType<
-  typeof useCreateRoundUpMutation
->
-export type CreateRoundUpMutationResult =
-  Apollo.MutationResult<CreateRoundUpMutation>
+export type CreateRoundUpMutationHookResult = ReturnType<typeof useCreateRoundUpMutation>
+export type CreateRoundUpMutationResult = Apollo.MutationResult<CreateRoundUpMutation>
 export type CreateRoundUpMutationOptions = Apollo.BaseMutationOptions<
   CreateRoundUpMutation,
   CreateRoundUpMutationVariables
@@ -4106,37 +3821,20 @@ export const PlaidItemsDocument = gql`
  * });
  */
 export function usePlaidItemsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    PlaidItemsQuery,
-    PlaidItemsQueryVariables
-  >
+  baseOptions?: Apollo.QueryHookOptions<PlaidItemsQuery, PlaidItemsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<PlaidItemsQuery, PlaidItemsQueryVariables>(
-    PlaidItemsDocument,
-    options
-  )
+  return Apollo.useQuery<PlaidItemsQuery, PlaidItemsQueryVariables>(PlaidItemsDocument, options)
 }
 export function usePlaidItemsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    PlaidItemsQuery,
-    PlaidItemsQueryVariables
-  >
+  baseOptions?: Apollo.LazyQueryHookOptions<PlaidItemsQuery, PlaidItemsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<PlaidItemsQuery, PlaidItemsQueryVariables>(
-    PlaidItemsDocument,
-    options
-  )
+  return Apollo.useLazyQuery<PlaidItemsQuery, PlaidItemsQueryVariables>(PlaidItemsDocument, options)
 }
 export type PlaidItemsQueryHookResult = ReturnType<typeof usePlaidItemsQuery>
-export type PlaidItemsLazyQueryHookResult = ReturnType<
-  typeof usePlaidItemsLazyQuery
->
-export type PlaidItemsQueryResult = Apollo.QueryResult<
-  PlaidItemsQuery,
-  PlaidItemsQueryVariables
->
+export type PlaidItemsLazyQueryHookResult = ReturnType<typeof usePlaidItemsLazyQuery>
+export type PlaidItemsQueryResult = Apollo.QueryResult<PlaidItemsQuery, PlaidItemsQueryVariables>
 export const PlaidItemSyncStatusDocument = gql`
   query PlaidItemSyncStatus($id: ID!) {
     plaidItem(id: $id) {
@@ -4164,16 +3862,13 @@ export const PlaidItemSyncStatusDocument = gql`
  * });
  */
 export function usePlaidItemSyncStatusQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    PlaidItemSyncStatusQuery,
-    PlaidItemSyncStatusQueryVariables
-  >
+  baseOptions: Apollo.QueryHookOptions<PlaidItemSyncStatusQuery, PlaidItemSyncStatusQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<
-    PlaidItemSyncStatusQuery,
-    PlaidItemSyncStatusQueryVariables
-  >(PlaidItemSyncStatusDocument, options)
+  return Apollo.useQuery<PlaidItemSyncStatusQuery, PlaidItemSyncStatusQueryVariables>(
+    PlaidItemSyncStatusDocument,
+    options
+  )
 }
 export function usePlaidItemSyncStatusLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
@@ -4182,14 +3877,12 @@ export function usePlaidItemSyncStatusLazyQuery(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<
-    PlaidItemSyncStatusQuery,
-    PlaidItemSyncStatusQueryVariables
-  >(PlaidItemSyncStatusDocument, options)
+  return Apollo.useLazyQuery<PlaidItemSyncStatusQuery, PlaidItemSyncStatusQueryVariables>(
+    PlaidItemSyncStatusDocument,
+    options
+  )
 }
-export type PlaidItemSyncStatusQueryHookResult = ReturnType<
-  typeof usePlaidItemSyncStatusQuery
->
+export type PlaidItemSyncStatusQueryHookResult = ReturnType<typeof usePlaidItemSyncStatusQuery>
 export type PlaidItemSyncStatusLazyQueryHookResult = ReturnType<
   typeof usePlaidItemSyncStatusLazyQuery
 >
@@ -4243,24 +3936,21 @@ export function usePlaidLinkTokenCreateMutation(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    PlaidLinkTokenCreateMutation,
-    PlaidLinkTokenCreateMutationVariables
-  >(PlaidLinkTokenCreateDocument, options)
+  return Apollo.useMutation<PlaidLinkTokenCreateMutation, PlaidLinkTokenCreateMutationVariables>(
+    PlaidLinkTokenCreateDocument,
+    options
+  )
 }
 export type PlaidLinkTokenCreateMutationHookResult = ReturnType<
   typeof usePlaidLinkTokenCreateMutation
 >
-export type PlaidLinkTokenCreateMutationResult =
-  Apollo.MutationResult<PlaidLinkTokenCreateMutation>
+export type PlaidLinkTokenCreateMutationResult = Apollo.MutationResult<PlaidLinkTokenCreateMutation>
 export type PlaidLinkTokenCreateMutationOptions = Apollo.BaseMutationOptions<
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreateMutationVariables
 >
 export const PlaidLinkTokenCreateForUpdateDocument = gql`
-  mutation PlaidLinkTokenCreateForUpdate(
-    $input: PlaidLinkTokenCreateForUpdateInput!
-  ) {
+  mutation PlaidLinkTokenCreateForUpdate($input: PlaidLinkTokenCreateForUpdateInput!) {
     plaidLinkTokenCreateForUpdate(input: $input) {
       record {
         linkToken
@@ -4315,11 +4005,10 @@ export type PlaidLinkTokenCreateForUpdateMutationHookResult = ReturnType<
 >
 export type PlaidLinkTokenCreateForUpdateMutationResult =
   Apollo.MutationResult<PlaidLinkTokenCreateForUpdateMutation>
-export type PlaidLinkTokenCreateForUpdateMutationOptions =
-  Apollo.BaseMutationOptions<
-    PlaidLinkTokenCreateForUpdateMutation,
-    PlaidLinkTokenCreateForUpdateMutationVariables
-  >
+export type PlaidLinkTokenCreateForUpdateMutationOptions = Apollo.BaseMutationOptions<
+  PlaidLinkTokenCreateForUpdateMutation,
+  PlaidLinkTokenCreateForUpdateMutationVariables
+>
 export const PlaidItemCreateDocument = gql`
   mutation PlaidItemCreate($input: PlaidItemCreateInput!) {
     plaidItemCreate(input: $input) {
@@ -4362,16 +4051,13 @@ export function usePlaidItemCreateMutation(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    PlaidItemCreateMutation,
-    PlaidItemCreateMutationVariables
-  >(PlaidItemCreateDocument, options)
+  return Apollo.useMutation<PlaidItemCreateMutation, PlaidItemCreateMutationVariables>(
+    PlaidItemCreateDocument,
+    options
+  )
 }
-export type PlaidItemCreateMutationHookResult = ReturnType<
-  typeof usePlaidItemCreateMutation
->
-export type PlaidItemCreateMutationResult =
-  Apollo.MutationResult<PlaidItemCreateMutation>
+export type PlaidItemCreateMutationHookResult = ReturnType<typeof usePlaidItemCreateMutation>
+export type PlaidItemCreateMutationResult = Apollo.MutationResult<PlaidItemCreateMutation>
 export type PlaidItemCreateMutationOptions = Apollo.BaseMutationOptions<
   PlaidItemCreateMutation,
   PlaidItemCreateMutationVariables
@@ -4415,16 +4101,13 @@ export function usePlaidItemUnlinkMutation(
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    PlaidItemUnlinkMutation,
-    PlaidItemUnlinkMutationVariables
-  >(PlaidItemUnlinkDocument, options)
+  return Apollo.useMutation<PlaidItemUnlinkMutation, PlaidItemUnlinkMutationVariables>(
+    PlaidItemUnlinkDocument,
+    options
+  )
 }
-export type PlaidItemUnlinkMutationHookResult = ReturnType<
-  typeof usePlaidItemUnlinkMutation
->
-export type PlaidItemUnlinkMutationResult =
-  Apollo.MutationResult<PlaidItemUnlinkMutation>
+export type PlaidItemUnlinkMutationHookResult = ReturnType<typeof usePlaidItemUnlinkMutation>
+export type PlaidItemUnlinkMutationResult = Apollo.MutationResult<PlaidItemUnlinkMutation>
 export type PlaidItemUnlinkMutationOptions = Apollo.BaseMutationOptions<
   PlaidItemUnlinkMutation,
   PlaidItemUnlinkMutationVariables
@@ -4501,26 +4184,17 @@ export function useProfileQuery(
   baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(
-    ProfileDocument,
-    options
-  )
+  return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
 }
 export function useProfileLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<ProfileQuery, ProfileQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(
-    ProfileDocument,
-    options
-  )
+  return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
 }
 export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>
 export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>
-export type ProfileQueryResult = Apollo.QueryResult<
-  ProfileQuery,
-  ProfileQueryVariables
->
+export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>
 export const ProfileUpdateDocument = gql`
   mutation ProfileUpdate($input: ProfileUpdateInput!) {
     profileUpdate(input: $input) {
@@ -4558,22 +4232,16 @@ export type ProfileUpdateMutationFn = Apollo.MutationFunction<
  * });
  */
 export function useProfileUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ProfileUpdateMutation,
-    ProfileUpdateMutationVariables
-  >
+  baseOptions?: Apollo.MutationHookOptions<ProfileUpdateMutation, ProfileUpdateMutationVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<
-    ProfileUpdateMutation,
-    ProfileUpdateMutationVariables
-  >(ProfileUpdateDocument, options)
+  return Apollo.useMutation<ProfileUpdateMutation, ProfileUpdateMutationVariables>(
+    ProfileUpdateDocument,
+    options
+  )
 }
-export type ProfileUpdateMutationHookResult = ReturnType<
-  typeof useProfileUpdateMutation
->
-export type ProfileUpdateMutationResult =
-  Apollo.MutationResult<ProfileUpdateMutation>
+export type ProfileUpdateMutationHookResult = ReturnType<typeof useProfileUpdateMutation>
+export type ProfileUpdateMutationResult = Apollo.MutationResult<ProfileUpdateMutation>
 export type ProfileUpdateMutationOptions = Apollo.BaseMutationOptions<
   ProfileUpdateMutation,
   ProfileUpdateMutationVariables

@@ -1,4 +1,5 @@
 import { ApolloLink, HttpLink } from '@apollo/client'
+import fetch from 'cross-fetch'
 
 // If request is a preview mutation, then terminates chain and directly calls
 // the api with the preview header set. Any requests made in preview mode will
@@ -17,7 +18,7 @@ const usePreviewLink = (endpoint: string) => {
     return forward(operation)
   })
 
-  const httpLink = new HttpLink({ uri: endpoint.toString() })
+  const httpLink = new HttpLink({ uri: endpoint.toString(), fetch })
 
   const forwardableLink = new ApolloLink((operation, forward) => {
     return forward(operation)

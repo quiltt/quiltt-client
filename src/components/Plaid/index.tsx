@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export { default as PlaidLinkButton } from './LinkButton'
 export { default as PlaidLinkLauncher } from './LinkLauncher'
 export { default as PlaidLinkLauncherWrapper } from './LinkLauncherWrapper'

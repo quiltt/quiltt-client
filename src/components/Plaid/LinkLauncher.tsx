@@ -1,12 +1,11 @@
 import * as React from 'react'
-
-import { usePlaidLink, PlaidLinkOptions } from 'react-plaid-link'
 import type {
-  PlaidLinkOnSuccess,
   PlaidLinkOnEvent,
   PlaidLinkOnExit,
   PlaidLinkOnLoad,
+  PlaidLinkOnSuccess,
 } from 'react-plaid-link'
+import { PlaidLinkOptions, usePlaidLink } from 'react-plaid-link'
 
 export type LinkLauncherProps = PlaidLinkOptions & {
   token: string
@@ -39,13 +38,7 @@ const LinkLauncher: React.FC<LinkLauncherProps> = ({
   }
 
   return (
-    <button
-      disabled={!ready}
-      type="button"
-      onClick={handleClick}
-      onLoad={onLoad}
-      {...buttonProps}
-    >
+    <button disabled={!ready} type="button" onClick={handleClick} onLoad={onLoad} {...buttonProps}>
       {children}
     </button>
   )

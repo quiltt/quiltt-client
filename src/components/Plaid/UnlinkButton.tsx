@@ -7,12 +7,7 @@ type UnlinkButtonProps = {
   name: string
 }
 
-const UnlinkButton: React.FC<UnlinkButtonProps> = ({
-  id,
-  name,
-  children,
-  ...buttonProps
-}) => {
+const UnlinkButton: React.FC<UnlinkButtonProps> = ({ id, name, children, ...buttonProps }) => {
   const [unlink, { loading }] = usePlaidItemUnlinkMutation({
     variables: { id },
     update: (cache, results) => {
@@ -32,12 +27,7 @@ const UnlinkButton: React.FC<UnlinkButtonProps> = ({
   }
 
   return (
-    <button
-      type="button"
-      disabled={loading}
-      onClick={handleClick}
-      {...buttonProps}
-    >
+    <button type="button" disabled={loading} onClick={handleClick} {...buttonProps}>
       {children || <span className="uppercase">Unlink</span>}
     </button>
   )
