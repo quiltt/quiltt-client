@@ -1,20 +1,19 @@
-import type { AxiosResponse } from 'axios'
-import Axios from 'axios'
+import fetch from 'cross-fetch'
 
 const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
 
-const DEFAULT_CONFIG = {
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: '',
-  },
-  validateStatus: (status: number) => status < 500,
-} as AuthConfig
-
 export type AuthConfig = {
-  headers: Record<string, unknown>
+  headers: Headers
   validateStatus: (status: number) => boolean
 }
+
+const DEFAULT_CONFIG: AuthConfig = {
+  headers: new Headers(),
+  validateStatus: (status: number) => status < 500,
+}
+
+DEFAULT_CONFIG.headers.append('Content-Type', 'application/json')
+DEFAULT_CONFIG.headers.append('Authorization', '')
 
 export type Strategies = 'phone' | 'email'
 
@@ -26,37 +25,51 @@ export type PasscodePayload = {
 }
 
 export type AuthAPI = {
-  ping: (token: string) => Promise<AxiosResponse<any>>
-  identify: (user: UsernamePayload) => Promise<AxiosResponse<any>>
-  authenticate: (user: UsernamePayload, passcode: string) => Promise<AxiosResponse<any>>
-  revoke: (token: string) => Promise<AxiosResponse<any>>
+  ping: (token: string) => Promise<Response>
+  identify: (user: UsernamePayload) => Promise<Response>
+  authenticate: (user: UsernamePayload, passcode: string) => Promise<Response>
+  revoke: (token: string) => Promise<Response>
 }
 
-export const useQuilttAuth = (
+const useQuilttAuth = (
   appId: string,
   endpoint: string = DEFAULT_ENDPOINT,
   appConfig: AuthConfig = DEFAULT_CONFIG
 ): AuthAPI => {
   const AuthAPI = {
     ping: (token: string) => {
-      const config = { ...appConfig }
-      config.headers.Authorization = `Bearer ${token}`
+      const config = appConfig
+      config.headers.set('Authorization', `Bearer ${token}`)
 
-      return Axios.get(endpoint, config)
+      return fetch(endpoint, {
+        method: 'GET',
+        headers: config.headers,
+        body: JSON.stringify(config.validateStatus),
+      })
     },
     identify: (username: UsernamePayload) => {
       const config = { ...appConfig }
-      return Axios.post(endpoint, { session: { appId, ...username } }, config)
+      return fetch(endpoint, {
+        method: 'POST',
+        headers: config.headers,
+        body: JSON.stringify({ session: { appId, ...username } }),
+      })
     },
     authenticate: (username: UsernamePayload, passcode: string) => {
       const config = { ...appConfig }
-      return Axios.put(endpoint, { session: { appId, ...username, passcode } }, config)
+      return fetch(endpoint, {
+        method: 'POST',
+        headers: config.headers,
+        body: JSON.stringify({ session: { appId, ...username, passcode } }),
+      })
     },
     revoke: (token: string) => {
       const config = { ...appConfig }
-      config.headers.Authorization = `Bearer ${token}`
-
-      return Axios.delete(endpoint, config)
+      config.headers.set('Authorization', `Bearer ${token}`)
+      return fetch(endpoint, {
+        method: 'DELETE',
+        headers: config.headers,
+      })
     },
   }
 
