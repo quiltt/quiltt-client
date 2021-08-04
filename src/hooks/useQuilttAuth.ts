@@ -45,6 +45,15 @@ const useQuilttAuth = (
         method: 'GET',
         headers: config.headers,
         body: JSON.stringify(config.validateStatus),
+      }).then((response) => {
+        return response
+          .json()
+          .then((data) => {
+            return data
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       })
     },
     identify: (username: UsernamePayload) => {
@@ -53,6 +62,15 @@ const useQuilttAuth = (
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({ session: { appId, ...username } }),
+      }).then((response) => {
+        return response
+          .json()
+          .then((data) => {
+            return data
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       })
     },
     authenticate: (username: UsernamePayload, passcode: string) => {
@@ -61,6 +79,15 @@ const useQuilttAuth = (
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({ session: { appId, ...username, passcode } }),
+      }).then((response) => {
+        return response
+          .json()
+          .then((data) => {
+            return data
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       })
     },
     revoke: (token: string) => {
@@ -69,6 +96,15 @@ const useQuilttAuth = (
       return fetch(endpoint, {
         method: 'DELETE',
         headers: config.headers,
+      }).then((response) => {
+        return response
+          .json()
+          .then((data) => {
+            return data
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       })
     },
   }
