@@ -27,7 +27,7 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["src/**/*", "jest/**/*"],
+  "include": ["src/**/*", "jest/**/*", "example/**/*"],
   "exclude": [
     "node_modules",
     "coverage",

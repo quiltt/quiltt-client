@@ -31,5 +31,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # example page
+example
 example/dist/
 example/node_modules/

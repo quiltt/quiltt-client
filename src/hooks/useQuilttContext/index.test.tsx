@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useQuilttContext from './useQuilttContext'
+import useQuilttContext from '.'
 
 test('should return value from local storage', () => {
   const context = renderHook(() => {

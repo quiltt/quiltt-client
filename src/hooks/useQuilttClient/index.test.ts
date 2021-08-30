@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useQuilttClient from './useQuilttClient'
+import useQuilttClient from '.'
 
 test('should return apollo client', () => {
   const client = renderHook(() => useQuilttClient(null))

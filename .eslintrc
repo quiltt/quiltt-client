@@ -26,6 +26,7 @@
     }
   },
   "rules": {
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "max-len": [1, { "code": 100 }],
     "space-before-function-paren": 0,
     "react/prop-types": 0,

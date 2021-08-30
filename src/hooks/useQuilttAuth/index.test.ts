@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useQuilttAuth from './useQuilttAuth'
+import useQuilttAuth from '.'
 
 test('should return quiltt auth API', () => {
   const client = renderHook(() => useQuilttAuth('1'))

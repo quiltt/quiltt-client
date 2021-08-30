@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import usePreviewLink from './usePreviewLink'
+import usePreviewLink from '.'
 
 test('should return apollo preview link', () => {
   const link = renderHook(() => usePreviewLink(''))

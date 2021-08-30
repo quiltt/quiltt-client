@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Helper function to show warning in the console during development
  * @param {expression} assert - assertion to test
@@ -11,6 +10,7 @@ const warn = (assert: boolean, scope: string, message: string): void => {
       if (console.warn) {
         console.warn(`Quiltt [${scope}]: ${message}`)
       } else {
+        // eslint-disable-next-line no-console
         console.log(`Quiltt [${scope}]: ${message}`)
       }
     }

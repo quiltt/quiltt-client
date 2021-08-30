@@ -1,14 +1,12 @@
 import * as React from 'react'
 
-// @see https://usehooks.com/useLocalStorage/
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = React.useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key)
       return item ? JSON.parse(item) : initialValue
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
+      console.error(error)
       return initialValue
     }
   })
@@ -24,8 +22,7 @@ function useLocalStorage<T>(key: string, initialValue: T) {
         window.localStorage.removeItem(key)
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.log(error)
+      console.error(error)
     }
   }
 

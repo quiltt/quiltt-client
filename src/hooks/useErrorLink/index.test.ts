@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useErrorLink from './useErrorLink'
+import useErrorLink from '.'
 
 test('should return apollo error link', () => {
   const link = renderHook(() => useErrorLink())

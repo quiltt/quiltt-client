@@ -34,23 +34,36 @@ import * as React from 'react'
 
 import { QuilttProvider } from '@quiltt/client'
 
-export const App: React.FC = () => {
+import App from './App'
+
+export const Index: React.FC = () => {
   return (
-    <QuilttProvider>
-      <div>Hello, World!</div>
+    <QuilttProvider appId={VITE_APP_QUILTT_APP_ID | REACT_APP_QUILTT_APP_ID}>
+      <App />
     </QuilttProvider>
   )
 }
-export default App
+export default Index
 ```
 
 ## Exported Hooks/Providers/Components
 
+- `QuilttProvider`
+- `useAuthLink`
+- `useErrorLink`
+- `useLocalStorage`
+- `usePreviewLink`
 - `useQuilttAuth`
 - `useQuilttClient`
 - `useQuilttContext`
-- `QuilttProvider`
+- `useQuilttLink`
 - `PlaidLinkButton`
+- `PlaidLinkLauncher`
+- `PlaidLinkLauncherWrapper`
+- `PlaidNewConnectionButton`
+- `PlaidReconnectButton`
+- `PlaidSyncStatus`
+- `PlaidUnlinkButton`
 
 ## License
 

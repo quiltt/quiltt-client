@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react-hooks'
 
-import useLocalStorage from './useLocalStorage'
+import useLocalStorage from '.'
 
 test('should return value from local storage', () => {
   const storage = renderHook(() => {

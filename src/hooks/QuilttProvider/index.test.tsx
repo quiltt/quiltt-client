@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { render } from '@testing-library/react'
 
-import QuilttProvider from './QuilttProvider'
+import QuilttProvider from '.'
 
 const quilttProviderComponent: React.ReactElement = (
   <QuilttProvider>

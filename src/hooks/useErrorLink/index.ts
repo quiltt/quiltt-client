@@ -4,8 +4,7 @@ const useErrorLink = () => {
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.map((error) => {
-        // eslint-disable-next-line no-console
-        console.log(
+        console.error(
           // eslint-disable-next-line max-len
           `[GraphQL error]: Message: ${error.message}, Location: ${error.locations}, Path: ${error.path}`
         )
@@ -15,8 +14,7 @@ const useErrorLink = () => {
     }
 
     if (networkError) {
-      // eslint-disable-next-line no-console
-      console.log(`[Network error]: ${networkError}`)
+      console.error(`[Network error]: ${networkError}`)
     }
   })
 
