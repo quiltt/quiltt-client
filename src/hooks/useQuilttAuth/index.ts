@@ -24,15 +24,14 @@ export type Strategies = 'phone' | 'email'
 
 export type UsernamePayload = { email: string } | { phone: string }
 
-export type PasscodePayload = {
-  email: string
+export type PasscodePayload = UsernamePayload & {
   passcode: string
 }
 
 export type AuthAPI = {
   ping: (token: string) => Promise<AxiosResponse<any>>
   identify: (user: UsernamePayload) => Promise<AxiosResponse<any>>
-  authenticate: (user: UsernamePayload, passcode: string) => Promise<AxiosResponse<any>>
+  authenticate: (authenticationVariables: PasscodePayload) => Promise<AxiosResponse<any>>
   revoke: (token: string) => Promise<AxiosResponse<any>>
 }
 
@@ -51,9 +50,9 @@ const useQuilttAuth = (
       const config = { ...appConfig }
       return axios.post(endpoint, { session: { appId, ...username } }, config)
     },
-    authenticate: (username: UsernamePayload, passcode: string) => {
+    authenticate: (authenticationVariables: PasscodePayload) => {
       const config = { ...appConfig }
-      return axios.post(endpoint, { session: { appId, ...username, passcode } }, config)
+      return axios.post(endpoint, { session: { appId, ...authenticationVariables } }, config)
     },
     revoke: (token: string) => {
       const config = { ...appConfig }
