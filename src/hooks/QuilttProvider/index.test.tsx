@@ -4,8 +4,10 @@ import { render } from '@testing-library/react'
 
 import QuilttProvider from '.'
 
+const appId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
 const quilttProviderComponent: React.ReactElement = (
-  <QuilttProvider>
+  <QuilttProvider appId={appId}>
     <div>Lorem Ipsum</div>
   </QuilttProvider>
 )
