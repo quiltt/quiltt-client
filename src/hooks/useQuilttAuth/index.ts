@@ -22,7 +22,10 @@ DEFAULT_CONFIG.headers.append('Authorization', '')
 
 export type Strategies = 'phone' | 'email'
 
-export type UsernamePayload = { email: string } | { phone: string }
+export type EmailInput = { email: string; phone?: never }
+export type PhoneInput = { phone: string; email?: never }
+
+export type UsernamePayload = EmailInput | PhoneInput
 
 export type PasscodePayload = UsernamePayload & {
   passcode: string
