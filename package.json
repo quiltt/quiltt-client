@@ -13,7 +13,8 @@
   "scripts": {
     "test": "jest",
     "coverage": "jest --collect-coverage",
-    "build": "rollup -c",
+    "clean": "rimraf dist",
+    "build": "yarn clean && rollup -c",
     "develop": "rollup -c -w",
     "start": "yarn develop",
     "publish-script": "npm publish --access public",
@@ -94,6 +95,7 @@
     "prettier": "^2.3.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "rimraf": "^3.0.2",
     "rollup": "^2.55.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
