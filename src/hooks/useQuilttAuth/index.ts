@@ -55,7 +55,7 @@ const useQuilttAuth = (
     },
     authenticate: (authenticationVariables: PasscodePayload) => {
       const config = { ...appConfig }
-      return axios.post(endpoint, { session: { appId, ...authenticationVariables } }, config)
+      return axios.put(endpoint, { session: { appId, ...authenticationVariables } }, config)
     },
     revoke: (token: string) => {
       const config = { ...appConfig }
