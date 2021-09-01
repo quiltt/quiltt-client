@@ -6,7 +6,7 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["simple-import-sort", "jest-dom", "@typescript-eslint"],
+  "plugins": ["import", "react", "simple-import-sort", "jest-dom", "@typescript-eslint"],
   "env": {
     "browser": true,
     "node": true,
