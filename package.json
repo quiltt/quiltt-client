@@ -20,6 +20,7 @@
     "clean": "rimraf dist",
     "build": "rollup -c",
     "build:prod": "yarn clean && rollup -c",
+    "prepare": "yarn build:prod",
     "develop": "rollup -c -w",
     "start": "yarn develop",
     "publish-script": "npm publish --access public",
