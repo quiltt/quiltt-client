@@ -6,7 +6,7 @@ import useAuthLink from '../useAuthLink'
 import useErrorLink from '../useErrorLink'
 import usePreviewLink from '../usePreviewLink'
 
-const graphqlEndpoint = new URL('v1/graphql', 'https://api.quiltt.io')
+export const graphqlEndpoint = new URL('v1/graphql', 'https://api.quiltt.io')
 
 const useQuilttLink = (token: string | null) => {
   const errorLink = useErrorLink()
