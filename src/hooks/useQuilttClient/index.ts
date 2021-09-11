@@ -8,7 +8,7 @@ export type QueryClients = 'apollo' | 'urql'
 const useQuilttClient = (
   token: string | null,
   client: QueryClients
-): ApolloClient<NormalizedCacheObject> | Client | null => {
+): ApolloClient<NormalizedCacheObject> | Client => {
   const quilttLink = useQuilttLink(token)
 
   switch (client) {
@@ -18,7 +18,6 @@ const useQuilttClient = (
         cache: new InMemoryCache(),
         connectToDevTools: true,
       })
-      break
     case 'urql':
       return createClient({
         url: graphqlEndpoint.toString(),
@@ -28,9 +27,12 @@ const useQuilttClient = (
           }
         },
       })
-      break
     default:
-      return null
+      return new ApolloClient({
+        link: quilttLink,
+        cache: new InMemoryCache(),
+        connectToDevTools: true,
+      })
       break
   }
 }
