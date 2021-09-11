@@ -24,9 +24,9 @@
     "develop": "rollup -c -w",
     "start": "yarn develop",
     "publish-script": "npm publish --access public",
-    "lint": "eslint --ext .tsx --ext .ts src/",
-    "lint:fix": "eslint --ext .tsx --ext .ts src/ --fix",
-    "prettier": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css,md,json}\"",
+    "lint": "eslint --ext .tsx --ext .ts src/ && eslint --ext .tsx --ext .ts example/src/",
+    "lint:fix": "eslint --ext .tsx --ext .ts src/ --fix && eslint --ext .tsx --ext .ts example/src/ --fix",
+    "prettier": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,css,md,json}\" \"./example/src/**/*.{js,jsx,ts,tsx,css,md,json}\"",
     "format": "yarn lint:fix && yarn prettier",
     "type-check": "tsc"
   },

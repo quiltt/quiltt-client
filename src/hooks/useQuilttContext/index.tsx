@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type QueryClients = 'apollo' | 'urql'
+import type { QueryClients } from '../useQuilttClient'
 
 export type QuilttContextType = {
   appId: string

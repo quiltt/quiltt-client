@@ -3,7 +3,7 @@ import { Client, createClient } from 'urql'
 
 import useQuilttLink, { graphqlEndpoint } from '../apollo/useQuilttLink'
 
-type QueryClients = 'apollo' | 'urql'
+export type QueryClients = 'apollo' | 'urql'
 
 const useQuilttClient = (
   token: string | null,

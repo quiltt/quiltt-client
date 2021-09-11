@@ -1,2 +1,2 @@
 export * from './Plaid'
-export * from './QuilttProvider'
+export { default as QuilttProvider } from './QuilttProvider'

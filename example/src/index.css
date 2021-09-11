@@ -1,3 +1,4 @@
+@import '@quiltt/ui/dist/index.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

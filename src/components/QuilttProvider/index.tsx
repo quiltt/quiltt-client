@@ -4,10 +4,9 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 import { Client, Provider } from 'urql'
 
 import useLocalStorage from '../../hooks/useLocalStorage'
+import type { QueryClients } from '../../hooks/useQuilttClient'
 import useQuilttClient from '../../hooks/useQuilttClient'
 import { QuilttContext } from '../../hooks/useQuilttContext'
-
-type QueryClients = 'apollo' | 'urql'
 
 type QuilttProviderProps = {
   appId: string
