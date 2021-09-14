@@ -3,8 +3,10 @@ import * as React from 'react'
 function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = React.useState<T>(() => {
     try {
-      const item = window.localStorage.getItem(key)
-      return item ? JSON.parse(item) : initialValue
+      if (typeof window !== 'undefined') {
+        const item = window.localStorage.getItem(key)
+        return item ? JSON.parse(item) : initialValue
+      }
     } catch (error) {
       console.error(error)
       return initialValue
@@ -16,10 +18,12 @@ function useLocalStorage<T>(key: string, initialValue: T) {
       const valueToStore = value instanceof Function ? value(storedValue) : value
       setStoredValue(valueToStore)
 
-      if (valueToStore) {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore))
-      } else {
-        window.localStorage.removeItem(key)
+      if (typeof window !== 'undefined') {
+        if (valueToStore) {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore))
+        } else {
+          window.localStorage.removeItem(key)
+        }
       }
     } catch (error) {
       console.error(error)

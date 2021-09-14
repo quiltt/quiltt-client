@@ -21,8 +21,10 @@ const UnlinkButton: React.FC<UnlinkButtonProps> = ({ id, name, children, ...butt
 
   const handleClick = () => {
     // eslint-disable-next-line no-alert
-    if (window.confirm(`Are you sure you want to unlink ${name}?`)) {
-      unlink()
+    if (typeof window !== 'undefined') {
+      if (window.confirm(`Are you sure you want to unlink ${name}?`)) {
+        unlink()
+      }
     }
   }
 
