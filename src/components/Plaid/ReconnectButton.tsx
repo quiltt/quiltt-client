@@ -30,6 +30,8 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
   onLoad = undefined,
   ...otherProps
 }) => {
+  const [linkToken, setLinkToken] = React.useState<string | null>(null)
+
   const onSuccess = React.useCallback(() => {
     setConnectionStatus(PlaidItemStatus.Syncing)
   }, [setConnectionStatus])
@@ -37,8 +39,6 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
   const onExit = React.useCallback((err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => {
     if (err) throw new Error(`${err.error_code} ${err.error_message} - ${JSON.stringify(metadata)}`)
   }, [])
-
-  const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
   const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateForUpdateMutation({
     variables: {
@@ -63,16 +63,6 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
     },
   })
 
-  React.useEffect(() => {
-    if (!called && !linkToken) {
-      createLinkToken()
-    }
-  }, [])
-
-  if (error) throw error
-
-  if (!linkToken) return LoadingComponent
-
   const config = {
     token: linkToken,
     onSuccess,
@@ -82,7 +72,17 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
 
   const { open, ready, error: plaidLinkError } = usePlaidLink(config)
 
+  React.useEffect(() => {
+    if (!called && !linkToken) {
+      createLinkToken()
+    }
+  })
+
+  if (error) throw error
+
   if (plaidLinkError) throw new Error(plaidLinkError.message)
+
+  if (!linkToken) return LoadingComponent
 
   return (
     <button type="button" id={id} onClick={() => open()} disabled={!ready} {...otherProps}>

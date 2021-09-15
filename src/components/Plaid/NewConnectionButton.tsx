@@ -65,16 +65,6 @@ const NewConnectionButton: React.FC<Props> = ({
     },
   })
 
-  React.useEffect(() => {
-    if (!called && !linkToken) {
-      createLinkToken()
-    }
-  }, [])
-
-  if (error) throw error
-
-  if (!linkToken) return null
-
   const config = {
     token: linkToken,
     onSuccess,
@@ -84,7 +74,16 @@ const NewConnectionButton: React.FC<Props> = ({
 
   const { open, ready, error: plaidLinkError } = usePlaidLink(config)
 
+  React.useEffect(() => {
+    if (!called && !linkToken) {
+      createLinkToken()
+    }
+  })
+
   if (plaidLinkError) throw new Error(plaidLinkError.message)
+  if (error) throw error
+
+  if (!linkToken) return null
 
   return (
     <button type="button" id={id} onClick={() => open()} disabled={!ready} {...otherProps}>
