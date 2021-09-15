@@ -59,7 +59,6 @@ export default Index
 - `useQuilttLink`
 - `PlaidLinkButton`
 - `PlaidLinkLauncher`
-- `PlaidLinkLauncherWrapper`
 - `PlaidNewConnectionButton`
 - `PlaidReconnectButton`
 - `PlaidSyncStatus`

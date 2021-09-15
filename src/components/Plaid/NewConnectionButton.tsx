@@ -1,5 +1,12 @@
 import * as React from 'react'
-import { PlaidLinkOnSuccess } from 'react-plaid-link'
+import {
+  PlaidLinkError,
+  PlaidLinkOnExitMetadata,
+  PlaidLinkOnLoad,
+  PlaidLinkOnSuccess,
+  PlaidLinkOptions,
+  usePlaidLink,
+} from 'react-plaid-link'
 
 import {
   PlaidLinkTokenCreateMutation,
@@ -7,34 +14,39 @@ import {
   usePlaidLinkTokenCreateMutation,
 } from '../../types'
 
-import LinkLauncherWrapper from './LinkLauncherWrapper'
-
 type PlaidProduct = 'transactions' | 'auth' | 'liabilities' | 'investments'
 
 type Props = {
-  linkAccountFilters: any
-  linkProducts: PlaidProduct[]
+  id: string
+  token: string
+  accountFilters: any
   linkCustomizationName?: string
-  buttonId: string
-  children: React.ReactChildren
+  children: React.ReactNode
+  products: PlaidProduct[]
   onSuccess: PlaidLinkOnSuccess
+  onExit?: (err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => void
+  onLoad?: PlaidLinkOnLoad
 }
 
 const NewConnectionButton: React.FC<Props> = ({
-  linkAccountFilters,
-  linkProducts,
+  id,
+  token,
+  accountFilters,
+  products,
   linkCustomizationName,
-  buttonId,
   children,
   onSuccess,
+  onExit = undefined,
+  onLoad = undefined,
+  ...otherProps
 }) => {
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
   const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateMutation({
     variables: {
       input: {
-        accountFilters: linkAccountFilters,
+        accountFilters,
         linkCustomizationName,
-        products: linkProducts,
+        products,
         countryCodes: ['US'],
       },
     },
@@ -63,14 +75,21 @@ const NewConnectionButton: React.FC<Props> = ({
 
   if (!linkToken) return null
 
+  const config = {
+    token: linkToken,
+    onSuccess,
+    onLoad,
+    onExit,
+  } as PlaidLinkOptions
+
+  const { open, ready, error: plaidLinkError } = usePlaidLink(config)
+
+  if (plaidLinkError) throw new Error(plaidLinkError.message)
+
   return (
-    <LinkLauncherWrapper token={linkToken} onSuccess={onSuccess}>
-      {(props) => (
-        <button id={buttonId} type="button" {...props}>
-          {children}
-        </button>
-      )}
-    </LinkLauncherWrapper>
+    <button type="button" id={id} onClick={() => open()} disabled={!ready} {...otherProps}>
+      {children}
+    </button>
   )
 }
 

@@ -1,5 +1,11 @@
 import * as React from 'react'
-import type { PlaidLinkError, PlaidLinkOnExitMetadata } from 'react-plaid-link'
+import type {
+  PlaidLinkError,
+  PlaidLinkOnExitMetadata,
+  PlaidLinkOnLoad,
+  PlaidLinkOptions,
+} from 'react-plaid-link'
+import { usePlaidLink } from 'react-plaid-link'
 
 import type {
   PlaidLinkTokenCreateForUpdateMutation,
@@ -8,18 +14,21 @@ import type {
 import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
-import LinkLauncherWrapper from './LinkLauncherWrapper'
-
 type ReconnectButtonProps = {
   id: string
-  setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
   LoadingComponent?: React.ReactElement
+  children?: React.ReactNode
+  setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
+  onLoad?: PlaidLinkOnLoad
 }
 
 const ReconnectButton: React.FC<ReconnectButtonProps> = ({
   id,
-  setConnectionStatus,
   LoadingComponent = <DefaultLoadingComponent />,
+  children = 'Reconnect',
+  setConnectionStatus,
+  onLoad = undefined,
+  ...otherProps
 }) => {
   const onSuccess = React.useCallback(() => {
     setConnectionStatus(PlaidItemStatus.Syncing)
@@ -64,14 +73,21 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
 
   if (!linkToken) return LoadingComponent
 
+  const config = {
+    token: linkToken,
+    onSuccess,
+    onLoad,
+    onExit,
+  } as PlaidLinkOptions
+
+  const { open, ready, error: plaidLinkError } = usePlaidLink(config)
+
+  if (plaidLinkError) throw new Error(plaidLinkError.message)
+
   return (
-    <LinkLauncherWrapper token={linkToken} onSuccess={onSuccess} onExit={onExit}>
-      {(props) => (
-        <button type="button" {...props}>
-          Reconnect
-        </button>
-      )}
-    </LinkLauncherWrapper>
+    <button type="button" id={id} onClick={() => open()} disabled={!ready} {...otherProps}>
+      {children}
+    </button>
   )
 }
 
