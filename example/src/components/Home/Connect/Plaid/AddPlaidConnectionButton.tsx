@@ -42,15 +42,15 @@ const AddPlaidConnectionButton: React.FC<AddPlaidConnectionButtonProps> = ({
   )
 
   return (
-    <Button
-      as={PlaidLinkButton}
+    <PlaidLinkButton
+      as={Button}
       onSuccess={handleSuccess}
       onEvent={onEvent}
       {...buttonProps}
       {...plaidLinkOptions}
     >
       {children}
-    </Button>
+    </PlaidLinkButton>
   )
 }
 

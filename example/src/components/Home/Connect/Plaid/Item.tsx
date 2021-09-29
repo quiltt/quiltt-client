@@ -9,7 +9,7 @@ import {
   PlaidItemStatus,
   usePlaidItemUpdatedSubscription,
 } from '@quiltt/client'
-// import { AccountList } from '@quiltt/components'
+import { AccountList } from '@quiltt/components'
 import { Button, Card, Heading } from '@quiltt/ui'
 
 type ReconnectCTAProps = {
@@ -19,7 +19,13 @@ type ReconnectCTAProps = {
 }
 
 const ReconnectCTA: React.FC<ReconnectCTAProps> = ({ id, name, setConnectionStatus }) => (
-  <PlaidReconnectButton data-name={name} id={id} setConnectionStatus={setConnectionStatus} />
+  <PlaidReconnectButton
+    as={Button}
+    data-name={name}
+    id={id}
+    setConnectionStatus={setConnectionStatus}
+    block
+  />
 )
 
 type ItemProps = {
@@ -38,8 +44,6 @@ const Item: React.FC<ItemProps> = ({ item }) => {
     console.error(error)
   }
 
-  console.log(item.id)
-
   return (
     <Card className="my-3 shadow-sm">
       <Card.Header>
@@ -57,18 +61,16 @@ const Item: React.FC<ItemProps> = ({ item }) => {
         </Heading>
       </Card.Header>
       <Card.Body style={{ padding: 0 }}>
-        {/* {connectionStatus === PlaidItemStatus.Disconnected ? ( */}
-        <Button block>
+        {connectionStatus === PlaidItemStatus.Disconnected ? (
           <ReconnectCTA id={item.id} name={item.name} setConnectionStatus={setConnectionStatus} />
-        </Button>
-        {/* ) : (
+        ) : (
           <AccountList accounts={item.accounts} />
-        )} */}
+        )}
       </Card.Body>
       <Card.Footer className="flex items-center justify-between border-top-0">
         <PlaidSyncStatus id={item.id} />
-        <Button
-          as={PlaidUnlinkButton}
+        <PlaidUnlinkButton
+          as={Button}
           id={item.id}
           name={item.name}
           variant="danger"
@@ -77,7 +79,7 @@ const Item: React.FC<ItemProps> = ({ item }) => {
           icon={TrashIcon}
         >
           Unlink
-        </Button>
+        </PlaidUnlinkButton>
       </Card.Footer>
     </Card>
   )

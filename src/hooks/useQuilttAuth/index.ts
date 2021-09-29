@@ -6,6 +6,7 @@ import axios from 'axios'
 import { QuilttContext } from '../useQuilttContext'
 
 const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
+// const DEFAULT_ENDPOINT = 'http://auth.lvh.me:3000/v1/users/session'
 
 export type AuthConfig = {
   headers: Headers

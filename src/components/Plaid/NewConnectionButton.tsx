@@ -13,33 +13,42 @@ import {
   PlaidLinkTokenCreatePayload,
   usePlaidLinkTokenCreateMutation,
 } from '../../types'
+import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
 
 type PlaidProduct = 'transactions' | 'auth' | 'liabilities' | 'investments'
 
-type Props = {
-  id: string
-  token: string
-  accountFilters: any
-  linkCustomizationName?: string
-  children: React.ReactNode
-  products: PlaidProduct[]
-  onSuccess: PlaidLinkOnSuccess
-  onExit?: (err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => void
-  onLoad?: PlaidLinkOnLoad
-}
+type NewConnectionButtonProps = React.HTMLAttributes<HTMLElement> &
+  CustomComponentProps & {
+    id: string
+    token: string
+    accountFilters: any
+    linkCustomizationName?: string
+    children: React.ReactNode
+    products: PlaidProduct[]
+    onSuccess: PlaidLinkOnSuccess
+    onExit?: (err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => void
+    onLoad?: PlaidLinkOnLoad
+  }
 
-const NewConnectionButton: React.FC<Props> = ({
-  id,
-  token,
-  accountFilters,
-  products,
-  linkCustomizationName,
-  children,
-  onSuccess,
-  onExit = undefined,
-  onLoad = undefined,
-  ...otherProps
-}) => {
+type Ref = React.ReactNode | HTMLElement | string
+
+const NewConnectionButton: CustomComponentRefForwardingComponent<
+  'button',
+  NewConnectionButtonProps
+> = React.forwardRef<Ref, NewConnectionButtonProps>(function NewConnectionButton(props, ref) {
+  const {
+    as = 'button',
+    id,
+    token,
+    accountFilters,
+    products,
+    linkCustomizationName,
+    children,
+    onSuccess,
+    onExit = undefined,
+    onLoad = undefined,
+    ...otherProps
+  } = props
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
   const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateMutation({
     variables: {
@@ -85,11 +94,17 @@ const NewConnectionButton: React.FC<Props> = ({
 
   if (!linkToken) return null
 
-  return (
-    <button type="button" id={id} onClick={() => open()} disabled={!ready} {...otherProps}>
-      {children}
-    </button>
+  return React.createElement(
+    as as string,
+    {
+      ref,
+      id: id,
+      disabled: !ready,
+      onClick: () => open(),
+      ...otherProps,
+    },
+    children
   )
-}
+})
 
 export default NewConnectionButton
