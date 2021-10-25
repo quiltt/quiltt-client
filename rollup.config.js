@@ -46,6 +46,7 @@ export default {
       exclude: [
         'coverage',
         'dist',
+        'example',
         'node_modules/**',
         '*.test.{js+(|x), ts+(|x)}',
         '**/*.test.{js+(|x), ts+(|x)}',

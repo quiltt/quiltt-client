@@ -82,27 +82,18 @@ const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProp
       )
     }
 
-    // const childComponent = React.createElement(
-    //   as as string,
-    //   {
-    //     ref,
-    //     disabled: false,
-    //     ...otherProps,
-    //   },
-    //   children
-    // )
-
-    return (
-      <LinkLauncher
-        as={as}
-        token={linkToken}
-        onSuccess={onSuccess}
-        onLoad={onLoad}
-        onEvent={onEvent}
-        {...otherProps}
-      >
-        {children}
-      </LinkLauncher>
+    return React.createElement(
+      LinkLauncher,
+      {
+        as,
+        ref,
+        token: linkToken,
+        onSuccess,
+        onLoad,
+        onEvent,
+        ...otherProps,
+      },
+      children
     )
   })
 

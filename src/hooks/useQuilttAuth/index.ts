@@ -1,53 +1,35 @@
 import * as React from 'react'
 
-import type { AxiosResponse } from 'axios'
+import type { AxiosRequestHeaders } from 'axios'
 import axios from 'axios'
 
-import { QuilttContext } from '../useQuilttContext'
+import useLocalStorage from '../useLocalStorage'
+import { QuilttContext, QuilttContextType } from '../useQuilttContext'
+
+import { AuthAPI, AuthConfig, PasscodePayload, UsernamePayload } from './types'
 
 const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
-// const DEFAULT_ENDPOINT = 'http://auth.lvh.me:3000/v1/users/session'
-
-export type AuthConfig = {
-  headers: Headers
-  validateStatus: (status: number) => boolean
-}
 
 const DEFAULT_CONFIG: AuthConfig = {
-  headers: new Headers(),
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: '',
+  } as AxiosRequestHeaders,
   validateStatus: (status: number) => status < 500,
-}
-
-DEFAULT_CONFIG.headers.append('Content-Type', 'application/json')
-DEFAULT_CONFIG.headers.append('Authorization', '')
-
-export type Strategies = 'phone' | 'email'
-
-export type EmailInput = { email: string; phone?: never }
-export type PhoneInput = { phone: string; email?: never }
-
-export type UsernamePayload = EmailInput | PhoneInput
-
-export type PasscodePayload = UsernamePayload & {
-  passcode: string
-}
-
-export type AuthAPI = {
-  ping: (token: string) => Promise<AxiosResponse<any>>
-  identify: (user: UsernamePayload) => Promise<AxiosResponse<any>>
-  authenticate: (authenticationVariables: PasscodePayload) => Promise<AxiosResponse<any>>
-  revoke: (token: string) => Promise<AxiosResponse<any>>
 }
 
 const useQuilttAuth = (
   endpoint: string = DEFAULT_ENDPOINT,
   appConfig: AuthConfig = DEFAULT_CONFIG
-): AuthAPI => {
-  const { appId } = React.useContext(QuilttContext)
-  const AuthAPI = {
-    ping: (token: string) => {
+) => {
+  const { appId } = React.useContext<QuilttContextType>(QuilttContext)
+  const [token, setToken] = useLocalStorage<string | null>('QUILTT_TOKEN', null)
+  const [userId, setUserId] = useLocalStorage<string | null>('QUILTT_USER_ID', null)
+
+  const { ping, identify, authenticate, revoke }: AuthAPI = {
+    ping: (authToken: string) => {
       const config = { ...appConfig }
-      config.headers.set('Authorization', `Bearer ${token}`)
+      config.headers.Authorization = `Bearer ${authToken}`
       return axios.get(endpoint, config)
     },
     identify: (username: UsernamePayload) => {
@@ -58,14 +40,29 @@ const useQuilttAuth = (
       const config = { ...appConfig }
       return axios.put(endpoint, { session: { appId, ...authenticationVariables } }, config)
     },
-    revoke: (token: string) => {
+    revoke: (authToken: string) => {
       const config = { ...appConfig }
-      config.headers.set('Authorization', `Bearer ${token}`)
+      config.headers.Authorization = `Bearer ${authToken}`
       return axios.delete(endpoint, config)
     },
   }
 
-  return AuthAPI
+  React.useEffect(() => {
+    let unsubscribe = () => {}
+    if (token) {
+      unsubscribe = () =>
+        ping(token).then((response) => {
+          if (response.data.userId) {
+            setUserId(response.data.userId)
+          } else {
+            setUserId(null)
+          }
+        })
+    }
+    return () => unsubscribe()
+  }, [ping, setUserId, token])
+
+  return { ping, identify, authenticate, revoke, token, setToken, userId, setUserId }
 }
 
 export default useQuilttAuth
