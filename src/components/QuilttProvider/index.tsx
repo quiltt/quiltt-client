@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client'
-import { Client, Provider } from 'urql'
+import { Client as UrqlClient, Provider as UrqlProvider } from 'urql'
 
 import useLocalStorage from '../../hooks/useLocalStorage'
 import type { QueryClients } from '../../hooks/useQuilttClient'
@@ -15,12 +15,10 @@ type QuilttProviderProps = {
 
 const QuilttProvider: React.FC<QuilttProviderProps> = ({ appId, client = 'apollo', children }) => {
   const [authorizationToken, setAuthorizationToken] = useLocalStorage<string | null>(
-    'QUILTT_TOKEN',
+    'QUILTT_SESSION',
     null
   )
-
   const [queryClient, setQueryClient] = useLocalStorage<QueryClients>('QUILTT_CLIENT', client)
-
   const quilttClient = useQuilttClient(authorizationToken, queryClient)
 
   const clients = {
@@ -29,7 +27,7 @@ const QuilttProvider: React.FC<QuilttProviderProps> = ({ appId, client = 'apollo
         {children}
       </ApolloProvider>
     ),
-    urql: <Provider value={quilttClient as Client}>{children}</Provider>,
+    urql: <UrqlProvider value={quilttClient as UrqlClient}>{children}</UrqlProvider>,
   }
 
   return (

@@ -4,6 +4,7 @@ import * as ReactDOM from 'react-dom'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { QuilttProvider } from '@quiltt/client'
 import App from './components/App'
+import 'regenerator-runtime/runtime.js'
 
 import './index.css'
 

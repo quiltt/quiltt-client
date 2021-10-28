@@ -3,45 +3,32 @@ import * as React from 'react'
 import { TrashIcon } from '@heroicons/react/outline'
 import {
   PlaidUnlinkButton,
-  PlaidReconnectButton,
-  PlaidSyncStatus,
   PlaidItem,
   PlaidItemStatus,
+  PlaidItemStatusIndicator,
+  PlaidItemReconnectButton,
   usePlaidItemUpdatedSubscription,
 } from '@quiltt/client'
 import { AccountList } from '@quiltt/components'
 import { Button, Card, Heading } from '@quiltt/ui'
-
-type ReconnectCTAProps = {
-  id: string
-  name: string
-  setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
-}
-
-const ReconnectCTA: React.FC<ReconnectCTAProps> = ({ id, name, setConnectionStatus }) => (
-  <PlaidReconnectButton
-    as={Button}
-    data-name={name}
-    id={id}
-    setConnectionStatus={setConnectionStatus}
-    block
-  />
-)
 
 type ItemProps = {
   item: PlaidItem
 }
 
 const Item: React.FC<ItemProps> = ({ item }) => {
-  const [connectionStatus, setConnectionStatus] = React.useState(item.status)
-
+  const [syncStatus, setSyncStatus] = React.useState(item.status)
   // Apollo automagically updates the cache so we don't need to do anything when subscription fires
-  const { error } = usePlaidItemUpdatedSubscription({
+  const { loading, error } = usePlaidItemUpdatedSubscription({
     variables: { id: item.id },
   })
 
-  if (error) {
+  if (!loading && error) {
     console.error(error)
+  }
+
+  const onSuccess = () => {
+    setSyncStatus(PlaidItemStatus.Syncing)
   }
 
   return (
@@ -61,14 +48,18 @@ const Item: React.FC<ItemProps> = ({ item }) => {
         </Heading>
       </Card.Header>
       <Card.Body style={{ padding: 0 }}>
-        {connectionStatus === PlaidItemStatus.Disconnected ? (
-          <ReconnectCTA id={item.id} name={item.name} setConnectionStatus={setConnectionStatus} />
+        {syncStatus === PlaidItemStatus.Disconnected ? (
+          <div className="flex items-center justify-center p-4">
+            <PlaidItemReconnectButton onSuccess={onSuccess} itemId={item.id} as={Button} block />
+          </div>
         ) : (
           <AccountList accounts={item.accounts} />
         )}
       </Card.Body>
       <Card.Footer className="flex items-center justify-between border-top-0">
-        <PlaidSyncStatus id={item.id} />
+        <div className="flex space-x-3">
+          <PlaidItemStatusIndicator status={item.status} syncedAt={item.syncedAt} />
+        </div>
         <PlaidUnlinkButton
           as={Button}
           id={item.id}
@@ -76,6 +67,7 @@ const Item: React.FC<ItemProps> = ({ item }) => {
           variant="danger"
           layout="outline"
           size="sm"
+          className="ml-auto"
           icon={TrashIcon}
         >
           Unlink

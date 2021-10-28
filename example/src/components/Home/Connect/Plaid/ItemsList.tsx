@@ -2,17 +2,13 @@ import * as React from 'react'
 
 import type { ApolloQueryResult } from '@apollo/client/core/types'
 import { PlusIcon } from '@heroicons/react/outline'
-import type {
-  PlaidItem as PlaidItemType,
-  Exact,
-  PlaidItemsQuery,
-} from '@quiltt/client/dist/src/types'
+import type { PlaidItem, Exact, PlaidItemsQuery } from '@quiltt/client/dist/src/types'
 import { Heading } from '@quiltt/ui'
 
-import PlaidItem from './Item'
+import Item from './Item'
 import PlaidLinkButton from './PlaidLinkButton'
 
-type PlaidItemsListProps = {
+type ItemsListProps = {
   data: PlaidItemsQuery
   refetch: (
     variables?: Partial<
@@ -23,7 +19,7 @@ type PlaidItemsListProps = {
   ) => Promise<ApolloQueryResult<PlaidItemsQuery>>
 }
 
-const PlaidItemsList: React.FC<PlaidItemsListProps> = ({ data, refetch }) => {
+const ItemsList: React.FC<ItemsListProps> = ({ data, refetch }) => {
   const variant = 'dark'
   const layout = 'outline'
 
@@ -41,11 +37,11 @@ const PlaidItemsList: React.FC<PlaidItemsListProps> = ({ data, refetch }) => {
           Add
         </PlaidLinkButton>
       </div>
-      {data?.plaidItems?.map((item) => {
-        return <PlaidItem item={item as PlaidItemType} key={item.id} />
+      {data?.plaidItems?.map((item: PlaidItem) => {
+        return <Item item={item as PlaidItem} key={item.id} />
       })}
     </>
   )
 }
 
-export default PlaidItemsList
+export default ItemsList

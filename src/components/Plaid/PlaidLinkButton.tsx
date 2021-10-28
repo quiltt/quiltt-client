@@ -14,7 +14,7 @@ import {
 } from '../../types'
 import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
 
-import LinkLauncher from './LinkLauncher'
+import PlaidLinkLauncher from './PlaidLinkLauncher'
 
 export type LinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
@@ -36,7 +36,8 @@ const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProp
       accountFilters,
       children,
       onSuccess,
-      onEvent,
+      onExit = undefined,
+      onEvent = undefined,
       onLoad = undefined,
       ...otherProps
     } = props
@@ -50,7 +51,7 @@ const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProp
           throw new Error(`${error.code}: ${error.message}`)
         })
 
-      if (record) {
+      if (record && record.linkToken) {
         setLinkToken(record.linkToken)
       }
     }
@@ -67,7 +68,9 @@ const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProp
     })
 
     React.useEffect(() => {
-      createLinkToken()
+      if (createLinkToken) {
+        createLinkToken()
+      }
     }, [createLinkToken])
 
     if (!linkToken) {
@@ -83,14 +86,15 @@ const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProp
     }
 
     return React.createElement(
-      LinkLauncher,
+      PlaidLinkLauncher,
       {
         as,
         ref,
         token: linkToken,
         onSuccess,
-        onLoad,
+        onExit,
         onEvent,
+        onLoad,
         ...otherProps,
       },
       children

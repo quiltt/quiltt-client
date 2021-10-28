@@ -4,11 +4,12 @@ import type { AxiosRequestHeaders } from 'axios'
 import axios from 'axios'
 
 import useLocalStorage from '../useLocalStorage'
-import { QuilttContext, QuilttContextType } from '../useQuilttContext'
+import useQuilttContext from '../useQuilttContext'
 
 import { AuthAPI, AuthConfig, PasscodePayload, UsernamePayload } from './types'
 
-const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
+// const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
+const DEFAULT_ENDPOINT = 'http://auth.lvh.me:3000/v1/users/session'
 
 const DEFAULT_CONFIG: AuthConfig = {
   headers: {
@@ -22,8 +23,8 @@ const useQuilttAuth = (
   endpoint: string = DEFAULT_ENDPOINT,
   appConfig: AuthConfig = DEFAULT_CONFIG
 ) => {
-  const { appId } = React.useContext<QuilttContextType>(QuilttContext)
-  const [token, setToken] = useLocalStorage<string | null>('QUILTT_TOKEN', null)
+  const { appId } = useQuilttContext()
+  const [token, setToken] = useLocalStorage<string | null>('QUILTT_SESSION', null)
   const [userId, setUserId] = useLocalStorage<string | null>('QUILTT_USER_ID', null)
 
   const { ping, identify, authenticate, revoke }: AuthAPI = {

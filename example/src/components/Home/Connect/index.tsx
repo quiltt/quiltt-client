@@ -5,7 +5,7 @@ import { Spinner } from '@quiltt/ui'
 
 import { usePlaidItemsQuery } from '@quiltt/client'
 
-import PlaidItemsList from './Plaid/PlaidItemsList'
+import PlaidItemsList from './Plaid/ItemsList'
 import PlaidLinkButton from './Plaid/PlaidLinkButton'
 
 const Connect: React.FC = () => {

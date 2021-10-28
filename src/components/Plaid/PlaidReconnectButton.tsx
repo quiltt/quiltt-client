@@ -1,26 +1,28 @@
 import * as React from 'react'
 import type {
   PlaidLinkError,
+  PlaidLinkOnEvent,
   PlaidLinkOnExitMetadata,
   PlaidLinkOnLoad,
   PlaidLinkOptions,
 } from 'react-plaid-link'
 import { usePlaidLink } from 'react-plaid-link'
 
+import DefaultLoadingComponent from '../../components/DefaultLoadingComponent'
 import type {
   PlaidLinkTokenCreateForUpdateMutation,
   PlaidLinkTokenCreateForUpdatePayload,
 } from '../../types'
 import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
 import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
-import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
 type ReconnectButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps & {
     id: string
-    LoadingComponent?: React.ReactElement
-    children?: React.ReactNode
     setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
+    loadingComponent?: React.ReactElement
+    children?: React.ReactNode
+    onEvent?: PlaidLinkOnEvent
     onLoad?: PlaidLinkOnLoad
   }
 
@@ -31,9 +33,10 @@ const ReconnectButton: CustomComponentRefForwardingComponent<'button', Reconnect
     const {
       as = 'button',
       id,
-      LoadingComponent = <DefaultLoadingComponent />,
+      loadingComponent = <DefaultLoadingComponent />,
       children = 'Reconnect',
       setConnectionStatus,
+      onEvent = undefined,
       onLoad = undefined,
       ...otherProps
     } = props
@@ -74,6 +77,7 @@ const ReconnectButton: CustomComponentRefForwardingComponent<'button', Reconnect
     const config = {
       token: linkToken,
       onSuccess,
+      onEvent,
       onLoad,
       onExit,
     } as PlaidLinkOptions
@@ -90,7 +94,7 @@ const ReconnectButton: CustomComponentRefForwardingComponent<'button', Reconnect
 
     if (plaidLinkError) throw new Error(plaidLinkError.message)
 
-    if (!linkToken) return LoadingComponent
+    if (!linkToken) return loadingComponent
 
     return React.createElement(
       as as string,
@@ -99,6 +103,10 @@ const ReconnectButton: CustomComponentRefForwardingComponent<'button', Reconnect
         id: id,
         disabled: !ready,
         onClick: () => open(),
+        onSuccess,
+        onEvent,
+        onLoad,
+        onExit,
         ...otherProps,
       },
       children

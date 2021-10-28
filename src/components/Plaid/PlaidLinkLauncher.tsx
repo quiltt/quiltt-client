@@ -39,6 +39,7 @@ const LinkLauncher: CustomComponentRefForwardingComponent<'button', LinkLauncher
       onSuccess,
       onExit,
       onEvent,
+      onLoad,
     })
 
     if (error) throw new Error(`${error.error} ${error.message}`)
@@ -53,9 +54,9 @@ const LinkLauncher: CustomComponentRefForwardingComponent<'button', LinkLauncher
         className,
         disabled: !ready,
         ref,
-        ...otherProps,
         onClick: handleClick,
         onLoad,
+        ...otherProps,
       },
       children
     )
