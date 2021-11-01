@@ -2134,6 +2134,8 @@ export type RoundUpsBankConnectionsCardQuery = {
         __typename?: 'PlaidItem'
         id: string
         name: string
+        status: PlaidItemStatus
+        syncedAt?: any | null | undefined
         logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
       }
     | null
@@ -2242,6 +2244,8 @@ export type RoundUpsBankConnectionsPageQuery = {
     | Array<{
         __typename?: 'PlaidItem'
         id: string
+        status: PlaidItemStatus
+        syncedAt?: any | null | undefined
         accounts: Array<{ __typename?: 'Account'; id: string }>
       }>
     | null
@@ -3908,6 +3912,8 @@ export const RoundUpsBankConnectionsCardDocument = gql`
     plaidItem(id: $id) {
       id
       name
+      status
+      syncedAt
       logo {
         url
       }
@@ -3980,6 +3986,8 @@ export const RoundUpsBankConnectionsListDocument = gql`
     plaidItems {
       id
       name
+      status
+      syncedAt
       logo {
         url
       }
@@ -4054,6 +4062,8 @@ export const RoundUpsBankConnectionsListItemDocument = gql`
     plaidItem(id: $id) {
       id
       name
+      status
+      syncedAt
       logo {
         url
       }
@@ -4128,6 +4138,8 @@ export const RoundUpsBankConnectionsPageDocument = gql`
     }
     plaidItems {
       id
+      status
+      syncedAt
       accounts {
         id
       }
