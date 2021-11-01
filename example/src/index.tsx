@@ -8,10 +8,10 @@ import 'regenerator-runtime/runtime.js'
 
 import './index.css'
 
-const quilttAppID = import.meta.env.VITE_APP_QUILTT_APP_ID as string
+const quilttDeploymentId = import.meta.env.VITE_APP_QUILTT_APP_ID as string
 
 ReactDOM.render(
-  <QuilttProvider appId={quilttAppID} client="apollo">
+  <QuilttProvider deploymentId={quilttDeploymentId} client="apollo">
     <Router>
       <App />
     </Router>

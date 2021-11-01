@@ -9,11 +9,15 @@ import useQuilttClient from '../../hooks/useQuilttClient'
 import { QuilttContext } from '../../hooks/useQuilttContext'
 
 type QuilttProviderProps = {
-  appId: string
+  deploymentId: string
   client?: QueryClients
 }
 
-const QuilttProvider: React.FC<QuilttProviderProps> = ({ appId, client = 'apollo', children }) => {
+const QuilttProvider: React.FC<QuilttProviderProps> = ({
+  deploymentId,
+  client = 'apollo',
+  children,
+}) => {
   const [authorizationToken, setAuthorizationToken] = useLocalStorage<string | null>(
     'QUILTT_SESSION',
     null
@@ -32,7 +36,13 @@ const QuilttProvider: React.FC<QuilttProviderProps> = ({ appId, client = 'apollo
 
   return (
     <QuilttContext.Provider
-      value={{ appId, authorizationToken, setAuthorizationToken, queryClient, setQueryClient }}
+      value={{
+        deploymentId,
+        authorizationToken,
+        setAuthorizationToken,
+        queryClient,
+        setQueryClient,
+      }}
     >
       {clients[client]}
     </QuilttContext.Provider>

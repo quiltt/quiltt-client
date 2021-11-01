@@ -3,7 +3,7 @@ import * as React from 'react'
 import type { QueryClients } from '../useQuilttClient'
 
 export type QuilttContextType = {
-  appId: string
+  deploymentId: string
   authorizationToken: string | null
   setAuthorizationToken: (token: string | null) => void
   queryClient: QueryClients
@@ -11,7 +11,7 @@ export type QuilttContextType = {
 }
 
 export const QuilttContext = React.createContext<QuilttContextType>({
-  appId: '',
+  deploymentId: '',
   authorizationToken: null,
   setAuthorizationToken: () => {},
   queryClient: 'apollo',

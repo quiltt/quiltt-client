@@ -34,13 +34,16 @@ const LinkLauncher: CustomComponentRefForwardingComponent<'button', LinkLauncher
       onLoad = undefined,
       ...otherProps
     } = props
-    const { open, ready, error } = usePlaidLink({
+
+    const config = {
       token,
       onSuccess,
       onExit,
       onEvent,
       onLoad,
-    })
+    } as PlaidLinkOptions
+
+    const { open, ready, error } = usePlaidLink(config)
 
     if (error) throw new Error(`${error.error} ${error.message}`)
 

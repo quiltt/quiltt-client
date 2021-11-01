@@ -23,7 +23,7 @@ const useQuilttAuth = (
   endpoint: string = DEFAULT_ENDPOINT,
   appConfig: AuthConfig = DEFAULT_CONFIG
 ) => {
-  const { appId } = useQuilttContext()
+  const { deploymentId } = useQuilttContext()
   const [token, setToken] = useLocalStorage<string | null>('QUILTT_SESSION', null)
   const [userId, setUserId] = useLocalStorage<string | null>('QUILTT_USER_ID', null)
 
@@ -35,11 +35,11 @@ const useQuilttAuth = (
     },
     identify: (username: UsernamePayload) => {
       const config = { ...appConfig }
-      return axios.post(endpoint, { session: { appId, ...username } }, config)
+      return axios.post(endpoint, { session: { deploymentId, ...username } }, config)
     },
     authenticate: (authenticationVariables: PasscodePayload) => {
       const config = { ...appConfig }
-      return axios.put(endpoint, { session: { appId, ...authenticationVariables } }, config)
+      return axios.put(endpoint, { session: { deploymentId, ...authenticationVariables } }, config)
     },
     revoke: (authToken: string) => {
       const config = { ...appConfig }

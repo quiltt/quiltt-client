@@ -4,10 +4,10 @@ import { render } from '@testing-library/react'
 
 import QuilttProvider from '.'
 
-const appId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+const deploymentId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
 
 const quilttProviderComponent: React.ReactElement = (
-  <QuilttProvider appId={appId}>
+  <QuilttProvider deploymentId={deploymentId}>
     <div>Lorem Ipsum</div>
   </QuilttProvider>
 )
