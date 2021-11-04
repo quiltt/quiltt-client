@@ -1,6 +1,6 @@
 {
   "name": "@quiltt/client",
-  "version": "0.0.5-1",
+  "version": "0.0.5-2",
   "description": "Quiltt client to use the Quiltt API with React",
   "author": "Zubair Aziz",
   "license": "MIT",
