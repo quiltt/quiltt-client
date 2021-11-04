@@ -1,7 +1,6 @@
 export { default as PlaidNewConnectionButton } from './NewConnectionButton'
 export { default as PlaidLinkButton } from './PlaidLinkButton'
 export { default as PlaidLinkLauncher } from './PlaidLinkLauncher'
-export { default as PlaidReconnectButton } from './PlaidReconnectButton'
 export { default as PlaidItemStatusIndicator } from './PlaidItemStatusIndicator'
 export { default as PlaidItemReconnectButton } from './PlaidItemReconnectButton'
-export { default as PlaidUnlinkButton } from './UnlinkButton'
+export { default as PlaidUnlinkButton } from './PlaidUnlinkButton'
