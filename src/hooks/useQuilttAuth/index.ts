@@ -8,8 +8,8 @@ import useQuilttContext from '../useQuilttContext'
 
 import { AuthAPI, AuthConfig, PasscodePayload, UsernamePayload } from './types'
 
-const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
-// const DEFAULT_ENDPOINT = 'http://auth.lvh.me:3000/v1/users/session'
+// const DEFAULT_ENDPOINT = 'https://auth.quiltt.io/v1/users/session'
+const DEFAULT_ENDPOINT = 'http://auth.lvh.me:3000/v1/users/session'
 
 const DEFAULT_CONFIG: AuthConfig = {
   headers: {

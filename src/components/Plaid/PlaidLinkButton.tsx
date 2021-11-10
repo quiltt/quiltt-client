@@ -12,11 +12,11 @@ import {
   PlaidLinkTokenCreatePayload,
   usePlaidLinkTokenCreateMutation,
 } from '../../types'
-import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
+import { CustomComponentProps } from '../../utils/components'
 
 import PlaidLinkLauncher from './PlaidLinkLauncher'
 
-export type LinkButtonProps = React.HTMLAttributes<HTMLElement> &
+export type PlaidLinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
   PlaidLinkTokenCreateInput & {
     onSuccess: PlaidLinkOnSuccess
@@ -25,80 +25,81 @@ export type LinkButtonProps = React.HTMLAttributes<HTMLElement> &
     onLoad?: PlaidLinkOnLoad
   }
 
-type Ref = React.ReactNode | HTMLElement | string
+export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
+  as = 'button',
+  className = '',
+  products,
+  linkCustomizationName,
+  accountFilters,
+  children,
+  onSuccess,
+  onEvent,
+  onLoad = undefined,
+  ...otherProps
+}) => {
+  const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
-const LinkButton: CustomComponentRefForwardingComponent<'button', LinkButtonProps> =
-  React.forwardRef<Ref, LinkButtonProps>(function LinkButton(props, ref) {
-    const {
-      as = 'button',
-      products,
-      linkCustomizationName,
-      accountFilters,
-      children,
-      onSuccess,
-      onExit = undefined,
-      onEvent = undefined,
-      onLoad = undefined,
-      ...otherProps
-    } = props
+  const handlePlaidTokenCreated = (data: PlaidLinkTokenCreateMutation) => {
+    const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
+    if (errors)
+      errors.map((error) => {
+        // throw new Error(`${error.code}: ${error.message}`)
+        console.error(error)
+      })
 
-    const [linkToken, setLinkToken] = React.useState<string | null>(null)
-
-    const handlePlaidTokenCreated = (data: PlaidLinkTokenCreateMutation) => {
-      const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
-      if (errors)
-        errors.map((error) => {
-          throw new Error(`${error.code}: ${error.message}`)
-        })
-
-      if (record && record.linkToken) {
-        setLinkToken(record.linkToken)
-      }
+    if (record) {
+      setLinkToken(record.linkToken)
     }
+  }
 
-    const [createLinkToken] = usePlaidLinkTokenCreateMutation({
-      variables: {
-        input: {
-          accountFilters,
-          linkCustomizationName,
-          products,
-        },
+  const [createLinkToken] = usePlaidLinkTokenCreateMutation({
+    variables: {
+      input: {
+        accountFilters,
+        linkCustomizationName,
+        products,
       },
-      onCompleted: handlePlaidTokenCreated,
-    })
+    },
+    onCompleted: handlePlaidTokenCreated,
+  })
 
-    React.useEffect(() => {
-      if (createLinkToken) {
-        createLinkToken()
-      }
-    }, [createLinkToken])
+  React.useEffect(() => {
+    createLinkToken()
+  }, [createLinkToken])
 
-    if (!linkToken) {
-      return React.createElement(
-        as as string,
-        {
-          ref,
-          disabled: true,
-          ...otherProps,
-        },
-        children
-      )
-    }
-
+  if (!linkToken) {
     return React.createElement(
-      PlaidLinkLauncher,
+      as as string,
       {
-        as,
-        ref,
-        token: linkToken,
-        onSuccess,
-        onExit,
-        onEvent,
-        onLoad,
+        className,
+        disabled: true,
         ...otherProps,
       },
       children
     )
-  })
+  }
 
-export default LinkButton
+  return (
+    <PlaidLinkLauncher
+      token={linkToken}
+      onLoad={onLoad}
+      onSuccess={onSuccess}
+      onEvent={onEvent}
+      {...otherProps}
+    >
+      {(props) => {
+        return React.createElement(
+          as as string,
+          {
+            className,
+            ...otherProps,
+            ...props,
+          },
+          children
+        )
+      }}
+    </PlaidLinkLauncher>
+  )
+}
+
+export default PlaidLinkButton

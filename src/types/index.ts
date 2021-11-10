@@ -187,6 +187,69 @@ export enum LedgerStatus {
   Paused = 'PAUSED',
 }
 
+/** Represents a Merchant */
+export type Merchant = {
+  __typename?: 'Merchant'
+  /** ID */
+  id: Scalars['ID']
+  /** Name */
+  name: Scalars['String']
+  /** API Merchant Data Source */
+  source?: Maybe<MerchantSources>
+  /** API Merchant Data Sources */
+  sources?: Maybe<Array<MerchantSources>>
+  /** State */
+  state: LedgerState
+  /**
+   * Status
+   * @deprecated Use `state` instead.
+   */
+  status: LedgerStatus
+  /** A limited list of transactions. Use `transactionsConnection` for a full paginated list. */
+  transactions: Array<Transaction>
+  /** Cursor-based pagination transactions */
+  transactionsConnection: TransactionConnection
+}
+
+/** Represents a Merchant */
+export type MerchantSourceArgs = {
+  type: MerchantSourceType
+}
+
+/** Represents a Merchant */
+export type MerchantSourcesArgs = {
+  types?: Maybe<Array<MerchantSourceType>>
+}
+
+/** Represents a Merchant */
+export type MerchantTransactionsArgs = {
+  filter?: Maybe<TransactionFilter>
+  limit?: Scalars['Int']
+  search?: Maybe<SearchQuery>
+  sort?: Maybe<TransactionSort>
+}
+
+/** Represents a Merchant */
+export type MerchantTransactionsConnectionArgs = {
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  filter?: Maybe<TransactionFilter>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+  search?: Maybe<SearchQuery>
+  sort?: Maybe<TransactionSort>
+}
+
+/** Represents a data source for the Merchant */
+export enum MerchantSourceType {
+  /** Plaid Transaction Data */
+  Plaid = 'PLAID',
+  /** Spade Transaction Enrichment */
+  Spade = 'SPADE',
+}
+
+export type MerchantSources = PlaidMerchant | SpadeMerchant
+
 /** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
 export type Mutation = {
   __typename?: 'Mutation'
@@ -206,10 +269,6 @@ export type Mutation = {
   plaidProcessorTokenCreate?: Maybe<PlaidProcessorTokenCreatePayload>
   /** Update Profile Information */
   profileUpdate?: Maybe<ProfileUpdatePayload>
-  /** Register a recurring event like a bill payment, paycheck or transfer */
-  recurrenceCreate?: Maybe<RecurrenceCreatePayload>
-  /** Update an existing recurring event like a bill payment, paycheck or transfer */
-  recurrenceUpdate?: Maybe<RecurrenceUpdatePayload>
   /** Create a RoundUp */
   roundUpCreate?: Maybe<RoundUpCreatePayload>
   /** Pause a RoundUp */
@@ -266,16 +325,6 @@ export type MutationPlaidProcessorTokenCreateArgs = {
 /** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
 export type MutationProfileUpdateArgs = {
   input: ProfileUpdateInput
-}
-
-/** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
-export type MutationRecurrenceCreateArgs = {
-  input: RecurrenceCreateInput
-}
-
-/** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
-export type MutationRecurrenceUpdateArgs = {
-  input: RecurrenceUpdateInput
 }
 
 /** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
@@ -591,6 +640,15 @@ export type PlaidLinkTokenCreatePayload = {
   success: Scalars['Boolean']
 }
 
+/** Plaid Merchant Data */
+export type PlaidMerchant = {
+  __typename?: 'PlaidMerchant'
+  /** API Source */
+  _sourcename: MerchantSourceType
+  /** translation missing: en.plaid.merchant.name.description */
+  name: Scalars['String']
+}
+
 /** Represents a Processor Token */
 export type PlaidProcessorToken = {
   __typename?: 'PlaidProcessorToken'
@@ -787,8 +845,12 @@ export type Query = {
   __typename?: 'Query'
   /** Look up an Account by its ID */
   account?: Maybe<Account>
-  /** Get a list of a person's Accounts */
+  /** Get a list of the user's Accounts */
   accounts?: Maybe<Array<Account>>
+  /** Look up an Merchant by its ID */
+  merchant?: Maybe<Merchant>
+  /** Get a list of the user's Merchants */
+  merchants?: Maybe<Array<Merchant>>
   /** Look up a Plaid Item by its ID */
   plaidItem?: Maybe<PlaidItem>
   /** Get a list of the user's Plaid Items */
@@ -797,7 +859,7 @@ export type Query = {
   profile?: Maybe<Profile>
   /** Look up a Recurrence by its ID */
   recurrence?: Maybe<Recurrence>
-  /** Get a list of the user's Recurrences, sorted by next payment date */
+  /** Get a list of the user's Recurrences */
   recurrences?: Maybe<Array<Recurrence>>
   /** Look up a RoundUp by its ID */
   roundUp?: Maybe<RoundUp>
@@ -805,7 +867,7 @@ export type Query = {
   roundUps?: Maybe<Array<RoundUp>>
   /** Look up a Transaction by its ID */
   transaction?: Maybe<Transaction>
-  /** Get a cursor paginated list of the person's Transactions */
+  /** Get a cursor paginated list of the user's Transactions */
   transactionsConnection: TransactionConnection
 }
 
@@ -817,6 +879,16 @@ export type QueryAccountArgs = {
 /** The top-level Query type. Queries are used to fetch data. */
 export type QueryAccountsArgs = {
   filter?: Maybe<AccountFilter>
+  search?: Maybe<SearchQuery>
+}
+
+/** The top-level Query type. Queries are used to fetch data. */
+export type QueryMerchantArgs = {
+  id: Scalars['ID']
+}
+
+/** The top-level Query type. Queries are used to fetch data. */
+export type QueryMerchantsArgs = {
   search?: Maybe<SearchQuery>
 }
 
@@ -894,27 +966,6 @@ export type RecurrenceTransactionsConnectionArgs = {
   sort?: Maybe<TransactionSort>
 }
 
-/** Autogenerated input type of RecurrenceCreate */
-export type RecurrenceCreateInput = {
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>
-  frequency: RecurrenceFrequency
-  transactionId: Scalars['ID']
-}
-
-/** Autogenerated return type of RecurrenceCreate */
-export type RecurrenceCreatePayload = {
-  __typename?: 'RecurrenceCreatePayload'
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>
-  /** List of errors from mutation */
-  errors?: Maybe<Array<Error>>
-  /** Updated bill */
-  record?: Maybe<Recurrence>
-  /** Status of the mutation */
-  success: Scalars['Boolean']
-}
-
 /** Whether the Recurrence represent money being advanced into or withdrawn from the account. */
 export enum RecurrenceEntryType {
   /** a set of entries recording money being advanced into the account */
@@ -929,6 +980,8 @@ export enum RecurrenceFrequency {
   Annually = 'ANNUALLY',
   /** Every daily */
   Daily = 'DAILY',
+  /** Every 30 days */
+  Every_30Days = 'EVERY_30_DAYS',
   /** Every two weeks */
   Fortnightly = 'FORTNIGHTLY',
   /** Every month */
@@ -941,30 +994,8 @@ export enum RecurrenceFrequency {
   SemimonthlyEarly = 'SEMIMONTHLY_EARLY',
   /** Twice per month, 15th & End of Month */
   SemimonthlyLate = 'SEMIMONTHLY_LATE',
-  /** Every thirty days */
-  ThirtyDays = 'THIRTY_DAYS',
   /** Every week */
   Weekly = 'WEEKLY',
-}
-
-/** Autogenerated input type of RecurrenceUpdate */
-export type RecurrenceUpdateInput = {
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>
-  frequency: RecurrenceFrequency
-}
-
-/** Autogenerated return type of RecurrenceUpdate */
-export type RecurrenceUpdatePayload = {
-  __typename?: 'RecurrenceUpdatePayload'
-  /** A unique identifier for the client performing the mutation. */
-  clientMutationId?: Maybe<Scalars['String']>
-  /** List of errors from mutation */
-  errors?: Maybe<Array<Error>>
-  /** Updated bill */
-  record?: Maybe<Recurrence>
-  /** Status of the mutation */
-  success: Scalars['Boolean']
 }
 
 /** Represents a RoundUp */
@@ -1210,6 +1241,17 @@ export type SpadeLogo = {
   type: Scalars['String']
   /** Is this logo from our verified logo database */
   verified: Scalars['Boolean']
+}
+
+/** Spade Merchant Info Data */
+export type SpadeMerchant = {
+  __typename?: 'SpadeMerchant'
+  /** API Source */
+  _sourcename: MerchantSourceType
+  hasPhysicalLocations?: Maybe<Scalars['String']>
+  name?: Maybe<Scalars['String']>
+  verified?: Maybe<Scalars['Boolean']>
+  website?: Maybe<Scalars['String']>
 }
 
 /** Spade Merchant Info Data */
@@ -1527,313 +1569,134 @@ export type TransactionUpdatePayload = {
 
 export type BillsQueryVariables = Exact<{ [key: string]: never }>
 
-export type BillsQuery = {
-  __typename?: 'Query'
-  recurrences?:
-    | Array<{
-        __typename?: 'Recurrence'
-        id: string
-        name?: string | null | undefined
-        frequency: RecurrenceFrequency
-        state: LedgerState
-        transactionNext?:
-          | { __typename?: 'Transaction'; id: string; date: any; amount: number }
-          | null
-          | undefined
-      }>
-    | null
-    | undefined
+export type BillsQuery = { __typename?: 'Query' } & {
+  recurrences?: Maybe<
+    Array<
+      { __typename?: 'Recurrence' } & Pick<Recurrence, 'id' | 'name' | 'frequency' | 'state'> & {
+          transactionNext?: Maybe<
+            { __typename?: 'Transaction' } & Pick<Transaction, 'id' | 'date' | 'amount'>
+          >
+        }
+    >
+  >
 }
 
 export type BillDetailQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type BillDetailQuery = {
-  __typename?: 'Query'
-  recurrence?:
-    | {
-        __typename?: 'Recurrence'
-        id: string
-        name?: string | null | undefined
-        frequency: RecurrenceFrequency
-        state: LedgerState
-        transactionNext?:
-          | { __typename?: 'Transaction'; id: string; date: any; amount: number }
-          | null
-          | undefined
-        transactions: Array<{ __typename?: 'Transaction'; id: string; amount: number; date: any }>
+export type BillDetailQuery = { __typename?: 'Query' } & {
+  recurrence?: Maybe<
+    { __typename?: 'Recurrence' } & Pick<Recurrence, 'id' | 'name' | 'frequency' | 'state'> & {
+        transactionNext?: Maybe<
+          { __typename?: 'Transaction' } & Pick<Transaction, 'id' | 'date' | 'amount'>
+        >
+        transactions: Array<
+          { __typename?: 'Transaction' } & Pick<Transaction, 'id' | 'amount' | 'date'>
+        >
       }
-    | null
-    | undefined
-}
-
-export type BillTemplateQueryVariables = Exact<{
-  categoryId?: Maybe<Scalars['ID']>
-  merchantId?: Maybe<Scalars['ID']>
-  name?: Maybe<Scalars['String']>
-}>
-
-export type BillTemplateQuery = {
-  __typename?: 'Query'
-  recurrences?:
-    | Array<{ __typename?: 'Recurrence'; name?: string | null | undefined }>
-    | null
-    | undefined
-}
-
-export type CreateBillMutationVariables = Exact<{
-  input: RecurrenceCreateInput
-}>
-
-export type CreateBillMutation = {
-  __typename?: 'Mutation'
-  recurrenceCreate?:
-    | {
-        __typename?: 'RecurrenceCreatePayload'
-        record?:
-          | {
-              __typename?: 'Recurrence'
-              id: string
-              name?: string | null | undefined
-              frequency: RecurrenceFrequency
-              state: LedgerState
-            }
-          | null
-          | undefined
-        errors?:
-          | Array<{
-              __typename?: 'Error'
-              message?: string | null | undefined
-              path?: Array<string> | null | undefined
-            }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
-}
-
-export type UpdateBillMutationVariables = Exact<{
-  input: RecurrenceUpdateInput
-}>
-
-export type UpdateBillMutation = {
-  __typename?: 'Mutation'
-  recurrenceUpdate?:
-    | {
-        __typename?: 'RecurrenceUpdatePayload'
-        record?:
-          | {
-              __typename?: 'Recurrence'
-              id: string
-              name?: string | null | undefined
-              frequency: RecurrenceFrequency
-              state: LedgerState
-            }
-          | null
-          | undefined
-        errors?:
-          | Array<{
-              __typename?: 'Error'
-              message?: string | null | undefined
-              path?: Array<string> | null | undefined
-            }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+  >
 }
 
 export type PlaidItemsQueryVariables = Exact<{ [key: string]: never }>
 
-export type PlaidItemsQuery = {
-  __typename?: 'Query'
-  plaidItems?:
-    | Array<{
-        __typename?: 'PlaidItem'
-        id: string
-        name: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-        accounts: Array<{
-          __typename?: 'Account'
-          id: string
-          name: string
-          lastFourDigits?: string | null | undefined
-          type: AccountType
-          balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-        }>
-      }>
-    | null
-    | undefined
+export type PlaidItemsQuery = { __typename?: 'Query' } & {
+  plaidItems?: Maybe<Array<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>>
 }
 
 export type PlaidItemSyncStatusQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type PlaidItemSyncStatusQuery = {
-  __typename?: 'Query'
-  plaidItem?:
-    | {
-        __typename?: 'PlaidItem'
-        id: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-      }
-    | null
-    | undefined
+export type PlaidItemSyncStatusQuery = { __typename?: 'Query' } & {
+  plaidItem?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'status' | 'syncedAt'>>
 }
 
 export type PlaidLinkTokenCreateMutationVariables = Exact<{
   input: PlaidLinkTokenCreateInput
 }>
 
-export type PlaidLinkTokenCreateMutation = {
-  __typename?: 'Mutation'
-  plaidLinkTokenCreate?:
-    | {
-        __typename?: 'PlaidLinkTokenCreatePayload'
-        record?:
-          | { __typename?: 'PlaidLinkToken'; linkToken: string; expiration: any }
-          | null
-          | undefined
-        errors?:
-          | Array<{
-              __typename?: 'PlaidAPIError'
-              code: string
-              type: string
-              message: string
-              requestId?: string | null | undefined
-              displayMessage?: string | null | undefined
-            }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type PlaidLinkTokenCreateMutation = { __typename?: 'Mutation' } & {
+  plaidLinkTokenCreate?: Maybe<
+    { __typename?: 'PlaidLinkTokenCreatePayload' } & {
+      record?: Maybe<
+        { __typename?: 'PlaidLinkToken' } & Pick<PlaidLinkToken, 'linkToken' | 'expiration'>
+      >
+      errors?: Maybe<
+        Array<
+          { __typename?: 'PlaidAPIError' } & Pick<
+            PlaidApiError,
+            'code' | 'type' | 'message' | 'requestId' | 'displayMessage'
+          >
+        >
+      >
+    }
+  >
 }
 
 export type PlaidLinkTokenCreateForUpdateMutationVariables = Exact<{
   input: PlaidLinkTokenCreateForUpdateInput
 }>
 
-export type PlaidLinkTokenCreateForUpdateMutation = {
-  __typename?: 'Mutation'
-  plaidLinkTokenCreateForUpdate?:
-    | {
-        __typename?: 'PlaidLinkTokenCreateForUpdatePayload'
-        record?:
-          | { __typename?: 'PlaidLinkToken'; linkToken: string; expiration: any }
-          | null
-          | undefined
-        errors?:
-          | Array<{
-              __typename?: 'PlaidAPIError'
-              code: string
-              type: string
-              message: string
-              requestId?: string | null | undefined
-              displayMessage?: string | null | undefined
-            }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type PlaidLinkTokenCreateForUpdateMutation = { __typename?: 'Mutation' } & {
+  plaidLinkTokenCreateForUpdate?: Maybe<
+    { __typename?: 'PlaidLinkTokenCreateForUpdatePayload' } & {
+      record?: Maybe<
+        { __typename?: 'PlaidLinkToken' } & Pick<PlaidLinkToken, 'linkToken' | 'expiration'>
+      >
+      errors?: Maybe<
+        Array<
+          { __typename?: 'PlaidAPIError' } & Pick<
+            PlaidApiError,
+            'code' | 'type' | 'message' | 'requestId' | 'displayMessage'
+          >
+        >
+      >
+    }
+  >
 }
 
 export type PlaidItemCreateMutationVariables = Exact<{
   input: PlaidItemCreateInput
 }>
 
-export type PlaidItemCreateMutation = {
-  __typename?: 'Mutation'
-  plaidItemCreate?:
-    | {
-        __typename?: 'PlaidItemCreatePayload'
-        record?:
-          | {
-              __typename?: 'PlaidItem'
-              id: string
-              name: string
-              status: PlaidItemStatus
-              syncedAt?: any | null | undefined
-              logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-              accounts: Array<{
-                __typename?: 'Account'
-                id: string
-                name: string
-                lastFourDigits?: string | null | undefined
-                type: AccountType
-                balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-              }>
-            }
-          | null
-          | undefined
-        errors?:
-          | Array<{ __typename?: 'PlaidAPIError'; displayMessage?: string | null | undefined }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type PlaidItemCreateMutation = { __typename?: 'Mutation' } & {
+  plaidItemCreate?: Maybe<
+    { __typename?: 'PlaidItemCreatePayload' } & {
+      record?: Maybe<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>
+      errors?: Maybe<
+        Array<{ __typename?: 'PlaidAPIError' } & Pick<PlaidApiError, 'displayMessage'>>
+      >
+    }
+  >
 }
 
 export type PlaidItemUnlinkMutationVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type PlaidItemUnlinkMutation = {
-  __typename?: 'Mutation'
-  plaidItemDelete?:
-    | {
-        __typename?: 'PlaidItemDeletePayload'
-        success: boolean
-        record?: { __typename?: 'PlaidItem'; id: string } | null | undefined
+export type PlaidItemUnlinkMutation = { __typename?: 'Mutation' } & {
+  plaidItemDelete?: Maybe<
+    { __typename?: 'PlaidItemDeletePayload' } & Pick<PlaidItemDeletePayload, 'success'> & {
+        record?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>>
       }
-    | null
-    | undefined
+  >
 }
 
 export type PlaidItemUpdatedSubscriptionVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type PlaidItemUpdatedSubscription = {
-  __typename?: 'Subscription'
-  plaidItemUpdated: {
-    __typename?: 'PlaidItemUpdatedPayload'
-    record?:
-      | {
-          __typename?: 'PlaidItem'
-          id: string
-          name: string
-          status: PlaidItemStatus
-          syncedAt?: any | null | undefined
-          logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-          accounts: Array<{
-            __typename?: 'Account'
-            id: string
-            name: string
-            lastFourDigits?: string | null | undefined
-            type: AccountType
-            balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-          }>
-        }
-      | null
-      | undefined
+export type PlaidItemUpdatedSubscription = { __typename?: 'Subscription' } & {
+  plaidItemUpdated: { __typename?: 'PlaidItemUpdatedPayload' } & {
+    record?: Maybe<{ __typename?: 'PlaidItem' } & PlaidItemFragmentFragment>
   }
 }
 
 export type NextPaycheckQueryQueryVariables = Exact<{ [key: string]: never }>
 
-export type NextPaycheckQueryQuery = {
-  __typename?: 'Query'
-  profile?: { __typename?: 'Profile'; name?: string | null | undefined } | null | undefined
+export type NextPaycheckQueryQuery = { __typename?: 'Query' } & {
+  profile?: Maybe<{ __typename?: 'Profile' } & Pick<Profile, 'name'>>
 }
 
 export type RoundUpActivateMutationVariables = Exact<{
@@ -1842,70 +1705,49 @@ export type RoundUpActivateMutationVariables = Exact<{
   startOn?: Maybe<Scalars['Date']>
 }>
 
-export type RoundUpActivateMutation = {
-  __typename?: 'Mutation'
-  roundUpSetStartTime?:
-    | {
-        __typename?: 'RoundUpSetStartTimePayload'
-        success: boolean
-        record?:
-          | {
-              __typename?: 'RoundUp'
-              id: string
-              balance: {
-                __typename?: 'LedgerBalance'
-                id: string
-                available?: number | null | undefined
-              }
-              transactionsConnection: {
-                __typename?: 'TransactionConnection'
-                nodes?:
-                  | Array<
-                      | {
-                          __typename?: 'Transaction'
-                          id: string
-                          date: any
-                          amount: number
-                          description: string
-                        }
-                      | null
-                      | undefined
+export type RoundUpActivateMutation = { __typename?: 'Mutation' } & {
+  roundUpSetStartTime?: Maybe<
+    { __typename?: 'RoundUpSetStartTimePayload' } & Pick<RoundUpSetStartTimePayload, 'success'> & {
+        record?: Maybe<
+          { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+              transactionsConnection: { __typename?: 'TransactionConnection' } & {
+                nodes?: Maybe<
+                  Array<
+                    Maybe<
+                      { __typename?: 'Transaction' } & Pick<
+                        Transaction,
+                        'id' | 'date' | 'amount' | 'description'
+                      >
                     >
-                  | null
-                  | undefined
+                  >
+                >
               }
             }
-          | null
-          | undefined
+        >
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpActivateDateSearchQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpActivateDateSearchQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        subscribedAccounts: Array<{
-          __typename?: 'Account'
-          id: string
-          transactions: Array<{
-            __typename?: 'Transaction'
-            id: string
-            date: any
-            amount: number
-            status: TransactionStatus
-          }>
-        }>
+export type RoundUpActivateDateSearchQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        subscribedAccounts: Array<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              transactions: Array<
+                { __typename?: 'Transaction' } & Pick<
+                  Transaction,
+                  'id' | 'date' | 'amount' | 'status'
+                >
+              >
+            }
+        >
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsAccountsListQueryVariables = Exact<{
@@ -1913,35 +1755,22 @@ export type RoundUpsBankConnectionsAccountsListQueryVariables = Exact<{
   bankConnectionId: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsAccountsListQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+export type RoundUpsBankConnectionsAccountsListQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
             }
-          | null
-          | undefined
+        >
       }
-    | null
-    | undefined
-  plaidItem?:
-    | {
-        __typename?: 'PlaidItem'
-        id: string
-        name: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-        accounts: Array<{ __typename?: 'Account'; id: string; name: string }>
+  >
+  plaidItem?: Maybe<
+    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
+        logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
+        accounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id' | 'name'>>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsAccountsListItemQueryVariables = Exact<{
@@ -1949,35 +1778,23 @@ export type RoundUpsBankConnectionsAccountsListItemQueryVariables = Exact<{
   accountId: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsAccountsListItemQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+export type RoundUpsBankConnectionsAccountsListItemQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
             }
-          | null
-          | undefined
-        subscribedAccounts: Array<{ __typename?: 'Account'; id: string }>
-        availableAccounts: Array<{ __typename?: 'Account'; id: string }>
+        >
+        subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+        availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
       }
-    | null
-    | undefined
-  account?:
-    | {
-        __typename?: 'Account'
-        id: string
-        name: string
-        lastFourDigits?: string | null | undefined
-        balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+  >
+  account?: Maybe<
+    { __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'lastFourDigits'> & {
+        balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsAccountsSubscribeMutationVariables = Exact<{
@@ -1985,23 +1802,17 @@ export type RoundUpsAccountsSubscribeMutationVariables = Exact<{
   accountId: Scalars['ID']
 }>
 
-export type RoundUpsAccountsSubscribeMutation = {
-  __typename?: 'Mutation'
-  roundUpSubscribedAccountsAdd?:
-    | {
-        __typename?: 'RoundUpSubscribedAccountsAddPayload'
-        record?:
-          | {
-              __typename?: 'RoundUp'
-              id: string
-              subscribedAccounts: Array<{ __typename?: 'Account'; id: string }>
-              availableAccounts: Array<{ __typename?: 'Account'; id: string }>
-            }
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsAccountsSubscribeMutation = { __typename?: 'Mutation' } & {
+  roundUpSubscribedAccountsAdd?: Maybe<
+    { __typename?: 'RoundUpSubscribedAccountsAddPayload' } & {
+      record?: Maybe<
+        { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+            subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+            availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+          }
+      >
+    }
+  >
 }
 
 export type RoundUpsAccountsUnsubscribeMutationVariables = Exact<{
@@ -2009,23 +1820,17 @@ export type RoundUpsAccountsUnsubscribeMutationVariables = Exact<{
   accountId: Scalars['ID']
 }>
 
-export type RoundUpsAccountsUnsubscribeMutation = {
-  __typename?: 'Mutation'
-  roundUpSubscribedAccountsRemove?:
-    | {
-        __typename?: 'RoundUpSubscribedAccountsRemovePayload'
-        record?:
-          | {
-              __typename?: 'RoundUp'
-              id: string
-              subscribedAccounts: Array<{ __typename?: 'Account'; id: string }>
-              availableAccounts: Array<{ __typename?: 'Account'; id: string }>
-            }
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsAccountsUnsubscribeMutation = { __typename?: 'Mutation' } & {
+  roundUpSubscribedAccountsRemove?: Maybe<
+    { __typename?: 'RoundUpSubscribedAccountsRemovePayload' } & {
+      record?: Maybe<
+        { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+            subscribedAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+            availableAccounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+          }
+      >
+    }
+  >
 }
 
 export type RoundUpsBankConnectionsAddFundingMutationVariables = Exact<{
@@ -2033,24 +1838,19 @@ export type RoundUpsBankConnectionsAddFundingMutationVariables = Exact<{
   accountId: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsAddFundingMutation = {
-  __typename?: 'Mutation'
-  roundUpSetFundingAccount?:
-    | {
-        __typename?: 'RoundUpSetFundingAccountPayload'
-        success: boolean
-        record?: { __typename?: 'RoundUp'; id: string } | null | undefined
-      }
-    | null
-    | undefined
-  roundUpSubscribedAccountsAdd?:
-    | {
-        __typename?: 'RoundUpSubscribedAccountsAddPayload'
-        success: boolean
-        record?: { __typename?: 'RoundUp'; id: string } | null | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsBankConnectionsAddFundingMutation = { __typename?: 'Mutation' } & {
+  roundUpSetFundingAccount?: Maybe<
+    { __typename?: 'RoundUpSetFundingAccountPayload' } & Pick<
+      RoundUpSetFundingAccountPayload,
+      'success'
+    > & { record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id'>> }
+  >
+  roundUpSubscribedAccountsAdd?: Maybe<
+    { __typename?: 'RoundUpSubscribedAccountsAddPayload' } & Pick<
+      RoundUpSubscribedAccountsAddPayload,
+      'success'
+    > & { record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id'>> }
+  >
 }
 
 export type RoundUpsBankConnectionsAddSubscriptionMutationVariables = Exact<{
@@ -2058,16 +1858,13 @@ export type RoundUpsBankConnectionsAddSubscriptionMutationVariables = Exact<{
   accountIds: Array<Scalars['ID']> | Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsAddSubscriptionMutation = {
-  __typename?: 'Mutation'
-  roundUpSubscribedAccountsAdd?:
-    | {
-        __typename?: 'RoundUpSubscribedAccountsAddPayload'
-        success: boolean
-        record?: { __typename?: 'RoundUp'; id: string } | null | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsBankConnectionsAddSubscriptionMutation = { __typename?: 'Mutation' } & {
+  roundUpSubscribedAccountsAdd?: Maybe<
+    { __typename?: 'RoundUpSubscribedAccountsAddPayload' } & Pick<
+      RoundUpSubscribedAccountsAddPayload,
+      'success'
+    > & { record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id'>> }
+  >
 }
 
 export type RoundUpsRecentActivityQueryVariables = Exact<{
@@ -2075,50 +1872,34 @@ export type RoundUpsRecentActivityQueryVariables = Exact<{
   since: Scalars['Date']
 }>
 
-export type RoundUpsRecentActivityQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        recentActivity: {
-          __typename?: 'LedgerBalance'
-          id: string
-          current?: number | null | undefined
-        }
+export type RoundUpsRecentActivityQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        recentActivity: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'current'>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsSummaryCardFooterQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsSummaryCardFooterQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+export type RoundUpsBankConnectionsSummaryCardFooterQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
             }
-          | null
-          | undefined
+        >
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsSummaryCardHeaderQueryVariables = Exact<{ [key: string]: never }>
 
-export type RoundUpsBankConnectionsSummaryCardHeaderQuery = {
-  __typename?: 'Query'
-  plaidItems?: Array<{ __typename?: 'PlaidItem'; id: string }> | null | undefined
+export type RoundUpsBankConnectionsSummaryCardHeaderQuery = { __typename?: 'Query' } & {
+  plaidItems?: Maybe<Array<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>>>
 }
 
 export type RoundUpsBankConnectionsCardQueryVariables = Exact<{
@@ -2126,58 +1907,36 @@ export type RoundUpsBankConnectionsCardQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsCardQuery = {
-  __typename?: 'Query'
-  roundUp?: { __typename?: 'RoundUp'; id: string } | null | undefined
-  plaidItem?:
-    | {
-        __typename?: 'PlaidItem'
-        id: string
-        name: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
+export type RoundUpsBankConnectionsCardQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id'>>
+  plaidItem?: Maybe<
+    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name'> & {
+        logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsListQueryVariables = Exact<{
   roundUpId: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsListQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              lastFourDigits?: string | null | undefined
-              name: string
-              type: AccountType
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-              plaidItem?: { __typename?: 'PlaidItem'; id: string } | null | undefined
-            }
-          | null
-          | undefined
+export type RoundUpsBankConnectionsListQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & {
+            balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
+          } & AccountFragmentFragment
+        >
       }
-    | null
-    | undefined
-  plaidItems?:
-    | Array<{
-        __typename?: 'PlaidItem'
-        id: string
-        name: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-      }>
-    | null
-    | undefined
+  >
+  plaidItems?: Maybe<
+    Array<
+      { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
+          logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
+        }
+    >
+  >
 }
 
 export type RoundUpsBankConnectionsListItemQueryVariables = Exact<{
@@ -2185,101 +1944,68 @@ export type RoundUpsBankConnectionsListItemQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsListItemQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              lastFourDigits?: string | null | undefined
-              name: string
-              type: AccountType
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-              plaidItem?: { __typename?: 'PlaidItem'; id: string } | null | undefined
-            }
-          | null
-          | undefined
+export type RoundUpsBankConnectionsListItemQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & {
+            balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
+          } & AccountFragmentFragment
+        >
       }
-    | null
-    | undefined
-  plaidItem?:
-    | {
-        __typename?: 'PlaidItem'
-        id: string
-        name: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
+  >
+  plaidItem?: Maybe<
+    { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id' | 'name' | 'status' | 'syncedAt'> & {
+        logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsBankConnectionsPageQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsBankConnectionsPageQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+export type RoundUpsBankConnectionsPageQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
             }
-          | null
-          | undefined
+        >
       }
-    | null
-    | undefined
-  plaidItems?:
-    | Array<{
-        __typename?: 'PlaidItem'
-        id: string
-        status: PlaidItemStatus
-        syncedAt?: any | null | undefined
-        accounts: Array<{ __typename?: 'Account'; id: string }>
-      }>
-    | null
-    | undefined
+  >
+  plaidItems?: Maybe<
+    Array<
+      { __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'> & {
+          accounts: Array<{ __typename?: 'Account' } & Pick<Account, 'id'>>
+        }
+    >
+  >
 }
 
 export type RoundUpsPauseMutationVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsPauseMutation = {
-  __typename?: 'Mutation'
-  roundUpPause?:
-    | {
-        __typename?: 'RoundUpPausePayload'
-        record?: { __typename?: 'RoundUp'; id: string; status: LedgerStatus } | null | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsPauseMutation = { __typename?: 'Mutation' } & {
+  roundUpPause?: Maybe<
+    { __typename?: 'RoundUpPausePayload' } & {
+      record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
+    }
+  >
 }
 
 export type RoundUpsResumeMutationVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpsResumeMutation = {
-  __typename?: 'Mutation'
-  roundUpResume?:
-    | {
-        __typename?: 'RoundUpResumePayload'
-        record?: { __typename?: 'RoundUp'; id: string; status: LedgerStatus } | null | undefined
-      }
-    | null
-    | undefined
+export type RoundUpsResumeMutation = { __typename?: 'Mutation' } & {
+  roundUpResume?: Maybe<
+    { __typename?: 'RoundUpResumePayload' } & {
+      record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
+    }
+  >
 }
 
 export type RoundUpSummaryQueryVariables = Exact<{
@@ -2287,27 +2013,19 @@ export type RoundUpSummaryQueryVariables = Exact<{
   startOfWeek?: Maybe<Scalars['Date']>
 }>
 
-export type RoundUpSummaryQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        totalAmount: {
-          __typename?: 'LedgerBalance'
-          id: string
-          available?: number | null | undefined
-          current?: number | null | undefined
-        }
-        thisWeek: {
-          __typename?: 'LedgerBalance'
-          id: string
-          available?: number | null | undefined
-          current?: number | null | undefined
-        }
+export type RoundUpSummaryQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        totalAmount: { __typename?: 'LedgerBalance' } & Pick<
+          LedgerBalance,
+          'id' | 'available' | 'current'
+        >
+        thisWeek: { __typename?: 'LedgerBalance' } & Pick<
+          LedgerBalance,
+          'id' | 'available' | 'current'
+        >
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpHistoryQueryVariables = Exact<{
@@ -2321,185 +2039,119 @@ export type RoundUpHistoryQueryVariables = Exact<{
   day6: Scalars['Date']
 }>
 
-export type RoundUpHistoryQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        day0: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day1: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day2: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day3: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day4: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day5: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
-        day6: { __typename?: 'LedgerBalance'; id: string; available?: number | null | undefined }
+export type RoundUpHistoryQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        day0: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day1: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day2: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day3: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day4: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day5: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
+        day6: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'id' | 'available'>
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpTransactionsQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpTransactionsQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        transactionsConnection: {
-          __typename?: 'TransactionConnection'
-          edges?:
-            | Array<
-                | {
-                    __typename?: 'TransactionEdge'
-                    node?:
-                      | {
-                          __typename?: 'Transaction'
-                          id: string
-                          date: any
-                          amount: number
-                          description: string
-                        }
-                      | null
-                      | undefined
-                  }
-                | null
-                | undefined
+export type RoundUpTransactionsQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id'> & {
+        transactionsConnection: { __typename?: 'TransactionConnection' } & {
+          edges?: Maybe<
+            Array<
+              Maybe<
+                { __typename?: 'TransactionEdge' } & {
+                  node?: Maybe<
+                    { __typename?: 'Transaction' } & Pick<
+                      Transaction,
+                      'id' | 'date' | 'amount' | 'description'
+                    >
+                  >
+                }
               >
-            | null
-            | undefined
+            >
+          >
         }
       }
-    | null
-    | undefined
+  >
 }
 
 export type RoundUpsQueryVariables = Exact<{ [key: string]: never }>
 
-export type RoundUpsQuery = {
-  __typename?: 'Query'
-  roundUps?: Array<{ __typename?: 'RoundUp'; id: string }> | null | undefined
+export type RoundUpsQuery = { __typename?: 'Query' } & {
+  roundUps?: Maybe<Array<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id'>>>
 }
 
 export type RoundUpHomeQueryVariables = Exact<{
   id: Scalars['ID']
 }>
 
-export type RoundUpHomeQuery = {
-  __typename?: 'Query'
-  roundUp?:
-    | {
-        __typename?: 'RoundUp'
-        id: string
-        status: LedgerStatus
-        fundingAccount?:
-          | {
-              __typename?: 'Account'
-              id: string
-              balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
+export type RoundUpHomeQuery = { __typename?: 'Query' } & {
+  roundUp?: Maybe<
+    { __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'> & {
+        fundingAccount?: Maybe<
+          { __typename?: 'Account' } & Pick<Account, 'id'> & {
+              balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
             }
-          | null
-          | undefined
+        >
       }
-    | null
-    | undefined
+  >
 }
 
 export type CreateRoundUpMutationVariables = Exact<{ [key: string]: never }>
 
-export type CreateRoundUpMutation = {
-  __typename?: 'Mutation'
-  roundUpCreate?:
-    | {
-        __typename?: 'RoundUpCreatePayload'
-        success: boolean
-        record?: { __typename?: 'RoundUp'; id: string; status: LedgerStatus } | null | undefined
+export type CreateRoundUpMutation = { __typename?: 'Mutation' } & {
+  roundUpCreate?: Maybe<
+    { __typename?: 'RoundUpCreatePayload' } & Pick<RoundUpCreatePayload, 'success'> & {
+        record?: Maybe<{ __typename?: 'RoundUp' } & Pick<RoundUp, 'id' | 'status'>>
       }
-    | null
-    | undefined
+  >
 }
 
-export type ProfileFragmentFragment = {
-  __typename?: 'Profile'
-  name?: string | null | undefined
-  email?: string | null | undefined
-  phone?: string | null | undefined
-}
+export type ProfileFragmentFragment = { __typename?: 'Profile' } & Pick<
+  Profile,
+  'name' | 'email' | 'phone'
+>
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never }>
 
-export type ProfileQuery = {
-  __typename?: 'Query'
-  profile?:
-    | {
-        __typename?: 'Profile'
-        name?: string | null | undefined
-        email?: string | null | undefined
-        phone?: string | null | undefined
-      }
-    | null
-    | undefined
+export type ProfileQuery = { __typename?: 'Query' } & {
+  profile?: Maybe<{ __typename?: 'Profile' } & ProfileFragmentFragment>
 }
 
 export type ProfileUpdateMutationVariables = Exact<{
   input: ProfileUpdateInput
 }>
 
-export type ProfileUpdateMutation = {
-  __typename?: 'Mutation'
-  profileUpdate?:
-    | {
-        __typename?: 'ProfileUpdatePayload'
-        record?:
-          | {
-              __typename?: 'Profile'
-              name?: string | null | undefined
-              email?: string | null | undefined
-              phone?: string | null | undefined
-            }
-          | null
-          | undefined
-        errors?:
-          | Array<{
-              __typename?: 'Error'
-              path?: Array<string> | null | undefined
-              message?: string | null | undefined
-            }>
-          | null
-          | undefined
-      }
-    | null
-    | undefined
+export type ProfileUpdateMutation = { __typename?: 'Mutation' } & {
+  profileUpdate?: Maybe<
+    { __typename?: 'ProfileUpdatePayload' } & {
+      record?: Maybe<{ __typename?: 'Profile' } & ProfileFragmentFragment>
+      errors?: Maybe<Array<{ __typename?: 'Error' } & Pick<Error, 'path' | 'message'>>>
+    }
+  >
 }
 
-export type AccountFragmentFragment = {
-  __typename?: 'Account'
-  id: string
-  lastFourDigits?: string | null | undefined
-  name: string
-  type: AccountType
-  plaidItem?: { __typename?: 'PlaidItem'; id: string } | null | undefined
-}
+export type AccountFragmentFragment = { __typename?: 'Account' } & Pick<
+  Account,
+  'id' | 'lastFourDigits' | 'name' | 'type'
+> & { plaidItem?: Maybe<{ __typename?: 'PlaidItem' } & Pick<PlaidItem, 'id'>> }
 
-export type PlaidItemFragmentFragment = {
-  __typename?: 'PlaidItem'
-  id: string
-  name: string
-  status: PlaidItemStatus
-  syncedAt?: any | null | undefined
-  logo?: { __typename?: 'Image'; url?: any | null | undefined } | null | undefined
-  accounts: Array<{
-    __typename?: 'Account'
-    id: string
-    name: string
-    lastFourDigits?: string | null | undefined
-    type: AccountType
-    balance: { __typename?: 'LedgerBalance'; current?: number | null | undefined }
-  }>
-}
+export type PlaidItemFragmentFragment = { __typename?: 'PlaidItem' } & Pick<
+  PlaidItem,
+  'id' | 'name' | 'status' | 'syncedAt'
+> & {
+    logo?: Maybe<{ __typename?: 'Image' } & Pick<Image, 'url'>>
+    accounts: Array<
+      { __typename?: 'Account' } & Pick<Account, 'id' | 'name' | 'lastFourDigits' | 'type'> & {
+          balance: { __typename?: 'LedgerBalance' } & Pick<LedgerBalance, 'current'>
+        }
+    >
+  }
 
 export const ProfileFragmentFragmentDoc = gql`
   fragment ProfileFragment on Profile {
@@ -2637,162 +2289,6 @@ export function useBillDetailLazyQuery(
 export type BillDetailQueryHookResult = ReturnType<typeof useBillDetailQuery>
 export type BillDetailLazyQueryHookResult = ReturnType<typeof useBillDetailLazyQuery>
 export type BillDetailQueryResult = Apollo.QueryResult<BillDetailQuery, BillDetailQueryVariables>
-export const BillTemplateDocument = gql`
-  query BillTemplate($categoryId: ID, $merchantId: ID, $name: String) {
-    recurrences {
-      name
-    }
-  }
-`
-
-/**
- * __useBillTemplateQuery__
- *
- * To run a query within a React component, call `useBillTemplateQuery` and pass it any options that fit your needs.
- * When your component renders, `useBillTemplateQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBillTemplateQuery({
- *   variables: {
- *      categoryId: // value for 'categoryId'
- *      merchantId: // value for 'merchantId'
- *      name: // value for 'name'
- *   },
- * });
- */
-export function useBillTemplateQuery(
-  baseOptions?: Apollo.QueryHookOptions<BillTemplateQuery, BillTemplateQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<BillTemplateQuery, BillTemplateQueryVariables>(
-    BillTemplateDocument,
-    options
-  )
-}
-export function useBillTemplateLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<BillTemplateQuery, BillTemplateQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<BillTemplateQuery, BillTemplateQueryVariables>(
-    BillTemplateDocument,
-    options
-  )
-}
-export type BillTemplateQueryHookResult = ReturnType<typeof useBillTemplateQuery>
-export type BillTemplateLazyQueryHookResult = ReturnType<typeof useBillTemplateLazyQuery>
-export type BillTemplateQueryResult = Apollo.QueryResult<
-  BillTemplateQuery,
-  BillTemplateQueryVariables
->
-export const CreateBillDocument = gql`
-  mutation CreateBill($input: RecurrenceCreateInput!) {
-    recurrenceCreate(input: $input) {
-      record {
-        id
-        name
-        frequency
-        state
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`
-export type CreateBillMutationFn = Apollo.MutationFunction<
-  CreateBillMutation,
-  CreateBillMutationVariables
->
-
-/**
- * __useCreateBillMutation__
- *
- * To run a mutation, you first call `useCreateBillMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateBillMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createBillMutation, { data, loading, error }] = useCreateBillMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateBillMutation(
-  baseOptions?: Apollo.MutationHookOptions<CreateBillMutation, CreateBillMutationVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<CreateBillMutation, CreateBillMutationVariables>(
-    CreateBillDocument,
-    options
-  )
-}
-export type CreateBillMutationHookResult = ReturnType<typeof useCreateBillMutation>
-export type CreateBillMutationResult = Apollo.MutationResult<CreateBillMutation>
-export type CreateBillMutationOptions = Apollo.BaseMutationOptions<
-  CreateBillMutation,
-  CreateBillMutationVariables
->
-export const UpdateBillDocument = gql`
-  mutation UpdateBill($input: RecurrenceUpdateInput!) {
-    recurrenceUpdate(input: $input) {
-      record {
-        id
-        name
-        frequency
-        state
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`
-export type UpdateBillMutationFn = Apollo.MutationFunction<
-  UpdateBillMutation,
-  UpdateBillMutationVariables
->
-
-/**
- * __useUpdateBillMutation__
- *
- * To run a mutation, you first call `useUpdateBillMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateBillMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateBillMutation, { data, loading, error }] = useUpdateBillMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateBillMutation(
-  baseOptions?: Apollo.MutationHookOptions<UpdateBillMutation, UpdateBillMutationVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UpdateBillMutation, UpdateBillMutationVariables>(
-    UpdateBillDocument,
-    options
-  )
-}
-export type UpdateBillMutationHookResult = ReturnType<typeof useUpdateBillMutation>
-export type UpdateBillMutationResult = Apollo.MutationResult<UpdateBillMutation>
-export type UpdateBillMutationOptions = Apollo.BaseMutationOptions<
-  UpdateBillMutation,
-  UpdateBillMutationVariables
->
 export const PlaidItemsDocument = gql`
   query PlaidItems {
     plaidItems {
@@ -3912,8 +3408,6 @@ export const RoundUpsBankConnectionsCardDocument = gql`
     plaidItem(id: $id) {
       id
       name
-      status
-      syncedAt
       logo {
         url
       }
@@ -3986,8 +3480,6 @@ export const RoundUpsBankConnectionsListDocument = gql`
     plaidItems {
       id
       name
-      status
-      syncedAt
       logo {
         url
       }
@@ -4062,8 +3554,6 @@ export const RoundUpsBankConnectionsListItemDocument = gql`
     plaidItem(id: $id) {
       id
       name
-      status
-      syncedAt
       logo {
         url
       }
@@ -4138,8 +3628,6 @@ export const RoundUpsBankConnectionsPageDocument = gql`
     }
     plaidItems {
       id
-      status
-      syncedAt
       accounts {
         id
       }

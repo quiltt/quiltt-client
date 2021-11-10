@@ -37,7 +37,7 @@ const ItemsList: React.FC<ItemsListProps> = ({ data, refetch }) => {
           Add
         </PlaidLinkButton>
       </div>
-      {data?.plaidItems?.map((item: PlaidItem) => {
+      {data?.plaidItems?.map((item) => {
         return <Item item={item as PlaidItem} key={item.id} />
       })}
     </>

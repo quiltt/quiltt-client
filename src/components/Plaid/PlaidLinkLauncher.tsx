@@ -9,10 +9,16 @@ import { PlaidLinkOptions, usePlaidLink } from 'react-plaid-link'
 
 import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
 
-export type LinkLauncherProps = React.HTMLAttributes<HTMLElement> &
+type LinkLauncherChildProps = {
+  onClick: () => void
+  disabled: boolean
+}
+
+type LinkLauncherProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
   PlaidLinkOptions & {
     token: string
+    children: React.FC<LinkLauncherChildProps>
     onSuccess: PlaidLinkOnSuccess
     onExit?: PlaidLinkOnExit
     onEvent?: PlaidLinkOnEvent
@@ -45,7 +51,10 @@ const LinkLauncher: CustomComponentRefForwardingComponent<'button', LinkLauncher
 
     const { open, ready, error } = usePlaidLink(config)
 
-    if (error) throw new Error(`${error.error} ${error.message}`)
+    if (error) {
+      // throw new Error(`${error.error} ${error.message}`)
+      console.error(error)
+    }
 
     const handleClick = () => {
       open()

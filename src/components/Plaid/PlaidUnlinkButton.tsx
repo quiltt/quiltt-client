@@ -5,7 +5,7 @@ import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../
 
 type PlaidUnlinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps & {
-    id: string
+    itemId: string
     name: string
   }
 
@@ -13,9 +13,9 @@ type Ref = React.ReactNode | HTMLElement | string
 
 const PlaidUnlinkButton: CustomComponentRefForwardingComponent<'button', PlaidUnlinkButtonProps> =
   React.forwardRef<Ref, PlaidUnlinkButtonProps>(function PlaidUnlinkButton(props, ref) {
-    const { as = 'button', id, name, children, ...otherProps } = props
+    const { as = 'button', className = '', itemId, name, children, ...otherProps } = props
     const [unlink, { loading }] = usePlaidItemUnlinkMutation({
-      variables: { id },
+      variables: { id: itemId },
       update: (cache, results) => {
         if (results?.data?.plaidItemDelete?.record) {
           cache.evict({
@@ -36,12 +36,14 @@ const PlaidUnlinkButton: CustomComponentRefForwardingComponent<'button', PlaidUn
     return React.createElement(
       as as string,
       {
+        className,
+        id: `plaid-unlink-${itemId}`,
         ref,
         disabled: loading,
         onClick: handleClick,
         ...otherProps,
       },
-      children || <span className="uppercase">Unlink</span>
+      children
     )
   })
 

@@ -5,8 +5,8 @@ import {
   PlaidUnlinkButton,
   PlaidItem,
   PlaidItemStatus,
-  PlaidItemStatusIndicator,
-  PlaidItemReconnectButton,
+  PlaidStatusIndicator,
+  // PlaidReconnectButton,
   usePlaidItemUpdatedSubscription,
 } from '@quiltt/client'
 import { AccountList } from '@quiltt/components'
@@ -25,10 +25,6 @@ const Item: React.FC<ItemProps> = ({ item }) => {
 
   if (!loading && error) {
     console.error(error)
-  }
-
-  const onSuccess = () => {
-    setSyncStatus(PlaidItemStatus.Syncing)
   }
 
   return (
@@ -50,19 +46,25 @@ const Item: React.FC<ItemProps> = ({ item }) => {
       <Card.Body style={{ padding: 0 }}>
         {syncStatus === PlaidItemStatus.Disconnected ? (
           <div className="flex items-center justify-center p-4">
-            <PlaidItemReconnectButton onSuccess={onSuccess} itemId={item.id} as={Button} block />
+            {/* <PlaidReconnectButton
+              setConnectionStatus={setSyncStatus}
+              itemId={item.id}
+              as={Button}
+              block
+            /> */}
           </div>
         ) : (
+          // @ts-ignore
           <AccountList accounts={item.accounts} />
         )}
       </Card.Body>
       <Card.Footer className="flex items-center justify-between border-top-0">
         <div className="flex space-x-3">
-          <PlaidItemStatusIndicator status={item.status} syncedAt={item.syncedAt} />
+          <PlaidStatusIndicator status={item.status} syncedAt={item.syncedAt} />
         </div>
         <PlaidUnlinkButton
           as={Button}
-          id={item.id}
+          itemId={item.id}
           name={item.name}
           variant="danger"
           layout="outline"
