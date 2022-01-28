@@ -6,13 +6,13 @@ import type {
   PlaidLinkOnSuccess,
 } from 'react-plaid-link'
 
-import {
+import type {
   PlaidLinkTokenCreateInput,
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreatePayload,
-  usePlaidLinkTokenCreateMutation,
 } from '../../types'
-import { CustomComponentProps } from '../../utils/components'
+import { usePlaidLinkTokenCreateMutation } from '../../types'
+import type { CustomComponentProps } from '../../utils/components'
 
 import PlaidLinkLauncher from './PlaidLinkLauncher'
 
@@ -43,8 +43,7 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
     if (errors)
       errors.map((error) => {
-        // throw new Error(`${error.code}: ${error.message}`)
-        console.error(error)
+        throw new Error(`${error.code}: ${error.message}`)
       })
 
     if (record) {
@@ -87,8 +86,8 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
       onEvent={onEvent}
       {...otherProps}
     >
-      {(props) => {
-        return React.createElement(
+      {(props) =>
+        React.createElement(
           as as string,
           {
             className,
@@ -97,7 +96,7 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
           },
           children
         )
-      }}
+      }
     </PlaidLinkLauncher>
   )
 }

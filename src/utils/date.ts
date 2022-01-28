@@ -1,6 +1,4 @@
-/* eslint-disable import/extensions */
-// Create custom locale based on en-US, to display relative dates without times
-import { formatDistanceToNow, formatRelative, parseISO } from 'date-fns'
+import { formatDistanceToNow, formatRelative, Locale, parseISO } from 'date-fns'
 import formatDistance from 'date-fns/locale/en-US/_lib/formatDistance/index.js'
 import formatLong from 'date-fns/locale/en-US/_lib/formatLong/index.js'
 import localize from 'date-fns/locale/en-US/_lib/localize/index.js'
@@ -14,12 +12,41 @@ export type RelativeTimeTokens =
   | 'nextWeek'
   | 'other'
 
+export type formatDistanceFn = (...args: any[]) => any
+export type formatLongFn =
+  | {
+      date: (...args: any[]) => any
+      time: (...args: any[]) => any
+      dateTime: (...args: any[]) => any
+    }
+  | undefined
+export type localizeFn =
+  | {
+      ordinalNumber: (...args: any[]) => any
+      era: (...args: any[]) => any
+      quarter: (...args: any[]) => any
+      month: (...args: any[]) => any
+      day: (...args: any[]) => any
+      dayPeriod: (...args: any[]) => any
+    }
+  | undefined
+export type matchFn =
+  | {
+      ordinalNumber: (...args: any[]) => any
+      era: (...args: any[]) => any
+      quarter: (...args: any[]) => any
+      month: (...args: any[]) => any
+      day: (...args: any[]) => any
+      dayPeriod: (...args: any[]) => any
+    }
+  | undefined
+
 // Get the default en-US locale to be added to
-const defaultLocale = {
-  formatDistance,
-  formatLong,
-  localize,
-  match,
+const defaultLocale: Locale = {
+  formatDistance: formatDistance as formatDistanceFn,
+  formatLong: formatLong as formatLongFn,
+  localize: localize as localizeFn,
+  match: match as matchFn,
   options: { weekStartsOn: 1 },
 }
 
@@ -47,6 +74,5 @@ export const friendlyDate = (date: string): string | null => {
   })
 }
 
-export const timeDifference = (date: string): string => {
-  return formatDistanceToNow(parseISO(date), { addSuffix: true })
-}
+export const timeDifference = (date: string): string =>
+  formatDistanceToNow(parseISO(date), { addSuffix: true })

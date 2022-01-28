@@ -4,10 +4,14 @@ const useErrorLink = () => {
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.map((error) => {
+        const locations = error?.locations !== undefined ? error.locations : []
+        const path = error?.path !== undefined ? error.path : []
         console.error(
           `[GraphQL error]: Message: ${error.message},
-          Location: ${error.locations},
-          Path: ${error.path}`
+          Location: ${locations
+            .map((location) => `${location.line}:${location.column}`)
+            .join(', ')},
+          Path: ${path.map((singlePath) => singlePath).join(', ')}`
         )
 
         return error
@@ -15,7 +19,7 @@ const useErrorLink = () => {
     }
 
     if (networkError) {
-      console.error(`[Network error]: ${networkError}`)
+      console.error(`[Network error]: ${networkError.message}`)
     }
   })
 

@@ -28,7 +28,7 @@ type LinkLauncherProps = React.HTMLAttributes<HTMLElement> &
 type Ref = React.ReactNode | HTMLElement | string
 
 const LinkLauncher: CustomComponentRefForwardingComponent<'button', LinkLauncherProps> =
-  React.forwardRef<Ref, LinkLauncherProps>(function LinkLauncher(props, ref) {
+  React.forwardRef<Ref, LinkLauncherProps>((props, ref) => {
     const {
       as = 'button',
       className = '',

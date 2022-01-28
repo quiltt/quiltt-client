@@ -23,7 +23,7 @@ type Ref = React.ReactNode | HTMLElement | string
 const PlaidReconnectButton: CustomComponentRefForwardingComponent<
   'button',
   PlaidReconnectButtonProps
-> = React.forwardRef<Ref, PlaidReconnectButtonProps>(function PlaidReconnectButton(props, ref) {
+> = React.forwardRef<Ref, PlaidReconnectButtonProps>((props, ref) => {
   const {
     as = 'button',
     className = '',
@@ -74,7 +74,7 @@ const PlaidReconnectButton: CustomComponentRefForwardingComponent<
     if (!called && !linkToken) {
       createLinkToken()
     }
-  }, [])
+  }, [called, createLinkToken, linkToken])
 
   if (error) throw error
 
@@ -82,8 +82,8 @@ const PlaidReconnectButton: CustomComponentRefForwardingComponent<
 
   return (
     <PlaidLinkLauncherWrapper token={linkToken} onSuccess={onSuccess} onExit={onExit}>
-      {(childProps) => {
-        return React.createElement(
+      {(childProps) =>
+        React.createElement(
           as as string,
           {
             className,
@@ -93,7 +93,7 @@ const PlaidReconnectButton: CustomComponentRefForwardingComponent<
           },
           children
         )
-      }}
+      }
     </PlaidLinkLauncherWrapper>
   )
 })

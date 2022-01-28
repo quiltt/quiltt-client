@@ -25,7 +25,7 @@ type PingData = {
   token: string
 }
 
-type IdentifyData = {}
+type IdentifyData = Record<string, unknown>
 
 type AuthenticateData = {
   id: string
@@ -34,7 +34,7 @@ type AuthenticateData = {
   token: string
 }
 
-type RevokeData = {}
+type RevokeData = Record<string, unknown>
 
 export type AuthAPI = {
   ping: (token: string) => Promise<AxiosResponse<PingData>>

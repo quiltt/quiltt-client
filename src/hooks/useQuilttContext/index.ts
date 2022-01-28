@@ -18,8 +18,6 @@ export const QuilttContext = React.createContext<QuilttContextType>({
   setQueryClient: () => {},
 })
 
-const useQuilttContext = () => {
-  return React.useContext(QuilttContext)
-}
+const useQuilttContext = () => React.useContext(QuilttContext)
 
 export default useQuilttContext

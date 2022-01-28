@@ -2,11 +2,12 @@ import * as React from 'react'
 import { PlaidLinkOnSuccess } from 'react-plaid-link'
 
 import {
+  PlaidLinkAccountFiltersInput,
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreatePayload,
   usePlaidLinkTokenCreateMutation,
 } from '../../types'
-import { CustomComponentProps } from '../../utils/components'
+import type { CustomComponentProps } from '../../utils/components'
 
 import PlaidLinkLauncherWrapper from './PlaidLinkLauncherWrapper'
 
@@ -14,7 +15,7 @@ type PlaidProduct = 'transactions' | 'auth' | 'liabilities' | 'investments'
 
 type PlaidNewConnectionButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps & {
-    linkAccountFilters: any
+    linkAccountFilters: PlaidLinkAccountFiltersInput
     linkProducts: PlaidProduct[]
     linkCustomizationName?: string
     itemId: string
@@ -63,7 +64,7 @@ const PlaidNewConnectionButton: React.FC<PlaidNewConnectionButtonProps> = ({
     if (!called && !linkToken) {
       createLinkToken()
     }
-  }, [])
+  }, [called, createLinkToken, linkToken])
 
   if (error) throw error
 
@@ -82,8 +83,8 @@ const PlaidNewConnectionButton: React.FC<PlaidNewConnectionButtonProps> = ({
 
   return (
     <PlaidLinkLauncherWrapper token={linkToken} onSuccess={onSuccess}>
-      {(props) => {
-        return React.createElement(
+      {(props) =>
+        React.createElement(
           as as string,
           {
             className,
@@ -92,7 +93,7 @@ const PlaidNewConnectionButton: React.FC<PlaidNewConnectionButtonProps> = ({
           },
           children
         )
-      }}
+      }
     </PlaidLinkLauncherWrapper>
   )
 }

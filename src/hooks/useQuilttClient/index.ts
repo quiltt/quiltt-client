@@ -21,11 +21,9 @@ const useQuilttClient = (
     case 'urql':
       return createClient({
         url: graphqlEndpoint.toString(),
-        fetchOptions: () => {
-          return {
-            headers: { authorization: token ? `Bearer ${token}` : '' },
-          }
-        },
+        fetchOptions: () => ({
+          headers: { authorization: token ? `Bearer ${token}` : '' },
+        }),
       })
     default:
       return new ApolloClient({
@@ -33,7 +31,6 @@ const useQuilttClient = (
         cache: new InMemoryCache(),
         connectToDevTools: true,
       })
-      break
   }
 }
 

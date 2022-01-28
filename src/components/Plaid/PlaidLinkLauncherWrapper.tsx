@@ -43,7 +43,7 @@ const LinkLauncherWrapper: React.FC<LinkLauncherWrapperProps> = ({
   }
 
   return children({
-    onClick: () => open(),
+    onClick: () => open() as () => void,
     disabled: !ready,
   })
 }

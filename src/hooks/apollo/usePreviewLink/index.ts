@@ -12,7 +12,7 @@ const usePreviewLink = (endpoint: string) => {
       headers: {
         ...context.headers,
         'Quiltt-Preview': true,
-      },
+      } as Headers,
     })
 
     return forward(operation)
@@ -20,12 +20,10 @@ const usePreviewLink = (endpoint: string) => {
 
   const httpLink = new HttpLink({ uri: endpoint.toString(), fetch })
 
-  const forwardableLink = new ApolloLink((operation, forward) => {
-    return forward(operation)
-  })
+  const forwardableLink = new ApolloLink((operation, forward) => forward(operation))
 
   return ApolloLink.split(
-    (operation) => operation.getContext().preview,
+    (operation) => operation.getContext().preview as boolean,
     ApolloLink.from([previewLink, httpLink]),
     forwardableLink
   )

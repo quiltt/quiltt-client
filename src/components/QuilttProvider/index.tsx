@@ -34,19 +34,18 @@ const QuilttProvider: React.FC<QuilttProviderProps> = ({
     urql: <UrqlProvider value={quilttClient as UrqlClient}>{children}</UrqlProvider>,
   }
 
-  return (
-    <QuilttContext.Provider
-      value={{
-        deploymentId,
-        authorizationToken,
-        setAuthorizationToken,
-        queryClient,
-        setQueryClient,
-      }}
-    >
-      {clients[client]}
-    </QuilttContext.Provider>
+  const value = React.useMemo(
+    () => ({
+      deploymentId,
+      authorizationToken,
+      setAuthorizationToken,
+      queryClient,
+      setQueryClient,
+    }),
+    [authorizationToken, deploymentId, queryClient, setAuthorizationToken, setQueryClient]
   )
+
+  return <QuilttContext.Provider value={value}>{clients[client]}</QuilttContext.Provider>
 }
 
 export default QuilttProvider
