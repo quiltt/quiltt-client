@@ -10,7 +10,6 @@ export type {
   AuthAPI,
 } from './useQuilttAuth/types'
 export { default as useQuilttClient } from './useQuilttClient'
-export type { QueryClients } from './useQuilttClient'
 export { default as useQuilttContext } from './useQuilttContext'
 export type { QuilttContextType } from './useQuilttContext'
 export { QuilttContext } from './useQuilttContext'

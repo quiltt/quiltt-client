@@ -1,21 +1,15 @@
 import * as React from 'react'
 
-import type { QueryClients } from '../useQuilttClient'
-
 export type QuilttContextType = {
   deploymentId: string
   authorizationToken: string | null
   setAuthorizationToken: (token: string | null) => void
-  queryClient: QueryClients
-  setQueryClient: (client: QueryClients) => void
 }
 
 export const QuilttContext = React.createContext<QuilttContextType>({
   deploymentId: '',
   authorizationToken: null,
   setAuthorizationToken: () => {},
-  queryClient: 'apollo',
-  setQueryClient: () => {},
 })
 
 const useQuilttContext = () => React.useContext(QuilttContext)
