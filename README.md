@@ -32,15 +32,15 @@ REACT_APP_QUILTT_APP_ID=xxxx-xxxx-xxxx # React app scaffolded with Create React 
 // App entrypoint
 import * as React from 'react'
 
-import { QuilttProvider } from '@quiltt/client'
+import { QuilttDeploymentProvider } from '@quiltt/client'
 
 import App from './App'
 
 export const Index: React.FC = () => {
   return (
-    <QuilttProvider deploymentId={VITE_APP_QUILTT_APP_ID | REACT_APP_QUILTT_APP_ID}>
+    <QuilttDeploymentProvider deploymentId={VITE_APP_QUILTT_APP_ID | REACT_APP_QUILTT_APP_ID}>
       <App />
-    </QuilttProvider>
+    </QuilttDeploymentProvider>
   )
 }
 export default Index
@@ -48,14 +48,14 @@ export default Index
 
 ## Exported Hooks/Providers/Components
 
-- `QuilttProvider`
+- `QuilttDeploymentProvider`
 - `useAuthLink`
 - `useErrorLink`
 - `useLocalStorage`
 - `usePreviewLink`
 - `useQuilttAuth`
 - `useQuilttClient`
-- `useQuilttContext`
+- `useQuilttDeployment`
 - `useQuilttLink`
 - `PlaidLinkButton`
 - `PlaidLinkLauncher`

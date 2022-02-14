@@ -4,8 +4,8 @@ import type { PlaidLinkError, PlaidLinkOnExitMetadata } from 'react-plaid-link'
 import type {
   PlaidLinkTokenCreateForUpdateMutation,
   PlaidLinkTokenCreateForUpdatePayload,
-} from '../../types'
-import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
+} from '../../types/quiltt'
+import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types/quiltt'
 import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { usePlaidItemUnlinkMutation } from '../../types'
+import { usePlaidItemUnlinkMutation } from '../../types/quiltt'
 import { CustomComponentProps, CustomComponentRefForwardingComponent } from '../../utils/components'
 
 type PlaidUnlinkButtonProps = React.HTMLAttributes<HTMLElement> &

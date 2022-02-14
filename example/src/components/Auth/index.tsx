@@ -1,14 +1,14 @@
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useQuilttContext } from '@quiltt/client'
+import { useQuilttDeployment } from '@quiltt/client'
 
 import Passcode from './Passcode'
 import Username from './Username'
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate()
-  const { setAuthorizationToken } = useQuilttContext()
+  const { setAuthorizationToken } = useQuilttDeployment()
   const [email, setEmail] = React.useState<string>()
   // const [phone, setPhone] = React.useState<string>()
 

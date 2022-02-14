@@ -1,13 +1,13 @@
 import * as React from 'react'
 
 import { useNavigate } from 'react-router'
-import { useQuilttContext } from '@quiltt/client'
+import { useQuilttDeployment } from '@quiltt/client'
 import LogoutButton from '../LogoutButton'
 import Connect from './Connect'
 
 const Home: React.FC = () => {
   const navigate = useNavigate()
-  const { authorizationToken } = useQuilttContext()
+  const { authorizationToken } = useQuilttDeployment()
 
   React.useEffect(() => {
     if (!authorizationToken) {

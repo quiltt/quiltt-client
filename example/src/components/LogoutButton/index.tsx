@@ -1,10 +1,10 @@
 import * as React from 'react'
 
-import { useQuilttContext } from '@quiltt/client'
+import { useQuilttDeployment } from '@quiltt/client'
 import { Button } from '@quiltt/ui'
 
 const LogoutButton: React.FC = () => {
-  const { setAuthorizationToken } = useQuilttContext()
+  const { setAuthorizationToken } = useQuilttDeployment()
 
   const handleClick = () => {
     setAuthorizationToken(null)

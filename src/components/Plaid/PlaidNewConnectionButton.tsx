@@ -6,7 +6,7 @@ import {
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreatePayload,
   usePlaidLinkTokenCreateMutation,
-} from '../../types'
+} from '../../types/quiltt'
 import type { CustomComponentProps } from '../../utils/components'
 
 import PlaidLinkLauncherWrapper from './PlaidLinkLauncherWrapper'

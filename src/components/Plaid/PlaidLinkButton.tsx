@@ -10,8 +10,8 @@ import type {
   PlaidLinkTokenCreateInput,
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreatePayload,
-} from '../../types'
-import { usePlaidLinkTokenCreateMutation } from '../../types'
+} from '../../types/quiltt'
+import { usePlaidLinkTokenCreateMutation } from '../../types/quiltt'
 import type { CustomComponentProps } from '../../utils/components'
 
 import PlaidLinkLauncher from './PlaidLinkLauncher'

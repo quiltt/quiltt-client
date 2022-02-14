@@ -1,2 +1,2 @@
 export * from './Plaid'
-export { default as QuilttProvider } from './QuilttProvider'
+// export { default as QuilttDeploymentProvider } from './QuilttDeploymentProvider'
