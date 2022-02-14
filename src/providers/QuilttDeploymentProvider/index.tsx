@@ -1,18 +1,12 @@
 import * as React from 'react'
 
-import { DEFAULT_API_ENDPOINT, DEFAULT_AUTH_ENDPOINT } from '../../constants'
-import { QuilttDeployment } from '../../hooks'
-import type { QuilttDeploymentContext } from '../../types'
+import { QuilttDeployment, useQuilttDeployment } from '../../hooks'
 
-const QuilttDeploymentProvider: React.FC<QuilttDeploymentContext> = ({
-  authEndpoint = DEFAULT_AUTH_ENDPOINT,
-  apiEndpoint = DEFAULT_API_ENDPOINT,
-  deploymentId,
-  children,
-}) => {
+const QuilttDeploymentProvider: React.FC = ({ children }) => {
+  const { deploymentId, authEndpoint, apiEndpoint, setDeployment } = useQuilttDeployment()
   const value = React.useMemo(
-    () => ({ deploymentId, authEndpoint, apiEndpoint }),
-    [deploymentId, authEndpoint, apiEndpoint]
+    () => ({ deploymentId, authEndpoint, apiEndpoint, setDeployment }),
+    [deploymentId, authEndpoint, apiEndpoint, setDeployment]
   )
 
   return <QuilttDeployment.Provider value={value}>{children}</QuilttDeployment.Provider>

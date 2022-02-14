@@ -9,6 +9,14 @@ export const QuilttDeployment = React.createContext<QuilttDeploymentContext>({
   deploymentId: '',
 })
 
-const useQuilttDeployment = () => React.useContext(QuilttDeployment)
+const useQuilttDeployment = () => {
+  const [deployment, setDeployment] = React.useState<QuilttDeploymentContext>({
+    authEndpoint: DEFAULT_AUTH_ENDPOINT,
+    apiEndpoint: DEFAULT_API_ENDPOINT,
+    deploymentId: '',
+  })
+
+  return { ...deployment, setDeployment }
+}
 
 export default useQuilttDeployment

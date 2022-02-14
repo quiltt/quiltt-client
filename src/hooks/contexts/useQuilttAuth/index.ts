@@ -37,16 +37,16 @@ const useQuilttAuth = () => {
     ping: (authToken: string) => {
       const config = { ...CONFIG }
       config.headers.Authorization = `Bearer ${authToken}`
-      return axios.get(authEndpoint as string, config)
+      return axios.get(authEndpoint, config)
     },
     identify: (username: UsernamePayload) => {
       const config = { ...CONFIG }
-      return axios.post(authEndpoint as string, { session: { deploymentId, ...username } }, config)
+      return axios.post(authEndpoint, { session: { deploymentId, ...username } }, config)
     },
     authenticate: (authenticationVariables: PasscodePayload) => {
       const config = { ...CONFIG }
       return axios.put(
-        authEndpoint as string,
+        authEndpoint,
         { session: { deploymentId, ...authenticationVariables } },
         config
       )
@@ -54,7 +54,7 @@ const useQuilttAuth = () => {
     revoke: (authToken: string) => {
       const config = { ...CONFIG }
       config.headers.Authorization = `Bearer ${authToken}`
-      return axios.delete(authEndpoint as string, config)
+      return axios.delete(authEndpoint, config)
     },
   }
 
