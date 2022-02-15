@@ -1,10 +1,14 @@
 import { ApolloLink, HttpLink } from '@apollo/client'
 import fetch from 'cross-fetch'
 
+import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+
 // If request is a preview mutation, then terminates chain and directly calls
 // the api with the preview header set. Any requests made in preview mode will
 // be rolled back.
-const usePreviewLink = (endpoint: string) => {
+const usePreviewLink = () => {
+  const { apiEndpoint } = useQuilttDeployment()
+
   const previewLink = new ApolloLink((operation, forward) => {
     const context = operation.getContext()
 
@@ -18,7 +22,7 @@ const usePreviewLink = (endpoint: string) => {
     return forward(operation)
   })
 
-  const httpLink = new HttpLink({ uri: endpoint.toString(), fetch })
+  const httpLink = new HttpLink({ uri: apiEndpoint.toString(), fetch })
 
   const forwardableLink = new ApolloLink((operation, forward) => forward(operation))
 

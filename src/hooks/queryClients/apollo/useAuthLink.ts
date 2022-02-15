@@ -1,15 +1,16 @@
-import type { GraphQLRequest } from '@apollo/client'
-import { ApolloLink } from '@apollo/client'
+import { setContext } from '@apollo/client/link/context'
 
-const useAuthLink = (token?: string): ApolloLink =>
-  new ApolloLink((operation, forward) => {
-    operation.setContext((_: GraphQLRequest, { headers }: any) => ({
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : undefined,
-      } as Headers,
-    }))
-    return forward(operation)
-  })
+import useQuilttAuth from '../../contexts/useQuilttAuth'
+
+const useAuthLink = () => {
+  const { token } = useQuilttAuth()
+
+  return setContext((_, { headers }: { headers: Headers }) => ({
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : undefined,
+    },
+  }))
+}
 
 export default useAuthLink

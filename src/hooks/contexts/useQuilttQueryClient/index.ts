@@ -3,16 +3,14 @@ import * as React from 'react'
 import type { QueryClient, QuilttQueryClientContext } from '../../../types'
 import { ClientOptions } from '../../../types'
 import useApolloClient from '../../queryClients/apollo/useApolloClient'
-import useQuilttAuth from '../useQuilttAuth'
 
 export const QuilttQueryClient = React.createContext<QuilttQueryClientContext>(
   {} as QuilttQueryClientContext
 )
 
 const useQuilttQueryClient = (clientName?: ClientOptions) => {
-  const { token } = useQuilttAuth()
-  const apolloClient = useApolloClient(token || '')
-  const urqlClient = useApolloClient(token || '')
+  const apolloClient = useApolloClient()
+  const urqlClient = useApolloClient()
 
   const ApolloClient = React.useMemo(
     () =>

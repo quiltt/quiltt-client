@@ -3,8 +3,8 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 import useQuilttLink from './useQuilttLink'
 
-const useApolloClient = (token: string): ApolloClient<NormalizedCacheObject> => {
-  const quilttLink = useQuilttLink(token)
+const useApolloClient = (): ApolloClient<NormalizedCacheObject> => {
+  const quilttLink = useQuilttLink()
 
   return new ApolloClient({
     link: quilttLink,

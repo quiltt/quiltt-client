@@ -1,8 +1,10 @@
 import * as React from 'react'
 import type {
+  PlaidLinkError,
   PlaidLinkOnEvent,
   PlaidLinkOnEventMetadata,
   PlaidLinkOnExit,
+  PlaidLinkOnExitMetadata,
   PlaidLinkOnLoad,
   PlaidLinkOnSuccess,
   PlaidLinkOptionsWithLinkToken,
@@ -10,30 +12,37 @@ import type {
 import { usePlaidLink } from 'react-plaid-link'
 
 import {
+  PlaidLinkTokenCreateForUpdateMutation,
+  PlaidLinkTokenCreateForUpdatePayload,
   PlaidLinkTokenCreateInput,
-  PlaidLinkTokenCreateMutation,
-  PlaidLinkTokenCreatePayload,
 } from '../../types'
 import type { CustomComponentProps } from '../../utils/components'
+import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
-import useLinkTokenCreate, { LinkCreateParams } from './useLinkTokenCreate'
+import useLinkTokenUpdate, { LinkUpdateParams } from './useLinkTokenUpdate'
 
 export type PlaidLinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
   PlaidLinkTokenCreateInput & {
+    plaidItemId: string
+    countryCodes: string[]
+    loadingComponent?: React.ReactElement
     onSuccess: PlaidLinkOnSuccess
     onExit?: PlaidLinkOnExit
     onEvent?: PlaidLinkOnEvent
     onLoad?: PlaidLinkOnLoad
   }
 
-const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
+const PlaidLinkReconnectButton: React.FC<PlaidLinkButtonProps> = ({
   className = '',
   as = 'button',
-  children = 'Connect with Plaid',
+  children = 'Reconnect with Plaid',
   accountFilters,
   linkCustomizationName,
   products,
+  plaidItemId,
+  countryCodes = ['US'],
+  loadingComponent = <DefaultLoadingComponent />,
   onSuccess,
   onEvent = undefined,
   onExit = undefined,
@@ -42,18 +51,6 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
 }) => {
   const [inactive, setInactive] = React.useState(false)
   const [token, setToken] = React.useState<string | null>(null)
-
-  const handlePlaidTokenCreated = (data: PlaidLinkTokenCreateMutation) => {
-    const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
-    if (errors)
-      errors.map((error) => {
-        throw new Error(`${error.code}: ${error.message}`)
-      })
-
-    if (record) {
-      setToken(record.linkToken)
-    }
-  }
 
   const handleEvent = React.useCallback(
     (event: string, metadata: PlaidLinkOnEventMetadata) => {
@@ -69,18 +66,48 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     [onEvent]
   )
 
-  const { generatePlaidLinkToken } = useLinkTokenCreate({
-    accountFilters,
-    linkCustomizationName,
-    products,
-    onCompleted: handlePlaidTokenCreated,
-  } as LinkCreateParams)
+  const handleCompleted = React.useCallback((data: PlaidLinkTokenCreateForUpdateMutation) => {
+    const { record, errors } =
+      data.plaidLinkTokenCreateForUpdate as PlaidLinkTokenCreateForUpdatePayload
+
+    if (errors) {
+      errors.map((err) => {
+        throw new Error(`Plaid Link Error: ${err.message}`)
+      })
+    }
+
+    if (record) {
+      setToken(record.linkToken)
+    }
+  }, [])
+
+  const {
+    generatePlaidLinkToken,
+    called,
+    error: linkError,
+  } = useLinkTokenUpdate({
+    plaidItemId,
+    countryCodes,
+    onCompleted: handleCompleted,
+  } as LinkUpdateParams)
+
+  const handleExit = React.useCallback(
+    (error: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => {
+      if (onExit) {
+        onExit(error, metadata)
+      }
+      if (error) {
+        throw new Error(`Plaid Link Error: ${error.error_message}`)
+      }
+    },
+    [onExit]
+  ) as PlaidLinkOnExit
 
   const config: PlaidLinkOptionsWithLinkToken = {
     token,
     onSuccess,
     onEvent: handleEvent,
-    onExit,
+    onExit: handleExit,
     onLoad,
   }
 
@@ -90,11 +117,13 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     open()
   }
 
-  const disabled = !ready || !token
+  const disabled = !ready
 
   React.useEffect(() => {
-    generatePlaidLinkToken()
-  }, [generatePlaidLinkToken])
+    if (!called && !token) {
+      generatePlaidLinkToken()
+    }
+  }, [generatePlaidLinkToken, called, token])
 
   React.useEffect(() => {
     if (error) {
@@ -111,6 +140,12 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     }
   })
 
+  if (linkError) {
+    throw new Error(`Plaid Link Error: ${linkError.message}`)
+  }
+
+  if (!token) return loadingComponent
+
   return React.createElement(
     as as string,
     {
@@ -123,4 +158,4 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
   )
 }
 
-export default PlaidLinkButton
+export default PlaidLinkReconnectButton

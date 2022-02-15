@@ -2039,6 +2039,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@rails/actioncable@^7.0.2-2":
+  version "7.0.2-2"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.0.2-2.tgz#cc0f57a5e815b28a78a0053fc1b95ac073bcef76"
+  integrity sha512-DgkWkU/GJ1EBUBfs9PWDDy49k1QGJ/zvebGWEAnMChyt/FI9aXkCy5SOcXwDf1A6uY4Aif8jRlFbUgHS6UJHcA==
+
 "@rollup/plugin-babel@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz#9cb1c5146ddd6a4968ad96f209c50c62f92f9879"
@@ -2530,6 +2535,11 @@
   version "15.7.4"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
+
+"@types/rails__actioncable@^6.1.6":
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/@types/rails__actioncable/-/rails__actioncable-6.1.6.tgz#c5427f7ba5a41e41e1237bc943c81d7f44b46167"
+  integrity sha512-/whIczf4uhpac/X19vMRTHOF4reN92I6C4uOmTTtbT1xdesjrStLNQq9v+jexHehc8RENUHk4sXVzwm5PBy2fA==
 
 "@types/react-dom@>=16.9.0":
   version "17.0.9"
@@ -5543,6 +5553,14 @@ graceful-fs@^4.2.9:
   version "4.2.9"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
+
+graphql-ruby-client@^1.10.6:
+  version "1.10.6"
+  resolved "https://registry.yarnpkg.com/graphql-ruby-client/-/graphql-ruby-client-1.10.6.tgz#c01f64677c49df52c3bab017a049f3ba6737f2ce"
+  integrity sha512-201Rnnw8f2KncIgVkU4kT6+4GNX4Bh7J0RbCigK/PvawE4NGKKjH0jr9dgHdO0sbPDsgnoDFGnenHFf/Jlqoaw==
+  dependencies:
+    glob "^7.1.4"
+    minimist "^1.2.0"
 
 graphql-tag@^2.12.3:
   version "2.12.5"

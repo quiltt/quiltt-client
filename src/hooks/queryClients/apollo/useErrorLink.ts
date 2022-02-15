@@ -1,25 +1,32 @@
+import type { ServerError } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
+import useQuilttAuth from '../../contexts/useQuilttAuth'
+import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+
 const useErrorLink = () => {
+  const { errorLogger } = useQuilttDeployment()
+  const { resetSession } = useQuilttAuth()
+
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       graphQLErrors.map((error) => {
-        const locations = error?.locations !== undefined ? error.locations : []
-        const path = error?.path !== undefined ? error.path : []
-        console.error(
-          `[GraphQL error]: Message: ${error.message},
-          Location: ${locations
-            .map((location) => `${location.line}:${location.column}`)
-            .join(', ')},
-          Path: ${path.map((singlePath) => singlePath).join(', ')}`
-        )
+        console.warn(`[GraphQL error]: Message: ${error.message}`)
+        errorLogger(error)
 
         return error
       })
     }
 
     if (networkError) {
-      console.error(`[Network error]: ${networkError.message}`)
+      // @see: https://www.apollographql.com/docs/react/networking/advanced-http-networking/#customizing-response-logic
+      // if (networkError.statusCode === 401) {
+      if (networkError && (networkError as ServerError).statusCode === 401) {
+        resetSession()
+      } else {
+        console.warn('[Network error]:', networkError)
+        errorLogger(networkError)
+      }
     }
   })
 
