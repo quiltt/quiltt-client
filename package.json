@@ -19,7 +19,7 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "jest .",
+    "test": "jest . --passWithNoTests",
     "coverage": "jest --collect-coverage",
     "clean": "rimraf dist",
     "build": "yarn tsc && rollup -c",
