@@ -23,6 +23,7 @@ const QuilttDeploymentProvider: React.FC<QuilttDeploymentProviderProps> = ({
   apiEndpoint = DEFAULT_API_ENDPOINT,
   apiVersion = DEFAULT_API_VERSION,
   websocketEndpoint = DEFAULT_WS_ENDPOINT,
+  // eslint-disable-next-line no-console
   errorLogger = console.log,
   children,
 }) => {

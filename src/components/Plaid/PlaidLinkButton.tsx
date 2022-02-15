@@ -16,7 +16,7 @@ import {
 } from '../../types'
 import type { CustomComponentProps } from '../../utils/components'
 
-import useLinkTokenCreate, { LinkCreateParams } from './useLinkTokenCreate'
+import usePlaidLinkTokenCreate, { LinkCreateParams } from './usePlaidLinkTokenCreate'
 
 export type PlaidLinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
@@ -38,6 +38,7 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
   onEvent = undefined,
   onExit = undefined,
   onLoad = undefined,
+  id,
   ...otherProps
 }) => {
   const [inactive, setInactive] = React.useState(false)
@@ -69,7 +70,7 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     [onEvent]
   )
 
-  const { generatePlaidLinkToken } = useLinkTokenCreate({
+  const { generatePlaidLinkToken } = usePlaidLinkTokenCreate({
     accountFilters,
     linkCustomizationName,
     products,
@@ -116,6 +117,7 @@ const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = ({
     {
       className,
       disabled,
+      id: id ? `plaid-connect-${id}` : undefined,
       onClick: handleClick,
       ...otherProps,
     },

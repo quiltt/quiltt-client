@@ -19,7 +19,7 @@ import {
 import type { CustomComponentProps } from '../../utils/components'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
-import useLinkTokenUpdate, { LinkUpdateParams } from './useLinkTokenUpdate'
+import useLinkTokenUpdate, { LinkUpdateParams } from './usePlaidLinkTokenUpdate'
 
 export type PlaidLinkButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
@@ -151,6 +151,7 @@ const PlaidLinkReconnectButton: React.FC<PlaidLinkButtonProps> = ({
     {
       className,
       disabled,
+      id: `plaid-reconnect-${plaidItemId}`,
       onClick: handleClick,
       ...otherProps,
     },

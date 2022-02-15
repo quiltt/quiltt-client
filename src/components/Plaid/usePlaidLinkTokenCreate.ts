@@ -1,23 +1,14 @@
-import {
+import type {
+  AvailablePlaidProducts,
   InputMaybe,
   PlaidLinkAccountFiltersInput,
   PlaidLinkTokenCreateMutation,
-  usePlaidLinkTokenCreateMutation,
 } from '../../types'
-
-enum AvailableProducts {
-  Auth = 'auth',
-  Identity = 'identity',
-  Income = 'income',
-  Transactions = 'transactions',
-  Assets = 'assets',
-  Liabilities = 'liabilities',
-  Investments = 'investments',
-}
+import { usePlaidLinkTokenCreateMutation } from '../../types'
 
 type AccountFilters = InputMaybe<PlaidLinkAccountFiltersInput> | undefined
 type LinkCustomizationName = InputMaybe<string> | undefined
-type Products = AvailableProducts[]
+type Products = AvailablePlaidProducts[]
 
 export type LinkCreateParams = {
   accountFilters?: AccountFilters
@@ -26,7 +17,7 @@ export type LinkCreateParams = {
   onCompleted: (data: PlaidLinkTokenCreateMutation) => void
 }
 
-const useLinkTokenCreate = ({
+const usePlaidLinkTokenCreate = ({
   accountFilters = undefined,
   linkCustomizationName = undefined,
   products = [],
@@ -47,4 +38,4 @@ const useLinkTokenCreate = ({
   return { generatePlaidLinkToken, data, called, loading, error }
 }
 
-export default useLinkTokenCreate
+export default usePlaidLinkTokenCreate

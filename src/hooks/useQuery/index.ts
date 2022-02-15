@@ -1,12 +1,14 @@
-import { gql, QueryResult, useQuery as useApolloQuery } from '@apollo/client'
+import { ApolloClient, useQuery as useApolloQuery } from '@apollo/client'
 
-const useQuery = (query: string, variables: { [key: string]: any } = {}) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { loading, error, data, refetch, networkStatus } = useApolloQuery(gql(query), {
-    variables,
-  })
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  return { loading, error, data, refetch, networkStatus } as QueryResult<typeof data>
+import useQuilttQueryClient from '../contexts/useQuilttQueryClient'
+
+const useQuery = () => {
+  const { client } = useQuilttQueryClient()
+
+  if (client instanceof ApolloClient) {
+    return useApolloQuery
+  }
+  return useApolloQuery
 }
 
 export default useQuery
