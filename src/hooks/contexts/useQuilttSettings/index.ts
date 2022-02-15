@@ -6,9 +6,9 @@ import {
   DEFAULT_AUTH_ENDPOINT,
   DEFAULT_WS_ENDPOINT,
 } from '../../../constants'
-import type { QuilttDeploymentContext } from '../../../types'
+import type { QuilttSettingsContext } from '../../../types'
 
-export const QuilttDeployment = React.createContext<QuilttDeploymentContext>({
+export const QuilttSettings = React.createContext<QuilttSettingsContext>({
   authEndpoint: DEFAULT_AUTH_ENDPOINT,
   apiEndpoint: DEFAULT_API_ENDPOINT,
   apiVersion: DEFAULT_API_VERSION,
@@ -18,8 +18,8 @@ export const QuilttDeployment = React.createContext<QuilttDeploymentContext>({
   errorLogger: console.log,
 })
 
-const useQuilttDeployment = () => {
-  const [deployment, setDeployment] = React.useState<QuilttDeploymentContext>({
+const useQuilttSettings = () => {
+  const [quilttSettings, setQuilttSettings] = React.useState<QuilttSettingsContext>({
     authEndpoint: DEFAULT_AUTH_ENDPOINT,
     apiEndpoint: DEFAULT_API_ENDPOINT,
     apiVersion: DEFAULT_API_VERSION,
@@ -29,7 +29,7 @@ const useQuilttDeployment = () => {
     errorLogger: console.log,
   })
 
-  return { ...deployment, setDeployment }
+  return { ...quilttSettings, setQuilttSettings }
 }
 
-export default useQuilttDeployment
+export default useQuilttSettings

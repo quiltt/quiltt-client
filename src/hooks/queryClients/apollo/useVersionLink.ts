@@ -1,9 +1,9 @@
 import { setContext } from '@apollo/client/link/context'
 
-import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+import useQuilttSettings from '../../contexts/useQuilttSettings'
 
 const useVersionLink = () => {
-  const { apiVersion } = useQuilttDeployment()
+  const { apiVersion } = useQuilttSettings()
   return setContext((_, { headers }: { headers: Headers }) => {
     if (apiVersion) {
       headers['Quiltt-Version'] = apiVersion

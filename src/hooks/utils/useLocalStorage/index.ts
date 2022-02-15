@@ -9,7 +9,7 @@ declare global {
   }
 }
 
-type SetValue<T> = React.Dispatch<React.SetStateAction<T>>
+export type SetValue<T> = React.Dispatch<React.SetStateAction<T>>
 
 const useLocalStorage = <T>(key: string, initialValue: T): [T, SetValue<T>] => {
   // Get from local storage then

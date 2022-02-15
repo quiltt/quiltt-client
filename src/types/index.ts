@@ -1,5 +1,5 @@
 export * from './auth'
-export * from './deployment'
+export * from './settings'
 export * from './queryClient'
 export * from './quiltt'
 export * from './plaid'

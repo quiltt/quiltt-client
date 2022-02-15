@@ -1,10 +1,10 @@
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import fetch from 'cross-fetch'
 
-import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+import useQuilttSettings from '../../contexts/useQuilttSettings'
 
 const useBatchLink = () => {
-  const { apiEndpoint } = useQuilttDeployment()
+  const { apiEndpoint } = useQuilttSettings()
 
   return new BatchHttpLink({
     uri: apiEndpoint.toString(),

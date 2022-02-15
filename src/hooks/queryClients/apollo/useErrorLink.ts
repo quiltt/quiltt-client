@@ -2,10 +2,10 @@ import type { ServerError } from '@apollo/client'
 import { onError } from '@apollo/client/link/error'
 
 import useQuilttAuth from '../../contexts/useQuilttAuth'
-import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+import useQuilttSettings from '../../contexts/useQuilttSettings'
 
 const useErrorLink = () => {
-  const { errorLogger } = useQuilttDeployment()
+  const { errorLogger } = useQuilttSettings()
   const { resetSession } = useQuilttAuth()
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {

@@ -1,5 +1,7 @@
 import type { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios'
 
+import { SetValue } from '../hooks/utils/useLocalStorage'
+
 export type EmailInput = { email: string; phone?: never }
 export type PhoneInput = { phone: string; email?: never }
 
@@ -20,7 +22,7 @@ export type QuilttSession = {
 export type AuthAPI = {
   ping: (token: string) => Promise<AxiosResponse<QuilttSession>>
   identify: (user: EmailInput) => Promise<AxiosResponse<QuilttSession>>
-  authenticate: (authenticationVariables: LoginPayload) => Promise<AxiosResponse<QuilttSession>>
+  authenticate: (payload: LoginPayload) => Promise<AxiosResponse<QuilttSession>>
   revoke: (token: string) => Promise<AxiosResponse<Record<string, unknown>>>
 }
 
@@ -29,8 +31,8 @@ export type AuthConfig = AxiosRequestConfig<QuilttSession | Record<string, unkno
   validateStatus: (status: number) => boolean
 }
 
-export type QuilttAuthContext = AuthAPI &
-  QuilttSession & {
-    setSession: (value: QuilttSession | ((val: Partial<QuilttSession>) => QuilttSession)) => void
-    resetSession: () => void
-  }
+export type QuilttAuthContext = AuthAPI & {
+  authorizationToken: string | null
+  setAuthorizationToken: SetValue<string | null>
+  resetSession: () => void
+}

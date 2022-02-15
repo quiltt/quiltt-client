@@ -4,11 +4,11 @@ import { OperationTypeNode } from 'graphql'
 import ActionCableLink from 'graphql-ruby-client/subscriptions/ActionCableLink'
 
 import useQuilttAuth from '../../contexts/useQuilttAuth'
-import useQuilttDeployment from '../../contexts/useQuilttDeployment'
+import useQuilttSettings from '../../contexts/useQuilttSettings'
 
 const useSubscriptionLink = () => {
-  const { websocketEndpoint } = useQuilttDeployment()
-  const { token } = useQuilttAuth()
+  const { websocketEndpoint } = useQuilttSettings()
+  const { authorizationToken } = useQuilttAuth()
   const hasSubscriptionOperation = ({
     query: { definitions },
   }: Operation | (OperationTypeNode & Operation)): boolean =>
@@ -17,7 +17,7 @@ const useSubscriptionLink = () => {
       ({ kind, operation }) => kind === 'OperationDefinition' && operation === 'subscription'
     )
 
-  const url = new URL(`?token=${token as string}`, websocketEndpoint)
+  const url = new URL(`?token=${authorizationToken ?? ''}`, websocketEndpoint)
   // eslint-disable-next-line
   const cable = createConsumer(url.toString())
 

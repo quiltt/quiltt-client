@@ -6,18 +6,18 @@ import {
   DEFAULT_AUTH_ENDPOINT,
   DEFAULT_WS_ENDPOINT,
 } from '../../constants'
-import { QuilttDeployment, useQuilttDeployment } from '../../hooks'
+import { QuilttSettings, useQuilttSettings } from '../../hooks'
 
-type QuilttDeploymentProviderProps = {
+type QuilttSettingsProviderProps = {
   deploymentId: string
-  authEndpoint: string
-  apiEndpoint: string
-  apiVersion: string
-  websocketEndpoint: string
-  errorLogger: (error: any) => void
+  authEndpoint?: string
+  apiEndpoint?: string
+  apiVersion?: string
+  websocketEndpoint?: string
+  errorLogger?: (error: any) => void
 }
 
-const QuilttDeploymentProvider: React.FC<QuilttDeploymentProviderProps> = ({
+const QuilttSettingsProvider: React.FC<QuilttSettingsProviderProps> = ({
   deploymentId,
   authEndpoint = DEFAULT_AUTH_ENDPOINT,
   apiEndpoint = DEFAULT_API_ENDPOINT,
@@ -27,7 +27,7 @@ const QuilttDeploymentProvider: React.FC<QuilttDeploymentProviderProps> = ({
   errorLogger = console.log,
   children,
 }) => {
-  const { setDeployment } = useQuilttDeployment()
+  const { setQuilttSettings } = useQuilttSettings()
   const value = React.useMemo(
     () => ({
       deploymentId,
@@ -36,7 +36,7 @@ const QuilttDeploymentProvider: React.FC<QuilttDeploymentProviderProps> = ({
       apiVersion,
       websocketEndpoint,
       errorLogger,
-      setDeployment,
+      setQuilttSettings,
     }),
     [
       deploymentId,
@@ -45,11 +45,11 @@ const QuilttDeploymentProvider: React.FC<QuilttDeploymentProviderProps> = ({
       apiVersion,
       websocketEndpoint,
       errorLogger,
-      setDeployment,
+      setQuilttSettings,
     ]
   )
 
-  return <QuilttDeployment.Provider value={value}>{children}</QuilttDeployment.Provider>
+  return <QuilttSettings.Provider value={value}>{children}</QuilttSettings.Provider>
 }
 
-export default QuilttDeploymentProvider
+export default QuilttSettingsProvider
