@@ -1,4 +1,5 @@
-import { PlaidLinkTokenCreateMutation, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
+import type { PlaidLinkTokenCreateMutation } from '../../types/quiltt'
+import { usePlaidLinkTokenCreateForUpdateMutation } from '../../types/quiltt'
 
 type PlaidItemId = string
 type CountryCodes = string[]

@@ -11,11 +11,11 @@ import type {
 } from 'react-plaid-link'
 import { usePlaidLink } from 'react-plaid-link'
 
-import {
+import type {
   PlaidLinkTokenCreateForUpdateMutation,
   PlaidLinkTokenCreateForUpdatePayload,
   PlaidLinkTokenCreateInput,
-} from '../../types'
+} from '../../types/quiltt'
 import type { CustomComponentProps } from '../../utils/components'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 

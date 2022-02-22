@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { PlaidItemStatus } from '../../types/quiltt'
+import type { PlaidItemStatus } from '../../types/quiltt'
 import { timeDifference } from '../../utils/date'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 import DefaultSyncingComponent from '../DefaultSyncingComponent'

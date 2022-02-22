@@ -2,10 +2,19 @@ import type { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axi
 
 import { SetValue } from '../hooks/utils/useLocalStorage'
 
-export type EmailInput = { email: string; phone?: never }
-export type PhoneInput = { phone: string; email?: never }
+export enum AuthStrategies {
+  Email = 'email',
+  Phone = 'phone',
+}
 
-export type UsernamePayload = EmailInput | PhoneInput
+export interface EmailInput {
+  email: string
+}
+export interface PhoneInput {
+  phone: string
+}
+
+export type UsernamePayload = Partial<EmailInput & PhoneInput>
 
 export type PasscodePayload = UsernamePayload & {
   passcode: string

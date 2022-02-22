@@ -9,11 +9,11 @@ import type {
 } from 'react-plaid-link'
 import { usePlaidLink } from 'react-plaid-link'
 
-import {
+import type {
   PlaidLinkTokenCreateInput,
   PlaidLinkTokenCreateMutation,
   PlaidLinkTokenCreatePayload,
-} from '../../types'
+} from '../../types/quiltt'
 import type { CustomComponentProps } from '../../utils/components'
 
 import usePlaidLinkTokenCreate, { LinkCreateParams } from './usePlaidLinkTokenCreate'

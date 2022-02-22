@@ -1,10 +1,10 @@
+import type { AvailablePlaidProducts } from '../../types'
 import type {
-  AvailablePlaidProducts,
   InputMaybe,
   PlaidLinkAccountFiltersInput,
   PlaidLinkTokenCreateMutation,
-} from '../../types'
-import { usePlaidLinkTokenCreateMutation } from '../../types'
+} from '../../types/quiltt'
+import { usePlaidLinkTokenCreateMutation } from '../../types/quiltt'
 
 type AccountFilters = InputMaybe<PlaidLinkAccountFiltersInput> | undefined
 type LinkCustomizationName = InputMaybe<string> | undefined
