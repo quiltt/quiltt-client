@@ -1,14 +1,13 @@
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
-import { Client, createClient } from 'urql'
 
 import useQuilttLink, { graphqlEndpoint } from '../apollo/useQuilttLink'
 
-export type QueryClients = 'apollo' | 'urql'
+export type QueryClients = 'apollo'
 
 const useQuilttClient = (
   token: string | null,
   client: QueryClients
-): ApolloClient<NormalizedCacheObject> | Client => {
+): ApolloClient<NormalizedCacheObject> => {
   const quilttLink = useQuilttLink(token)
 
   switch (client) {
@@ -17,15 +16,6 @@ const useQuilttClient = (
         link: quilttLink,
         cache: new InMemoryCache(),
         connectToDevTools: true,
-      })
-    case 'urql':
-      return createClient({
-        url: graphqlEndpoint.toString(),
-        fetchOptions: () => {
-          return {
-            headers: { authorization: token ? `Bearer ${token}` : '' },
-          }
-        },
       })
     default:
       return new ApolloClient({
