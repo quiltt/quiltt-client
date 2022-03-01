@@ -18,7 +18,6 @@ const DEFAULT_CONFIG: AuthConfig = {
 }
 
 DEFAULT_CONFIG.headers.append('Content-Type', 'application/json')
-DEFAULT_CONFIG.headers.append('Quiltt-Version', '2021-05-12')
 DEFAULT_CONFIG.headers.append('Authorization', '')
 
 export type Strategies = 'phone' | 'email'
