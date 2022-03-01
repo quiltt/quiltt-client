@@ -1,7 +1,4 @@
 {
-  "extends": "../tsconfig.json",
-  "include": ["src", "**/*.d.ts", "**/*.config.js"],
-  "exclude": ["node_modules", "build"],
   "compilerOptions": {
     "outDir": "dist",
     "module": "esnext",
@@ -28,6 +25,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client", "react"]
-  }
+    "types": ["vite/client"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build"]
 }

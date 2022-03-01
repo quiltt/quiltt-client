@@ -10,6 +10,7 @@ const warn = (assert: boolean, scope: string, message: string): void => {
       if (console.warn) {
         console.warn(`Quiltt [${scope}]: ${message}`)
       } else {
+        // eslint-disable-next-line no-console
         console.log(`Quiltt [${scope}]: ${message}`)
       }
     }

@@ -38,7 +38,7 @@ import App from './App'
 
 export const Index: React.FC = () => {
   return (
-    <QuilttProvider deploymentId={VITE_APP_QUILTT_APP_ID | REACT_APP_QUILTT_APP_ID}>
+    <QuilttProvider appId={VITE_APP_QUILTT_APP_ID | REACT_APP_QUILTT_APP_ID}>
       <App />
     </QuilttProvider>
   )
@@ -48,20 +48,20 @@ export default Index
 
 ## Exported Hooks/Providers/Components
 
-- `QuilttSettingsProvider`
+- `QuilttProvider`
 - `useAuthLink`
 - `useErrorLink`
 - `useLocalStorage`
 - `usePreviewLink`
 - `useQuilttAuth`
 - `useQuilttClient`
-- `useQuilttSettings`
+- `useQuilttContext`
 - `useQuilttLink`
 - `PlaidLinkButton`
 - `PlaidLinkLauncher`
+- `PlaidLinkLauncherWrapper`
 - `PlaidNewConnectionButton`
 - `PlaidReconnectButton`
-- `PlaidSyncStatus`
 - `PlaidUnlinkButton`
 
 ## License

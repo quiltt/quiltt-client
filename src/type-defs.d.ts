@@ -3,7 +3,7 @@ declare module '*.css' {
   export default content
 }
 
-type SvgrComponent = React.FC<React.SVGAttributes<SVGElement>>
+interface SvgrComponent extends React.FC<React.SVGAttributes<SVGElement>> {}
 
 declare module '*.svg' {
   const svgUrl: string

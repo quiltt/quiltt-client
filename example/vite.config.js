@@ -1,5 +1,4 @@
 import reactRefresh from '@vitejs/plugin-react-refresh'
-import babel from 'vite-babel-plugin'
 
 import { defineConfig } from 'vite'
 
@@ -11,6 +10,6 @@ export default defineConfig({
       allow: ['..', '.', 'src', 'public'],
     },
   },
-  plugins: [reactRefresh(), babel()],
+  plugins: [reactRefresh()],
   publicDir: './public',
 })
