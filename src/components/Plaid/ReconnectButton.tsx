@@ -1,29 +1,22 @@
 import * as React from 'react'
 import type { PlaidLinkError, PlaidLinkOnExitMetadata } from 'react-plaid-link'
 
-import type {
-  PlaidLinkTokenCreateForUpdateMutation,
-  PlaidLinkTokenCreateForUpdatePayload,
-} from '../../types'
-import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
+import type { ConnectorPlaidInitializeMutation, ConnectorPlaidInitializePayload } from '../../types'
+import { useConnectorPlaidInitializeMutation } from '../../types'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
 import LinkLauncherWrapper from './LinkLauncherWrapper'
 
 type ReconnectButtonProps = {
   id: string
-  setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
   LoadingComponent?: React.ReactElement
 }
 
 const ReconnectButton: React.FC<ReconnectButtonProps> = ({
   id,
-  setConnectionStatus,
   LoadingComponent = <DefaultLoadingComponent />,
 }) => {
-  const onSuccess = React.useCallback(() => {
-    setConnectionStatus(PlaidItemStatus.Syncing)
-  }, [setConnectionStatus])
+  const onSuccess = React.useCallback(() => {}, [])
 
   const onExit = React.useCallback((err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => {
     if (err) throw new Error(`${err.error_code} ${err.error_message} - ${JSON.stringify(metadata)}`)
@@ -31,16 +24,15 @@ const ReconnectButton: React.FC<ReconnectButtonProps> = ({
 
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
-  const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateForUpdateMutation({
+  const [createLinkToken, { called, error }] = useConnectorPlaidInitializeMutation({
     variables: {
       input: {
-        plaidItemId: id,
+        connectionId: id,
         countryCodes: ['US'],
       },
     },
-    onCompleted(data: PlaidLinkTokenCreateForUpdateMutation) {
-      const { record, errors } =
-        data.plaidLinkTokenCreateForUpdate as PlaidLinkTokenCreateForUpdatePayload
+    onCompleted(data: ConnectorPlaidInitializeMutation) {
+      const { record, errors } = data.connectorPlaidInitialize as ConnectorPlaidInitializePayload
 
       if (errors) {
         errors.map((err) => {

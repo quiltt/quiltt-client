@@ -62,7 +62,6 @@ export default Index
 - `PlaidLinkLauncherWrapper`
 - `PlaidNewConnectionButton`
 - `PlaidReconnectButton`
-- `PlaidSyncStatus`
 - `PlaidUnlinkButton`
 
 ## License

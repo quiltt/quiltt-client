@@ -7,15 +7,15 @@ import type {
 } from 'react-plaid-link'
 
 import {
-  PlaidLinkTokenCreateInput,
-  PlaidLinkTokenCreateMutation,
-  PlaidLinkTokenCreatePayload,
-  usePlaidLinkTokenCreateMutation,
+  ConnectorPlaidInitializeInput,
+  ConnectorPlaidInitializeMutation,
+  ConnectorPlaidInitializePayload,
+  useConnectorPlaidInitializeMutation,
 } from '../../types'
 
 import LinkLauncher from './LinkLauncher'
 
-export type PlaidLinkButtonProps = PlaidLinkTokenCreateInput & {
+export type PlaidLinkButtonProps = ConnectorPlaidInitializeInput & {
   onSuccess: PlaidLinkOnSuccess
   onExit?: PlaidLinkOnExit
   onEvent?: PlaidLinkOnEvent
@@ -36,8 +36,8 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = (props) => {
 
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
-  const handlePlaidTokenCreated = (data: PlaidLinkTokenCreateMutation) => {
-    const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
+  const handlePlaidTokenCreated = (data: ConnectorPlaidInitializeMutation) => {
+    const { record, errors } = data.connectorPlaidInitialize as ConnectorPlaidInitializePayload
     if (errors)
       errors.map((error) => {
         throw new Error(`${error.code}: ${error.message}`)
@@ -48,7 +48,7 @@ export const PlaidLinkButton: React.FC<PlaidLinkButtonProps> = (props) => {
     }
   }
 
-  const [createLinkToken] = usePlaidLinkTokenCreateMutation({
+  const [createLinkToken] = useConnectorPlaidInitializeMutation({
     variables: {
       input: {
         accountFilters,
