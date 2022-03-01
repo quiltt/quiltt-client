@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache, NormalizedCacheObject } from '@apollo/client'
 
-import useQuilttLink, { graphqlEndpoint } from '../apollo/useQuilttLink'
+import useQuilttLink from '../apollo/useQuilttLink'
 
 export type QueryClients = 'apollo'
 
