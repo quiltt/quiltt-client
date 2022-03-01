@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import type { AxiosResponse } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import axios from 'axios'
 
 import { QuilttContext } from '../useQuilttContext'
@@ -47,20 +47,28 @@ const useQuilttAuth = (
     ping: (token: string) => {
       const config = { ...appConfig }
       config.headers.set('Authorization', `Bearer ${token}`)
-      return axios.get(endpoint, config)
+      return axios.get(endpoint, config as unknown as AxiosRequestConfig)
     },
     identify: (username: UsernamePayload) => {
       const config = { ...appConfig }
-      return axios.post(endpoint, { session: { appId, ...username } }, config)
+      return axios.post(
+        endpoint,
+        { session: { appId, ...username } },
+        config as unknown as AxiosRequestConfig
+      )
     },
     authenticate: (authenticationVariables: PasscodePayload) => {
       const config = { ...appConfig }
-      return axios.put(endpoint, { session: { appId, ...authenticationVariables } }, config)
+      return axios.put(
+        endpoint,
+        { session: { appId, ...authenticationVariables } },
+        config as unknown as AxiosRequestConfig
+      )
     },
     revoke: (token: string) => {
       const config = { ...appConfig }
       config.headers.set('Authorization', `Bearer ${token}`)
-      return axios.delete(endpoint, config)
+      return axios.delete(endpoint, config as unknown as AxiosRequestConfig)
     },
   }
 
