@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useConnectionDeleteMutation } from '../../types'
+import { usePlaidItemUnlinkMutation } from '../../types'
 
 type UnlinkButtonProps = {
   id: string
@@ -8,12 +8,12 @@ type UnlinkButtonProps = {
 }
 
 const UnlinkButton: React.FC<UnlinkButtonProps> = ({ id, name, children, ...buttonProps }) => {
-  const [unlink, { loading }] = useConnectionDeleteMutation({
+  const [unlink, { loading }] = usePlaidItemUnlinkMutation({
     variables: { id },
     update: (cache, results) => {
-      if (results?.data?.connectionDelete?.record) {
+      if (results?.data?.plaidItemDelete?.record) {
         cache.evict({
-          id: cache.identify(results.data.connectionDelete.record),
+          id: cache.identify(results.data.plaidItemDelete.record),
         })
       }
     },

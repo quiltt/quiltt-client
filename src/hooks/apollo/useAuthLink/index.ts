@@ -6,6 +6,7 @@ const useAuthLink = (token: string | null) => {
       headers: {
         ...headers,
         authorization: token ? `Bearer ${token}` : null,
+        'Quiltt-Version': '2021-05-12',
       },
     }
   })

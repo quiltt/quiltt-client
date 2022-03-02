@@ -2,9 +2,9 @@ import * as React from 'react'
 import { PlaidLinkOnSuccess } from 'react-plaid-link'
 
 import {
-  ConnectorPlaidInitializeMutation,
-  ConnectorPlaidInitializePayload,
-  useConnectorPlaidInitializeMutation,
+  PlaidLinkTokenCreateMutation,
+  PlaidLinkTokenCreatePayload,
+  usePlaidLinkTokenCreateMutation,
 } from '../../types'
 
 import LinkLauncherWrapper from './LinkLauncherWrapper'
@@ -29,7 +29,7 @@ const NewConnectionButton: React.FC<Props> = ({
   onSuccess,
 }) => {
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
-  const [createLinkToken, { called, error }] = useConnectorPlaidInitializeMutation({
+  const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateMutation({
     variables: {
       input: {
         accountFilters: linkAccountFilters,
@@ -38,8 +38,8 @@ const NewConnectionButton: React.FC<Props> = ({
         countryCodes: ['US'],
       },
     },
-    onCompleted(data: ConnectorPlaidInitializeMutation) {
-      const { record, errors } = data.connectorPlaidInitialize as ConnectorPlaidInitializePayload
+    onCompleted(data: PlaidLinkTokenCreateMutation) {
+      const { record, errors } = data.plaidLinkTokenCreate as PlaidLinkTokenCreatePayload
 
       if (errors) {
         errors.map((err) => {

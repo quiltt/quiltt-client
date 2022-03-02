@@ -1,38 +1,45 @@
 import * as React from 'react'
 import type { PlaidLinkError, PlaidLinkOnExitMetadata } from 'react-plaid-link'
 
-import type { ConnectorPlaidInitializeMutation, ConnectorPlaidInitializePayload } from '../../types'
-import { useConnectorPlaidInitializeMutation } from '../../types'
+import type {
+  PlaidLinkTokenCreateForUpdateMutation,
+  PlaidLinkTokenCreateForUpdatePayload,
+} from '../../types'
+import { PlaidItemStatus, usePlaidLinkTokenCreateForUpdateMutation } from '../../types'
 import DefaultLoadingComponent from '../DefaultLoadingComponent'
 
 import LinkLauncherWrapper from './LinkLauncherWrapper'
 
 type ReconnectButtonProps = {
   id: string
+  setConnectionStatus: React.Dispatch<React.SetStateAction<PlaidItemStatus>>
   LoadingComponent?: React.ReactElement
 }
 
 const ReconnectButton: React.FC<ReconnectButtonProps> = ({
   id,
+  setConnectionStatus,
   LoadingComponent = <DefaultLoadingComponent />,
 }) => {
-  const onSuccess = React.useCallback(() => {}, [])
-
+  const onSuccess = React.useCallback(() => {
+    setConnectionStatus(PlaidItemStatus.Syncing)
+  }, [setConnectionStatus])
   const onExit = React.useCallback((err: PlaidLinkError, metadata: PlaidLinkOnExitMetadata) => {
     if (err) throw new Error(`${err.error_code} ${err.error_message} - ${JSON.stringify(metadata)}`)
   }, [])
 
   const [linkToken, setLinkToken] = React.useState<string | null>(null)
 
-  const [createLinkToken, { called, error }] = useConnectorPlaidInitializeMutation({
+  const [createLinkToken, { called, error }] = usePlaidLinkTokenCreateForUpdateMutation({
     variables: {
       input: {
-        connectionId: id,
+        plaidItemId: id,
         countryCodes: ['US'],
       },
     },
-    onCompleted(data: ConnectorPlaidInitializeMutation) {
-      const { record, errors } = data.connectorPlaidInitialize as ConnectorPlaidInitializePayload
+    onCompleted(data: PlaidLinkTokenCreateForUpdateMutation) {
+      const { record, errors } =
+        data.plaidLinkTokenCreateForUpdate as PlaidLinkTokenCreateForUpdatePayload
 
       if (errors) {
         errors.map((err) => {
