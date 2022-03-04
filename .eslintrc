@@ -1,17 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "extends": [
-    "airbnb-typescript",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": ["import", "react", "simple-import-sort", "jest-dom", "@typescript-eslint"],
-  "env": {
-    "browser": true,
-    "node": true,
-    "jest": true
-  },
+  "extends": ["quiltt/typescript"],
   "parserOptions": {
     "ecmaVersion": 2020,
     "ecmaFeatures": {
@@ -20,46 +10,47 @@
     },
     "project": "tsconfig.json"
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
+  "plugins": ["simple-import-sort"],
   "rules": {
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "max-len": [1, { "code": 100 }],
-    "space-before-function-paren": 0,
-    "react/prop-types": 0,
-    "react/jsx-handler-names": 0,
-    "react/jsx-fragments": 0,
-    "react/no-unused-prop-types": 0,
-    "react/jsx-props-no-spreading": 0,
-    "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error",
-    "no-use-before-define": "off",
-    "@typescript-eslint/no-use-before-define": "error",
-    "import/export": 0,
-    "import/prefer-default-export": 0,
-    "import/no-extraneous-dependencies": 0,
-    "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
     "simple-import-sort/imports": [
       "error",
       {
         "groups": [
           ["^react", "^react-dom"],
+          // Node Builtins
+          [
+            "^(assert|buffer|child_process|cluster|console|constants|crypto|dgram|dns|domain|events|fs|http|https|module|net|os|path|punycode|querystring|readline|repl|stream|string_decoder|sys|timers|tls|tty|url|util|vm|zlib|freelist|v8|process|async_hooks|http2|perf_hooks)(/.*|$)"
+          ],
+          // Packages
           ["^@?\\w"],
-          ["^(@|@company|@ui|components|utils|config|vendored-lib)(/.*|$)"],
+          ["^\\w"],
+          // Internal packages.
+          ["^(@|components|utils|config/)(/*|$)"],
+          // Side effect imports.
           ["^\\u0000"],
+          // Parent imports. Put `..` last.
           ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
+          // Other relative imports. Put same-folder imports and `.` last.
           ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
+          // Style imports.
           ["^.+\\.s?css$"]
         ]
       }
     ],
     "simple-import-sort/exports": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx"],
+      "rules": {
+        "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["src/utils/warning.ts", "**/*.test.tsx"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

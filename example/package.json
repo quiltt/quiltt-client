@@ -10,8 +10,10 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.17.2",
     "@quiltt/client": "link:..",
-    "@quiltt/ui": "^1.0.5",
+    "@quiltt/components": "^0.0.2-2",
+    "@quiltt/ui": "^1.2.6",
     "@testing-library/jest-dom": "link:../node_modules/@testing-library/jest-dom",
     "@testing-library/react": "link:../node_modules/@testing-library/react",
     "@testing-library/user-event": "link:../node_modules/@testing-library/user-event",
@@ -20,26 +22,26 @@
     "@types/react": "link:../node_modules/@types/react",
     "@types/react-dom": "link:../node_modules/@types/react-dom",
     "@vitejs/plugin-react-refresh": "^1.3.6",
-    "autoprefixer": "^10.3.4",
+    "autoprefixer": "^10.4.2",
     "formik": "^2.2.9",
-    "history": "^5.0.1",
-    "postcss": "8.3.6",
+    "history": "^5.3.0",
+    "postcss": "8.4.7",
     "postcss-import": "14.0.2",
     "postcss-nested": "5.0.6",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-router-dom": "^6.0.0-beta.4",
-    "react-scripts": "^4.0.3",
-    "tailwindcss": "2.2.15",
+    "react-router-dom": "^6.2.2",
+    "react-scripts": "^5.0.0",
+    "regenerator-runtime": "^0.13.9",
+    "tailwindcss": "3.0.23",
     "typescript": "link:../node_modules/typescript",
-    "vite": "^2.5.6"
+    "vite": "^2.8.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/plugin-syntax-object-rest-spread": "^7.8.3"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-syntax-object-rest-spread": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "vite-babel-plugin": "^0.0.2"
   },
   "browserslist": {
     "production": [

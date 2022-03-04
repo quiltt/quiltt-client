@@ -1,45 +1,61 @@
 import * as React from 'react'
+
 import { useNavigate } from 'react-router-dom'
 
-import { useQuilttContext } from '@quiltt/client'
+import { Card, Heading } from '@quiltt/ui'
 
-import Passcode from './Passcode'
-import Username from './Username'
+import { AuthStrategies, useQuilttAuth, useQuilttSettings, UsernamePayload } from '@quiltt/client'
+import PasscodeForm from './PasscodeForm'
+import UsernameForm from './UsernameForm'
 
-export const AuthPage: React.FC = () => {
+const AuthPage: React.VFC = () => {
+  const settings = useQuilttSettings()
+  const auth = useQuilttAuth()
+  const { setAuthorizationToken } = auth
+  const authStrategy = AuthStrategies.Email
+  const [username, setUsername] = React.useState<UsernamePayload>()
   const navigate = useNavigate()
-  const { setAuthorizationToken } = useQuilttContext()
-  const [email, setEmail] = React.useState<string>()
-  // const [phone, setPhone] = React.useState<string>()
 
-  // We're only using email for this example
-  const handleIdentification = (email: string) => {
-    setEmail(email)
+  const handleIdentification = (payload: UsernamePayload) => {
+    setUsername(payload)
   }
 
   const handleAuthentication = (token: string) => {
     setAuthorizationToken(token)
-
-    if (navigate) navigate('/')
+    navigate('/')
   }
 
+  React.useEffect(() => {
+    console.log({ settings })
+  }, [settings])
+
   return (
-    <div className="flex items-center justify-center w-full h-full px-4 py-12 text-black sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-3xl font-extrabold text-center">Sign in to your account</h2>
-        </div>
-        {email ? (
-          <Passcode onAuthentication={handleAuthentication} email={email} />
-        ) : (
-          <Username
-            strategy="email"
-            onAuthentication={handleAuthentication}
-            onIdentification={handleIdentification}
-          />
-        )}
-      </div>
-    </div>
+    <main className="flex flex-col justify-center flex-auto h-full p-3 overflow-y-auto">
+      <img alt="" className="block mx-auto w-50" style={{ maxWidth: '350px' }} />
+
+      <Card className="my-5">
+        <Card.Header>
+          <Heading as="h1">{username ? 'Log In' : 'Sign Up or Log In'}</Heading>
+        </Card.Header>
+        <Card.Body>
+          {username ? (
+            <PasscodeForm
+              auth={auth}
+              username={username}
+              onAuthentication={handleAuthentication}
+              strategy={authStrategy}
+            />
+          ) : (
+            <UsernameForm
+              auth={auth}
+              onAuthentication={handleAuthentication}
+              onIdentification={handleIdentification}
+              strategy={authStrategy}
+            />
+          )}
+        </Card.Body>
+      </Card>
+    </main>
   )
 }
 
