@@ -1,5 +1,5 @@
 export * from './auth'
 export * from './client'
 export * from './plaid'
-export * from './queries'
+export * from './graphql'
 export * from './settings'

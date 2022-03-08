@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useConnectionDeleteMutation } from '../../types/queries'
+import { useConnectionDeleteMutation } from '../../types/graphql'
 import type { CustomComponentProps } from '../../utils/components'
 
 export type PlaidDisconnectButtonProps = React.HTMLAttributes<HTMLElement> &

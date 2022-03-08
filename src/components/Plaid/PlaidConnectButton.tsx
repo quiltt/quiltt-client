@@ -14,7 +14,7 @@ import {
   ConnectorPlaidInitializeMutation,
   ConnectorPlaidInitializePayload,
   useConnectorPlaidInitializeMutation,
-} from '../../types/queries'
+} from '../../types/graphql'
 import type { CustomComponentProps } from '../../utils/components'
 
 export type PlaidConnectButtonProps = React.HTMLAttributes<HTMLElement> &

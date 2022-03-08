@@ -20,6 +20,8 @@ export type Scalars = {
   DateTime: unknown
   /** Represents untyped JSON */
   JSON: unknown
+  /** A valid URL, transported as a string */
+  URL: unknown
 }
 
 /** Represents an Account */
@@ -221,6 +223,24 @@ export enum ConnectionSourceType {
 
 export type ConnectionSources = MockConnection | MxConnection | PlaidConnection
 
+/** Represents the status of an Connection */
+export enum ConnectionStatus {
+  /** Institution Error */
+  ErrorInstitution = 'ERROR_INSTITUTION',
+  /** Provider Error */
+  ErrorProvider = 'ERROR_PROVIDER',
+  /** Repairable Error */
+  ErrorRepairable = 'ERROR_REPAIRABLE',
+  /** Service Error */
+  ErrorService = 'ERROR_SERVICE',
+  /** Initializing */
+  Initializing = 'INITIALIZING',
+  /** Synced */
+  Synced = 'SYNCED',
+  /** Syncing */
+  Syncing = 'SYNCING',
+}
+
 /** Represents a Connection */
 export type ConnectionType = {
   __typename?: 'ConnectionType'
@@ -236,6 +256,8 @@ export type ConnectionType = {
   source?: Maybe<ConnectionSources>
   /** API Connection Data Sources */
   sources?: Maybe<Array<ConnectionSources>>
+  /** Status */
+  status: ConnectionStatus
 }
 
 /** Represents a Connection */
@@ -384,12 +406,69 @@ export type Error = {
   path?: Maybe<Array<Scalars['String']>>
 }
 
+/** Represents an image */
+export type Image = {
+  __typename?: 'Image'
+  /** API Source */
+  _sourcename: ImageSource
+  /** URL for the image */
+  url?: Maybe<Scalars['URL']>
+}
+
+/** Represents the data source for the image */
+export enum ImageSource {
+  /** MX */
+  Mx = 'MX',
+  /** Plaid */
+  Plaid = 'PLAID',
+  /** Spade */
+  Spade = 'SPADE',
+}
+
 /** Represents an Institution */
 export type Institution = {
   __typename?: 'Institution'
+  /** Single logo */
+  logo?: Maybe<Image>
+  /** List of logos */
+  logos?: Maybe<Array<Image>>
   /** Name */
   name: Scalars['String']
+  /** API Institution Data Source */
+  source?: Maybe<InstitutionSources>
+  /** API Institution Data Sources */
+  sources?: Maybe<Array<InstitutionSources>>
 }
+
+/** Represents an Institution */
+export type InstitutionLogoArgs = {
+  source?: InputMaybe<ImageSource>
+}
+
+/** Represents an Institution */
+export type InstitutionLogosArgs = {
+  sources?: InputMaybe<Array<ImageSource>>
+}
+
+/** Represents an Institution */
+export type InstitutionSourceArgs = {
+  type: InstitutionSourceType
+}
+
+/** Represents an Institution */
+export type InstitutionSourcesArgs = {
+  types?: InputMaybe<Array<InstitutionSourceType>>
+}
+
+/** Represents a data source for the Institution */
+export enum InstitutionSourceType {
+  /** MX institution */
+  Mx = 'MX',
+  /** Plaid institution */
+  Plaid = 'PLAID',
+}
+
+export type InstitutionSources = MxInstitution | PlaidInstitution
 
 export type LedgerBalance = {
   __typename?: 'LedgerBalance'
@@ -659,6 +738,36 @@ export type MxConnector = {
   __typename?: 'MxConnector'
   connectWidgetUrl?: Maybe<Scalars['String']>
   guid?: Maybe<Scalars['String']>
+}
+
+/** MX Institution Data */
+export type MxInstitution = {
+  __typename?: 'MxInstitution'
+  /** API Source */
+  _sourcename: InstitutionSourceType
+  /** A unique identifier for each institution, defined by MX. */
+  code?: Maybe<Scalars['String']>
+  /** The URL for a 100px X 100px logo for each institution. A generic logo is returned for institutions that don’t have one. */
+  mediumLogoUrl?: Maybe<Scalars['String']>
+  /** An easy-to-read name for an institution, e.g., “Chase Bank” or “Wells Fargo Bank.” */
+  name?: Maybe<Scalars['String']>
+  /**
+   * String	The URL for a 50px X 50px logo for each institution. A generic logo is
+   * returned for institutions that don’t have one.
+   */
+  smallLogoUrl?: Maybe<Scalars['String']>
+  /** This indicates whether the institution supports account identification. */
+  supportsAccountIdentification?: Maybe<Scalars['Boolean']>
+  /** This indicates whether the institution provides access to account statements. */
+  supportsAccountStatement?: Maybe<Scalars['Boolean']>
+  /** This indicates whether the institution supports account verification. */
+  supportsAccountVerification?: Maybe<Scalars['Boolean']>
+  /** This indicates whether the institution supports OAuth authentication. */
+  supportsOauth?: Maybe<Scalars['Boolean']>
+  /** This indicates whether the institution allows access to up to 24 months of transaction data. */
+  supportsTransactionHistory?: Maybe<Scalars['Boolean']>
+  /** The URL for particular institution’s website , e.g., www.chase.com. */
+  url?: Maybe<Scalars['String']>
 }
 
 /** Information about pagination in a connection. */
@@ -944,6 +1053,23 @@ export type PlaidAccountLiabilitiesStudent = {
   ytdPrincipalPaid?: Maybe<Scalars['Float']>
 }
 
+/** Metadata that captures information about the Auth features of an institution. */
+export type PlaidAuthMetadata = {
+  __typename?: 'PlaidAuthMetadata'
+  supportedMethods?: Maybe<PlaidAuthSupportedMethods>
+}
+
+/** Metadata specifically related to which auth methods an institution supports. */
+export type PlaidAuthSupportedMethods = {
+  __typename?: 'PlaidAuthSupportedMethods'
+  /** Indicates if automated microdeposits are supported. */
+  automatedMicroDeposits: Scalars['Boolean']
+  /** Indicates if instant auth is supported. */
+  instantAuth: Scalars['Boolean']
+  /** Indicates if instant match is supported. */
+  instantMatch: Scalars['Boolean']
+}
+
 /** Plaid Item Data */
 export type PlaidConnection = {
   __typename?: 'PlaidConnection'
@@ -1076,6 +1202,47 @@ export type PlaidError = {
   status?: Maybe<Scalars['Float']>
   /** Suggested steps for resolving the error */
   suggestedAction: Scalars['String']
+}
+
+/** Plaid Institution Data */
+export type PlaidInstitution = {
+  __typename?: 'PlaidInstitution'
+  /** API Source */
+  _sourcename: InstitutionSourceType
+  /** A list of the country codes supported by the institution. */
+  authMetadata?: Maybe<PlaidAuthMetadata>
+  /** A list of the country codes supported by the institution. */
+  countryCodes: Array<Scalars['String']>
+  /** Unique identifier for the institution */
+  institutionId: Scalars['String']
+  /** Base64 encoded representation of the institution's logo */
+  logo?: Maybe<Scalars['String']>
+  /** The official name of the institution */
+  name: Scalars['String']
+  /**
+   * Indicates that the institution has an OAuth login flow. This is primarily
+   * relevant to institutions with European country codes.
+   */
+  oauth: Scalars['Boolean']
+  /** Hexadecimal representation of the primary color used by the institution */
+  primaryColor?: Maybe<Scalars['String']>
+  /**
+   * A list of the Plaid products supported by the institution. Note that only
+   * institutions that support Instant Auth will return `auth` in the product
+   * array; institutions that do not list `auth` may still support other Auth
+   * methods such as Instant Match or Automated Micro-deposit Verification. For
+   * more details, see [Full Auth coverage](https://plaid.com/docs/auth/coverage/).
+   */
+  products: Array<Scalars['String']>
+  /**
+   * A partial list of routing numbers associated with the institution. This list
+   * is provided for the purpose of looking up institutions by routing number. It
+   * is not comprehensive and should never be used as a complete list of routing
+   * numbers for an institution.
+   */
+  routingNumbers: Array<Scalars['String']>
+  /** The URL for the institution's website */
+  url?: Maybe<Scalars['String']>
 }
 
 /** A filter to apply to `investment`-type accounts */
@@ -1269,8 +1436,8 @@ export type PlaidProcessorTokenCreateInput = {
   accountId: Scalars['ID']
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>
-  /** The ID of the Plaid Item data is being requested for */
-  plaidItemId: Scalars['ID']
+  /** The ID associated with the Connection data is being requested for. */
+  connectionId: Scalars['ID']
   /** The processor you are integrating with */
   processor: Scalars['String']
 }
@@ -2243,26 +2410,87 @@ export type TransactionUpdatePayload = {
   success: Scalars['Boolean']
 }
 
-export type ConnectionsQueryVariables = Exact<{ [key: string]: never }>
-
-export type ConnectionsQuery = {
-  __typename?: 'Query'
-  connections?: Array<{
+export type AccountAttributesFragment = {
+  __typename?: 'Account'
+  id: string
+  name: string
+  type: AccountType
+  lastFourDigits?: string | null
+  metadata?: unknown | null
+  state: LedgerState
+  connection?: {
     __typename?: 'ConnectionType'
     id: string
-    institution: { __typename?: 'Institution'; name: string }
     sources?: Array<
       | { __typename?: 'MockConnection' }
-      | {
-          __typename?: 'MxConnection'
-          id?: string | null
-          name?: string | null
-          _sourcename: ConnectionSourceType
-        }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
       | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
     > | null
-    accounts: Array<{ __typename?: 'Account'; id: string }>
-  }> | null
+  } | null
+}
+
+export type ConnectionAttributesFragment = {
+  __typename?: 'ConnectionType'
+  id: string
+  status: ConnectionStatus
+  institution: { __typename?: 'Institution'; name: string }
+  accounts: Array<{ __typename?: 'Account'; id: string }>
+  sources?: Array<
+    | { __typename?: 'MockConnection' }
+    | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+    | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+  > | null
+}
+
+export type ErrorAttributesFragment = {
+  __typename?: 'Error'
+  message?: string | null
+  path?: Array<string> | null
+}
+
+export type ProfileAttributesFragment = {
+  __typename?: 'Profile'
+  name?: string | null
+  email?: string | null
+  phone?: string | null
+  dateOfBirth?: unknown | null
+  metadata?: unknown | null
+  names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
+  address?: {
+    __typename?: 'ProfileAddress'
+    line1?: string | null
+    line2?: string | null
+    city?: string | null
+    state?: string | null
+    postalCode?: string | null
+    countryCode?: AddressCountryCode | null
+  } | null
+}
+
+export type TransactionAttributesFragment = {
+  __typename?: 'Transaction'
+  id: string
+  amount: number
+  date: unknown
+  description: string
+  entryType: TransactionEntryType
+  metadata?: unknown | null
+  sources?: Array<
+    | { __typename?: 'MockTransaction' }
+    | { __typename?: 'PlaidTransaction'; _sourcename: TransactionSourceType }
+    | {
+        __typename?: 'SpadeTransaction'
+        _sourcename: TransactionSourceType
+        normalizedMerchantName?: string | null
+        logo?: {
+          __typename?: 'SpadeLogo'
+          logoName: string
+          path: string
+          type: string
+          verified: boolean
+        } | null
+      }
+  > | null
 }
 
 export type ConnectorPlaidInitializeMutationVariables = Exact<{
@@ -2298,18 +2526,14 @@ export type ConnectionPlaidCreateMutation = {
     record?: {
       __typename?: 'ConnectionType'
       id: string
+      status: ConnectionStatus
       institution: { __typename?: 'Institution'; name: string }
+      accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
         | { __typename?: 'MockConnection' }
-        | {
-            __typename?: 'MxConnection'
-            id?: string | null
-            name?: string | null
-            _sourcename: ConnectionSourceType
-          }
+        | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
         | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
       > | null
-      accounts: Array<{ __typename?: 'Account'; id: string }>
     } | null
     errors?: Array<{
       __typename?: 'PlaidAPIError'
@@ -2334,18 +2558,14 @@ export type ConnectionPlaidImportMutation = {
     record?: {
       __typename?: 'ConnectionType'
       id: string
+      status: ConnectionStatus
       institution: { __typename?: 'Institution'; name: string }
+      accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
         | { __typename?: 'MockConnection' }
-        | {
-            __typename?: 'MxConnection'
-            id?: string | null
-            name?: string | null
-            _sourcename: ConnectionSourceType
-          }
+        | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
         | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
       > | null
-      accounts: Array<{ __typename?: 'Account'; id: string }>
     } | null
     errors?: Array<{
       __typename?: 'PlaidAPIError'
@@ -2419,30 +2639,6 @@ export type ConnectionDeleteMutation = {
   } | null
 }
 
-export type ProfileQueryVariables = Exact<{ [key: string]: never }>
-
-export type ProfileQuery = {
-  __typename?: 'Query'
-  profile?: {
-    __typename?: 'Profile'
-    name?: string | null
-    email?: string | null
-    phone?: string | null
-    dateOfBirth?: unknown | null
-    metadata?: unknown | null
-    names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
-    address?: {
-      __typename?: 'ProfileAddress'
-      line1?: string | null
-      line2?: string | null
-      city?: string | null
-      state?: string | null
-      postalCode?: string | null
-      countryCode?: AddressCountryCode | null
-    } | null
-  } | null
-}
-
 export type ProfileUpdateMutationVariables = Exact<{
   input: ProfileUpdateInput
 }>
@@ -2478,71 +2674,64 @@ export type ProfileUpdateMutation = {
   } | null
 }
 
-export type AccountAttributesFragment = {
-  __typename?: 'Account'
-  id: string
-  name: string
-  type: AccountType
-  lastFourDigits?: string | null
-  state: LedgerState
-  connection?: { __typename?: 'ConnectionType'; id: string } | null
+export type ConnectionsQueryVariables = Exact<{ [key: string]: never }>
+
+export type ConnectionsQuery = {
+  __typename?: 'Query'
+  connections?: Array<{
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: { __typename?: 'Institution'; name: string }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  }> | null
 }
 
-export type ConnectionAttributesFragment = {
-  __typename?: 'ConnectionType'
-  id: string
-  institution: { __typename?: 'Institution'; name: string }
-  sources?: Array<
-    | { __typename?: 'MockConnection' }
-    | {
-        __typename?: 'MxConnection'
-        id?: string | null
-        name?: string | null
-        _sourcename: ConnectionSourceType
-      }
-    | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
-  > | null
-  accounts: Array<{ __typename?: 'Account'; id: string }>
-}
+export type ConnectionStatusQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
 
-export type ErrorAttributesFragment = {
-  __typename?: 'Error'
-  message?: string | null
-  path?: Array<string> | null
-}
-
-export type ProfileAttributesFragment = {
-  __typename?: 'Profile'
-  name?: string | null
-  email?: string | null
-  phone?: string | null
-  dateOfBirth?: unknown | null
-  metadata?: unknown | null
-  names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
-  address?: {
-    __typename?: 'ProfileAddress'
-    line1?: string | null
-    line2?: string | null
-    city?: string | null
-    state?: string | null
-    postalCode?: string | null
-    countryCode?: AddressCountryCode | null
+export type ConnectionStatusQuery = {
+  __typename?: 'Query'
+  connection?: {
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
   } | null
 }
 
-export type TransactionAttributesFragment = {
-  __typename?: 'Transaction'
-  id: string
-  amount: number
-  date: unknown
-  description: string
-  entryType: TransactionEntryType
-  status: TransactionStatus
-  sources?: Array<
-    | { __typename?: 'MockTransaction' }
-    | { __typename?: 'PlaidTransaction'; _sourcename: TransactionSourceType }
-    | { __typename?: 'SpadeTransaction'; _sourcename: TransactionSourceType }
-  > | null
+export type ProfileQueryVariables = Exact<{ [key: string]: never }>
+
+export type ProfileQuery = {
+  __typename?: 'Query'
+  profile?: {
+    __typename?: 'Profile'
+    name?: string | null
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: unknown | null
+    metadata?: unknown | null
+    names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
+    address?: {
+      __typename?: 'ProfileAddress'
+      line1?: string | null
+      line2?: string | null
+      city?: string | null
+      state?: string | null
+      postalCode?: string | null
+      countryCode?: AddressCountryCode | null
+    } | null
+  } | null
 }
 
 export const AccountAttributesFragmentDoc = gql`
@@ -2551,30 +2740,38 @@ export const AccountAttributesFragmentDoc = gql`
     name
     type
     lastFourDigits
+    metadata
     state
     connection {
       id
+      sources {
+        ... on MxConnection {
+          _sourcename
+        }
+        ... on PlaidConnection {
+          _sourcename
+        }
+      }
     }
   }
 `
 export const ConnectionAttributesFragmentDoc = gql`
   fragment ConnectionAttributes on ConnectionType {
     id
+    status
     institution {
       name
     }
+    accounts {
+      id
+    }
     sources {
       ... on MxConnection {
-        id
-        name
         _sourcename
       }
       ... on PlaidConnection {
         _sourcename
       }
-    }
-    accounts {
-      id
     }
   }
 `
@@ -2612,59 +2809,24 @@ export const TransactionAttributesFragmentDoc = gql`
     date
     description
     entryType
-    status
+    metadata
     sources {
       ... on PlaidTransaction {
         _sourcename
       }
       ... on SpadeTransaction {
         _sourcename
+        logo {
+          logoName
+          path
+          type
+          verified
+        }
+        normalizedMerchantName
       }
     }
   }
 `
-export const ConnectionsDocument = gql`
-  query Connections {
-    connections {
-      ...ConnectionAttributes
-    }
-  }
-  ${ConnectionAttributesFragmentDoc}
-`
-
-/**
- * __useConnectionsQuery__
- *
- * To run a query within a React component, call `useConnectionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useConnectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useConnectionsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useConnectionsQuery(
-  baseOptions?: Apollo.QueryHookOptions<ConnectionsQuery, ConnectionsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ConnectionsQuery, ConnectionsQueryVariables>(ConnectionsDocument, options)
-}
-export function useConnectionsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ConnectionsQuery, ConnectionsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ConnectionsQuery, ConnectionsQueryVariables>(
-    ConnectionsDocument,
-    options
-  )
-}
-export type ConnectionsQueryHookResult = ReturnType<typeof useConnectionsQuery>
-export type ConnectionsLazyQueryHookResult = ReturnType<typeof useConnectionsLazyQuery>
-export type ConnectionsQueryResult = Apollo.QueryResult<ConnectionsQuery, ConnectionsQueryVariables>
 export const ConnectorPlaidInitializeDocument = gql`
   mutation ConnectorPlaidInitialize($input: ConnectorPlaidInitializeInput!) {
     connectorPlaidInitialize(input: $input) {
@@ -3020,45 +3182,6 @@ export type ConnectionDeleteMutationOptions = Apollo.BaseMutationOptions<
   ConnectionDeleteMutation,
   ConnectionDeleteMutationVariables
 >
-export const ProfileDocument = gql`
-  query Profile {
-    profile {
-      ...ProfileAttributes
-    }
-  }
-  ${ProfileAttributesFragmentDoc}
-`
-
-/**
- * __useProfileQuery__
- *
- * To run a query within a React component, call `useProfileQuery` and pass it any options that fit your needs.
- * When your component renders, `useProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProfileQuery({
- *   variables: {
- *   },
- * });
- */
-export function useProfileQuery(
-  baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
-}
-export function useProfileLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<ProfileQuery, ProfileQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
-}
-export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>
-export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>
-export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>
 export const ProfileUpdateDocument = gql`
   mutation ProfileUpdate($input: ProfileUpdateInput!) {
     profileUpdate(input: $input) {
@@ -3111,3 +3234,141 @@ export type ProfileUpdateMutationOptions = Apollo.BaseMutationOptions<
   ProfileUpdateMutation,
   ProfileUpdateMutationVariables
 >
+export const ConnectionsDocument = gql`
+  query Connections {
+    connections {
+      ...ConnectionAttributes
+    }
+  }
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useConnectionsQuery__
+ *
+ * To run a query within a React component, call `useConnectionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConnectionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useConnectionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useConnectionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<ConnectionsQuery, ConnectionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ConnectionsQuery, ConnectionsQueryVariables>(ConnectionsDocument, options)
+}
+export function useConnectionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ConnectionsQuery, ConnectionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ConnectionsQuery, ConnectionsQueryVariables>(
+    ConnectionsDocument,
+    options
+  )
+}
+export type ConnectionsQueryHookResult = ReturnType<typeof useConnectionsQuery>
+export type ConnectionsLazyQueryHookResult = ReturnType<typeof useConnectionsLazyQuery>
+export type ConnectionsQueryResult = Apollo.QueryResult<ConnectionsQuery, ConnectionsQueryVariables>
+export const ConnectionStatusDocument = gql`
+  query ConnectionStatus($id: ID!) {
+    connection(id: $id) {
+      id
+      status
+      sources {
+        ... on MxConnection {
+          _sourcename
+        }
+        ... on PlaidConnection {
+          _sourcename
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useConnectionStatusQuery__
+ *
+ * To run a query within a React component, call `useConnectionStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useConnectionStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useConnectionStatusQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useConnectionStatusQuery(
+  baseOptions: Apollo.QueryHookOptions<ConnectionStatusQuery, ConnectionStatusQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ConnectionStatusQuery, ConnectionStatusQueryVariables>(
+    ConnectionStatusDocument,
+    options
+  )
+}
+export function useConnectionStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ConnectionStatusQuery, ConnectionStatusQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ConnectionStatusQuery, ConnectionStatusQueryVariables>(
+    ConnectionStatusDocument,
+    options
+  )
+}
+export type ConnectionStatusQueryHookResult = ReturnType<typeof useConnectionStatusQuery>
+export type ConnectionStatusLazyQueryHookResult = ReturnType<typeof useConnectionStatusLazyQuery>
+export type ConnectionStatusQueryResult = Apollo.QueryResult<
+  ConnectionStatusQuery,
+  ConnectionStatusQueryVariables
+>
+export const ProfileDocument = gql`
+  query Profile {
+    profile {
+      ...ProfileAttributes
+    }
+  }
+  ${ProfileAttributesFragmentDoc}
+`
+
+/**
+ * __useProfileQuery__
+ *
+ * To run a query within a React component, call `useProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProfileQuery(
+  baseOptions?: Apollo.QueryHookOptions<ProfileQuery, ProfileQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
+}
+export function useProfileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProfileQuery, ProfileQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProfileQuery, ProfileQueryVariables>(ProfileDocument, options)
+}
+export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>
+export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>
+export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>
