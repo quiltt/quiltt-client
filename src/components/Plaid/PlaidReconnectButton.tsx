@@ -110,12 +110,12 @@ const PlaidReconnectButton: React.FC<PlaidReconnectButtonProps> = ({
     }
   }, [error])
 
-  // Auto close modal after 10 seconds of inactivity
+  // Auto close modal after 30 seconds of inactivity
   React.useEffect(() => {
     if (inactive) {
       setTimeout(() => {
         exit()
-      }, 10000)
+      }, 30000)
     }
   })
 
