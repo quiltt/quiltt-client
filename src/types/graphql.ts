@@ -15,13 +15,13 @@ export type Scalars = {
   Int: number
   Float: number
   /** Represents an ISO 8601-encoded date */
-  Date: unknown
+  Date: string
   /** Represents an ISO 8601-encoded datetime */
-  DateTime: unknown
+  DateTime: string
   /** Represents untyped JSON */
-  JSON: unknown
+  JSON: Record<string, unknown>
   /** A valid URL, transported as a string */
-  URL: unknown
+  URL: URL
 }
 
 /** Represents an Account */
@@ -2074,6 +2074,8 @@ export type SpadeLogo = {
   __typename?: 'SpadeLogo'
   /** Name of the logo (for use in logo endpoint, same as path) */
   logoName: Scalars['String']
+  /** Full url for logo */
+  logoUrl: Scalars['URL']
   /** Path to the image */
   path: Scalars['String']
   /** mime type of image (currently all are PNGs) */
@@ -2159,6 +2161,10 @@ export type Transaction = {
   entryType: TransactionEntryType
   /** ID */
   id: Scalars['ID']
+  /** Single logo */
+  logo?: Maybe<Image>
+  /** List of logos */
+  logos?: Maybe<Array<Image>>
   /** Customizable metadata */
   metadata?: Maybe<Scalars['JSON']>
   /** API Transaction Data Source */
@@ -2167,6 +2173,16 @@ export type Transaction = {
   sources?: Maybe<Array<TransactionSources>>
   /** Status */
   status: TransactionStatus
+}
+
+/** Represents a Transaction */
+export type TransactionLogoArgs = {
+  source?: InputMaybe<ImageSource>
+}
+
+/** Represents a Transaction */
+export type TransactionLogosArgs = {
+  sources?: InputMaybe<Array<ImageSource>>
 }
 
 /** Represents a Transaction */
@@ -2416,7 +2432,7 @@ export type AccountAttributesFragment = {
   name: string
   type: AccountType
   lastFourDigits?: string | null
-  metadata?: unknown | null
+  metadata?: Record<string, unknown> | null
   state: LedgerState
   connection?: {
     __typename?: 'ConnectionType'
@@ -2453,8 +2469,8 @@ export type ProfileAttributesFragment = {
   name?: string | null
   email?: string | null
   phone?: string | null
-  dateOfBirth?: unknown | null
-  metadata?: unknown | null
+  dateOfBirth?: string | null
+  metadata?: Record<string, unknown> | null
   names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
   address?: {
     __typename?: 'ProfileAddress'
@@ -2471,10 +2487,10 @@ export type TransactionAttributesFragment = {
   __typename?: 'Transaction'
   id: string
   amount: number
-  date: unknown
+  date: string
   description: string
   entryType: TransactionEntryType
-  metadata?: unknown | null
+  metadata?: Record<string, unknown> | null
   sources?: Array<
     | { __typename?: 'MockTransaction' }
     | { __typename?: 'PlaidTransaction'; _sourcename: TransactionSourceType }
@@ -2502,7 +2518,7 @@ export type ConnectorPlaidInitializeMutation = {
   connectorPlaidInitialize?: {
     __typename?: 'ConnectorPlaidInitializePayload'
     success: boolean
-    record?: { __typename?: 'PlaidConnector'; expiration: unknown; linkToken: string } | null
+    record?: { __typename?: 'PlaidConnector'; expiration: string; linkToken: string } | null
     errors?: Array<{
       __typename?: 'PlaidAPIError'
       code: string
@@ -2653,8 +2669,8 @@ export type ProfileUpdateMutation = {
       name?: string | null
       email?: string | null
       phone?: string | null
-      dateOfBirth?: unknown | null
-      metadata?: unknown | null
+      dateOfBirth?: string | null
+      metadata?: Record<string, unknown> | null
       names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
       address?: {
         __typename?: 'ProfileAddress'
@@ -2719,8 +2735,8 @@ export type ProfileQuery = {
     name?: string | null
     email?: string | null
     phone?: string | null
-    dateOfBirth?: unknown | null
-    metadata?: unknown | null
+    dateOfBirth?: string | null
+    metadata?: Record<string, unknown> | null
     names?: { __typename?: 'ProfileName'; first?: string | null; last?: string | null } | null
     address?: {
       __typename?: 'ProfileAddress'
@@ -2731,6 +2747,50 @@ export type ProfileQuery = {
       postalCode?: string | null
       countryCode?: AddressCountryCode | null
     } | null
+  } | null
+}
+
+export type TransactionsByAccountQueryVariables = Exact<{
+  accountId: Scalars['ID']
+  after?: InputMaybe<Scalars['String']>
+  before?: InputMaybe<Scalars['String']>
+  first?: InputMaybe<Scalars['Int']>
+  last?: InputMaybe<Scalars['Int']>
+}>
+
+export type TransactionsByAccountQuery = {
+  __typename?: 'Query'
+  account?: {
+    __typename?: 'Account'
+    id: string
+    lastFourDigits?: string | null
+    metadata?: Record<string, unknown> | null
+    name: string
+    transactionsConnection: {
+      __typename?: 'TransactionConnection'
+      count: number
+      pageInfo: {
+        __typename?: 'PageInfo'
+        endCursor?: string | null
+        hasNextPage: boolean
+        hasPreviousPage: boolean
+        startCursor?: string | null
+      }
+      edges?: Array<{
+        __typename?: 'TransactionEdge'
+        cursor: string
+        node?: {
+          __typename?: 'Transaction'
+          id: string
+          description: string
+          amount: number
+          date: string
+          entryType: TransactionEntryType
+          status: TransactionStatus
+          logo?: { __typename?: 'Image'; _sourcename: ImageSource; url?: URL | null } | null
+        } | null
+      } | null> | null
+    }
   } | null
 }
 
@@ -3372,3 +3432,102 @@ export function useProfileLazyQuery(
 export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>
 export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>
 export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>
+export const TransactionsByAccountDocument = gql`
+  query TransactionsByAccount(
+    $accountId: ID!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    account(id: $accountId) {
+      id
+      lastFourDigits
+      metadata
+      name
+      transactionsConnection(
+        sort: DATE_DESC
+        first: $first
+        last: $last
+        after: $after
+        before: $before
+      ) {
+        pageInfo {
+          endCursor
+          hasNextPage
+          hasPreviousPage
+          startCursor
+        }
+        edges {
+          cursor
+          node {
+            id
+            description
+            amount
+            date
+            entryType
+            status
+            logo {
+              _sourcename
+              url
+            }
+          }
+        }
+        count
+      }
+    }
+  }
+`
+
+/**
+ * __useTransactionsByAccountQuery__
+ *
+ * To run a query within a React component, call `useTransactionsByAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTransactionsByAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTransactionsByAccountQuery({
+ *   variables: {
+ *      accountId: // value for 'accountId'
+ *      after: // value for 'after'
+ *      before: // value for 'before'
+ *      first: // value for 'first'
+ *      last: // value for 'last'
+ *   },
+ * });
+ */
+export function useTransactionsByAccountQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TransactionsByAccountQuery,
+    TransactionsByAccountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<TransactionsByAccountQuery, TransactionsByAccountQueryVariables>(
+    TransactionsByAccountDocument,
+    options
+  )
+}
+export function useTransactionsByAccountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TransactionsByAccountQuery,
+    TransactionsByAccountQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<TransactionsByAccountQuery, TransactionsByAccountQueryVariables>(
+    TransactionsByAccountDocument,
+    options
+  )
+}
+export type TransactionsByAccountQueryHookResult = ReturnType<typeof useTransactionsByAccountQuery>
+export type TransactionsByAccountLazyQueryHookResult = ReturnType<
+  typeof useTransactionsByAccountLazyQuery
+>
+export type TransactionsByAccountQueryResult = Apollo.QueryResult<
+  TransactionsByAccountQuery,
+  TransactionsByAccountQueryVariables
+>
