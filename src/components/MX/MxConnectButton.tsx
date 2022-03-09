@@ -14,7 +14,7 @@ export type MxConnectButtonProps = React.HTMLAttributes<HTMLElement> &
 
 const MxConnectButton: React.FC<MxConnectButtonProps> = ({
   className = '',
-  widgetClassName = '',
+  widgetClassName = undefined,
   as = 'button',
   children = 'Connect with Mx',
   clientMutationId = undefined,
@@ -85,23 +85,21 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
 
   const disabled = !widgetURL
 
-  const widgetHolderProps = React.useMemo(
-    () =>
+  const widgetStyle = React.useMemo(
+    (): React.CSSProperties | undefined =>
       widgetClassName
-        ? { className: widgetClassName }
+        ? undefined
         : {
-            styles: {
-              position: 'fixed',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            },
+            position: 'fixed',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           },
     [widgetClassName]
   )
@@ -111,13 +109,13 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
       <>
         {children}
         {widgetURL && loadWidget && (
-          <div {...widgetHolderProps}>
+          <div className={widgetClassName} style={widgetStyle}>
             <MxWidget url={widgetURL} onEvent={handleEvent} closeWidget={handleClose} />
           </div>
         )}
       </>
     ),
-    [children, widgetURL, loadWidget, widgetHolderProps, handleEvent, handleClose]
+    [children, widgetURL, loadWidget, widgetClassName, widgetStyle, handleEvent, handleClose]
   )
 
   // Auto close modal after 30 seconds of inactivity
