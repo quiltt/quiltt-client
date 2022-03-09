@@ -15,7 +15,6 @@ ReactDOM.render(
       deploymentId={quilttDeploymentId}
       apiBase="http://api.lvh.me:3000"
       authBase="http://auth.lvh.me:3000"
-      wsBase="ws://api.lvh.me:3000"
     >
       <Router>
         <App />

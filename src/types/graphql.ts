@@ -2430,10 +2430,20 @@ export type AccountAttributesFragment = {
   __typename?: 'Account'
   id: string
   name: string
+  state: LedgerState
   type: AccountType
   lastFourDigits?: string | null
   metadata?: Record<string, unknown> | null
-  state: LedgerState
+  balance: {
+    __typename?: 'LedgerBalance'
+    id: string
+    available?: number | null
+    current?: number | null
+    limit?: number | null
+  }
+  sources?: Array<
+    { __typename?: 'MockAccount' } | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
+  > | null
   connection?: {
     __typename?: 'ConnectionType'
     id: string
@@ -2702,6 +2712,43 @@ export type ProfileUpdateMutation = {
   } | null
 }
 
+export type AccountQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type AccountQuery = {
+  __typename?: 'Query'
+  account?: {
+    __typename?: 'Account'
+    id: string
+    name: string
+    state: LedgerState
+    type: AccountType
+    lastFourDigits?: string | null
+    metadata?: Record<string, unknown> | null
+    balance: {
+      __typename?: 'LedgerBalance'
+      id: string
+      available?: number | null
+      current?: number | null
+      limit?: number | null
+    }
+    sources?: Array<
+      | { __typename?: 'MockAccount' }
+      | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
+    > | null
+    connection?: {
+      __typename?: 'ConnectionType'
+      id: string
+      sources?: Array<
+        | { __typename?: 'MockConnection' }
+        | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+        | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+      > | null
+    } | null
+  } | null
+}
+
 export type ConnectionsQueryVariables = Exact<{ [key: string]: never }>
 
 export type ConnectionsQuery = {
@@ -2814,10 +2861,21 @@ export const AccountAttributesFragmentDoc = gql`
   fragment AccountAttributes on Account {
     id
     name
+    state
     type
     lastFourDigits
     metadata
-    state
+    balance {
+      id
+      available
+      current
+      limit
+    }
+    sources {
+      ... on PlaidAccount {
+        _sourcename
+      }
+    }
     connection {
       id
       sources {
@@ -3313,6 +3371,46 @@ export type ProfileUpdateMutationOptions = Apollo.BaseMutationOptions<
   ProfileUpdateMutation,
   ProfileUpdateMutationVariables
 >
+export const AccountDocument = gql`
+  query Account($id: ID!) {
+    account(id: $id) {
+      ...AccountAttributes
+    }
+  }
+  ${AccountAttributesFragmentDoc}
+`
+
+/**
+ * __useAccountQuery__
+ *
+ * To run a query within a React component, call `useAccountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useAccountQuery(
+  baseOptions: Apollo.QueryHookOptions<AccountQuery, AccountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options)
+}
+export function useAccountLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<AccountQuery, AccountQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<AccountQuery, AccountQueryVariables>(AccountDocument, options)
+}
+export type AccountQueryHookResult = ReturnType<typeof useAccountQuery>
+export type AccountLazyQueryHookResult = ReturnType<typeof useAccountLazyQuery>
+export type AccountQueryResult = Apollo.QueryResult<AccountQuery, AccountQueryVariables>
 export const ConnectionsDocument = gql`
   query Connections {
     connections {

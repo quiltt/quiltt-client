@@ -4,12 +4,11 @@ import { useNavigate } from 'react-router-dom'
 
 import { Card, Heading } from '@quiltt/ui'
 
-import { AuthStrategies, useQuilttAuth, useQuilttSettings, UsernamePayload } from '@quiltt/client'
+import { AuthStrategies, useQuilttAuth, UsernamePayload } from '@quiltt/client'
 import PasscodeForm from './PasscodeForm'
 import UsernameForm from './UsernameForm'
 
 const AuthPage: React.VFC = () => {
-  const settings = useQuilttSettings()
   const auth = useQuilttAuth()
   const { setAuthorizationToken } = auth
   const authStrategy = AuthStrategies.Email
@@ -24,10 +23,6 @@ const AuthPage: React.VFC = () => {
     setAuthorizationToken(token)
     navigate('/')
   }
-
-  React.useEffect(() => {
-    console.log({ settings })
-  }, [settings])
 
   return (
     <main className="flex flex-col justify-center flex-auto h-full p-3 overflow-y-auto">

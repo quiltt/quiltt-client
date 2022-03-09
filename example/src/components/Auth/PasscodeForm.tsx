@@ -21,8 +21,7 @@ const PasscodeForm: React.VFC<PasscodeFormProps> = ({
 }) => {
   const handleSubmit = async (values: { passcode: string }) => {
     const { passcode } = values
-    const { email, phone } = username
-    const response = await auth.authenticate({ email, phone, passcode })
+    const response = await auth.authenticate({ ...username, passcode })
 
     switch (response.status) {
       case 201: // Created -> New Session
