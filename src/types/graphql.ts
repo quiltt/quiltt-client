@@ -2449,7 +2449,11 @@ export type ConnectionAttributesFragment = {
   __typename?: 'ConnectionType'
   id: string
   status: ConnectionStatus
-  institution: { __typename?: 'Institution'; name: string }
+  institution: {
+    __typename?: 'Institution'
+    name: string
+    logo?: { __typename?: 'Image'; url?: URL | null } | null
+  }
   accounts: Array<{ __typename?: 'Account'; id: string }>
   sources?: Array<
     | { __typename?: 'MockConnection' }
@@ -2543,7 +2547,11 @@ export type ConnectionPlaidCreateMutation = {
       __typename?: 'ConnectionType'
       id: string
       status: ConnectionStatus
-      institution: { __typename?: 'Institution'; name: string }
+      institution: {
+        __typename?: 'Institution'
+        name: string
+        logo?: { __typename?: 'Image'; url?: URL | null } | null
+      }
       accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
         | { __typename?: 'MockConnection' }
@@ -2575,7 +2583,11 @@ export type ConnectionPlaidImportMutation = {
       __typename?: 'ConnectionType'
       id: string
       status: ConnectionStatus
-      institution: { __typename?: 'Institution'; name: string }
+      institution: {
+        __typename?: 'Institution'
+        name: string
+        logo?: { __typename?: 'Image'; url?: URL | null } | null
+      }
       accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
         | { __typename?: 'MockConnection' }
@@ -2698,7 +2710,11 @@ export type ConnectionsQuery = {
     __typename?: 'ConnectionType'
     id: string
     status: ConnectionStatus
-    institution: { __typename?: 'Institution'; name: string }
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: URL | null } | null
+    }
     accounts: Array<{ __typename?: 'Account'; id: string }>
     sources?: Array<
       | { __typename?: 'MockConnection' }
@@ -2820,6 +2836,9 @@ export const ConnectionAttributesFragmentDoc = gql`
     id
     status
     institution {
+      logo {
+        url
+      }
       name
     }
     accounts {
