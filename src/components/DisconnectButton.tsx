@@ -11,6 +11,7 @@ const DisconnectButton: React.FC<DisconnectButtonProps> = ({
   as = 'button',
   children = 'Disconnect',
   id,
+  onClick = undefined,
   ...otherProps
 }) => {
   const [disconnect, { loading, error }] = useConnectionDeleteMutation({
@@ -19,9 +20,15 @@ const DisconnectButton: React.FC<DisconnectButtonProps> = ({
     },
   })
 
-  const handleClick = () => {
-    disconnect()
-  }
+  const handleClick = React.useCallback(
+    (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      disconnect()
+      if (onClick) {
+        onClick(event)
+      }
+    },
+    [disconnect, onClick]
+  )
 
   const disabled = loading || !disconnect
 
