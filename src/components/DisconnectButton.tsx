@@ -3,19 +3,19 @@ import * as React from 'react'
 import { useConnectionDeleteMutation } from '../types/graphql'
 import type { CustomComponentProps } from '../utils/components'
 
-export type PlaidDisconnectButtonProps = React.HTMLAttributes<HTMLElement> &
-  CustomComponentProps & { connectionId: string }
+export type DisconnectButtonProps = React.HTMLAttributes<HTMLElement> &
+  CustomComponentProps & { id: string }
 
-const PlaidDisconnectButton: React.FC<PlaidDisconnectButtonProps> = ({
+const DisconnectButton: React.FC<DisconnectButtonProps> = ({
   className = '',
   as = 'button',
   children = 'Disconnect',
-  connectionId,
+  id,
   ...otherProps
 }) => {
   const [disconnect, { loading, error }] = useConnectionDeleteMutation({
     variables: {
-      id: connectionId,
+      id,
     },
   })
 
@@ -23,7 +23,7 @@ const PlaidDisconnectButton: React.FC<PlaidDisconnectButtonProps> = ({
     disconnect()
   }
 
-  const disabled = !loading || !disconnect
+  const disabled = loading || !disconnect
 
   React.useEffect(() => {
     if (error) {
@@ -36,7 +36,7 @@ const PlaidDisconnectButton: React.FC<PlaidDisconnectButtonProps> = ({
     {
       className,
       disabled,
-      id: connectionId ? `disconnect-${connectionId}` : undefined,
+      id: id ? `disconnect-${id}` : undefined,
       onClick: handleClick,
       ...otherProps,
     },
@@ -44,4 +44,4 @@ const PlaidDisconnectButton: React.FC<PlaidDisconnectButtonProps> = ({
   )
 }
 
-export default PlaidDisconnectButton
+export default DisconnectButton
