@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { MxEvent } from 'types'
+
 import { CustomComponentProps } from 'utils/components'
 
 import { ConnectionMxCreateInput, useConnectionMxCreateMutation } from '../../types/graphql'
@@ -36,8 +38,8 @@ const MxNewConnectionButton: React.FC<MxNewConnectionButtonProps> = ({
   )
 
   const handleEvent = React.useCallback(
-    (eventName) => {
-      if (refetch && eventName === 'HANDOFF') {
+    (event: MessageEvent<MxEvent>) => {
+      if (refetch && event.data.mx === true) {
         refetch()
       }
     },

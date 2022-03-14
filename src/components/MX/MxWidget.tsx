@@ -5,7 +5,7 @@ import { ConnectionMxCreateInput, MxEvent, MxPostMessageEventType } from 'types'
 
 type MxWidgetProps = {
   url: string
-  onEvent: (event: MxEvent) => void
+  onEvent: (event: MessageEvent<MxEvent>) => void
   onSuccess: (input: ConnectionMxCreateInput) => void
   closeWidget: (event?: MxEvent) => void
 }
@@ -18,11 +18,16 @@ const MxWidget: React.FC<MxWidgetProps> = ({ url, onEvent, onSuccess, closeWidge
       switch (event.type) {
         case MxPostMessageEventType.MEMBER_CONNECTED:
           onSuccess(event.data)
-          onEvent(event.data)
+          onEvent(event)
+          closeWidget()
+          break
+        case MxPostMessageEventType.PRIMARY_ACTION:
+          onSuccess(event.data)
+          onEvent(event)
           closeWidget()
           break
         default:
-          onEvent(event.data)
+          onEvent(event)
           break
       }
     },

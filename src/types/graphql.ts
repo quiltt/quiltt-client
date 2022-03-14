@@ -21,7 +21,7 @@ export type Scalars = {
   /** Represents untyped JSON */
   JSON: Record<string, unknown>
   /** A valid URL, transported as a string */
-  URL: URL
+  URL: string
 }
 
 /** Represents an Account */
@@ -2547,7 +2547,7 @@ export type ConnectionAttributesFragment = {
   institution: {
     __typename?: 'Institution'
     name: string
-    logo?: { __typename?: 'Image'; url?: URL | null } | null
+    logo?: { __typename?: 'Image'; url?: string | null } | null
   }
   accounts: Array<{ __typename?: 'Account'; id: string }>
   sources?: Array<
@@ -2645,7 +2645,7 @@ export type ConnectionPlaidCreateMutation = {
       institution: {
         __typename?: 'Institution'
         name: string
-        logo?: { __typename?: 'Image'; url?: URL | null } | null
+        logo?: { __typename?: 'Image'; url?: string | null } | null
       }
       accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
@@ -2681,7 +2681,7 @@ export type ConnectionPlaidImportMutation = {
       institution: {
         __typename?: 'Institution'
         name: string
-        logo?: { __typename?: 'Image'; url?: URL | null } | null
+        logo?: { __typename?: 'Image'; url?: string | null } | null
       }
       accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
@@ -2760,7 +2760,7 @@ export type ConnectionMxCreateMutation = {
       institution: {
         __typename?: 'Institution'
         name: string
-        logo?: { __typename?: 'Image'; url?: URL | null } | null
+        logo?: { __typename?: 'Image'; url?: string | null } | null
       }
       accounts: Array<{ __typename?: 'Account'; id: string }>
       sources?: Array<
@@ -2830,6 +2830,117 @@ export type ProfileUpdateMutation = {
   } | null
 }
 
+export type CreateRoundUpMutationVariables = Exact<{
+  input: RoundUpCreateInput
+}>
+
+export type CreateRoundUpMutation = {
+  __typename?: 'Mutation'
+  roundUpCreate?: {
+    __typename?: 'RoundUpCreatePayload'
+    success: boolean
+    record?: { __typename?: 'RoundUp'; id: string; state: LedgerState } | null
+  } | null
+}
+
+export type RoundUpActivateMutationVariables = Exact<{
+  id: Scalars['ID']
+  startAt: Scalars['DateTime']
+  startOn?: InputMaybe<Scalars['Date']>
+}>
+
+export type RoundUpActivateMutation = {
+  __typename?: 'Mutation'
+  roundUpSetStartTime?: {
+    __typename?: 'RoundUpSetStartTimePayload'
+    success: boolean
+    record?: {
+      __typename?: 'RoundUp'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+      transactionsConnection: {
+        __typename?: 'TransactionConnection'
+        nodes?: Array<{
+          __typename?: 'Transaction'
+          id: string
+          date: string
+          amount: number
+          description: string
+        } | null> | null
+      }
+    } | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsAddFundingMutationVariables = Exact<{
+  roundUpId: Scalars['ID']
+  accountId: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsAddFundingMutation = {
+  __typename?: 'Mutation'
+  roundUpSetFundingAccount?: {
+    __typename?: 'RoundUpSetFundingAccountPayload'
+    success: boolean
+    record?: { __typename?: 'RoundUp'; id: string } | null
+  } | null
+  roundUpSubscribedAccountsAdd?: {
+    __typename?: 'RoundUpSubscribedAccountsAddPayload'
+    success: boolean
+    record?: { __typename?: 'RoundUp'; id: string } | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsAddSubscriptionMutationVariables = Exact<{
+  roundUpId: Scalars['ID']
+  accountIds: Array<Scalars['ID']> | Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsAddSubscriptionMutation = {
+  __typename?: 'Mutation'
+  roundUpSubscribedAccountsAdd?: {
+    __typename?: 'RoundUpSubscribedAccountsAddPayload'
+    success: boolean
+    record?: { __typename?: 'RoundUp'; id: string } | null
+  } | null
+}
+
+export type RoundUpsAccountsSubscribeMutationVariables = Exact<{
+  id: Scalars['ID']
+  accountId: Scalars['ID']
+}>
+
+export type RoundUpsAccountsSubscribeMutation = {
+  __typename?: 'Mutation'
+  roundUpSubscribedAccountsAdd?: {
+    __typename?: 'RoundUpSubscribedAccountsAddPayload'
+    record?: {
+      __typename?: 'RoundUp'
+      id: string
+      subscribedAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+      availableAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+    } | null
+  } | null
+}
+
+export type RoundUpsAccountsUnsubscribeMutationVariables = Exact<{
+  id: Scalars['ID']
+  accountId: Scalars['ID']
+}>
+
+export type RoundUpsAccountsUnsubscribeMutation = {
+  __typename?: 'Mutation'
+  roundUpSubscribedAccountsRemove?: {
+    __typename?: 'RoundUpSubscribedAccountsRemovePayload'
+    record?: {
+      __typename?: 'RoundUp'
+      id: string
+      subscribedAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+      availableAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+    } | null
+  } | null
+}
+
 export type AccountQueryVariables = Exact<{
   id: Scalars['ID']
 }>
@@ -2878,7 +2989,7 @@ export type ConnectionsQuery = {
     institution: {
       __typename?: 'Institution'
       name: string
-      logo?: { __typename?: 'Image'; url?: URL | null } | null
+      logo?: { __typename?: 'Image'; url?: string | null } | null
     }
     accounts: Array<{ __typename?: 'Account'; id: string }>
     sources?: Array<
@@ -2931,6 +3042,427 @@ export type ProfileQuery = {
   } | null
 }
 
+export type RoundUpsQueryVariables = Exact<{ [key: string]: never }>
+
+export type RoundUpsQuery = {
+  __typename?: 'Query'
+  roundUps?: Array<{ __typename?: 'RoundUp'; id: string }> | null
+}
+
+export type RoundUpHomeQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpHomeQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    state: LedgerState
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; current?: number | null }
+    } | null
+  } | null
+}
+
+export type RoundUpActivateDateSearchQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpActivateDateSearchQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    subscribedAccounts: Array<{
+      __typename?: 'Account'
+      id: string
+      transactions: Array<{
+        __typename?: 'Transaction'
+        id: string
+        date: string
+        amount: number
+        status: TransactionStatus
+      }>
+    } | null>
+  } | null
+}
+
+export type RoundUpsBankConnectionsCardQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+  id: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsCardQuery = {
+  __typename?: 'Query'
+  roundUp?: { __typename?: 'RoundUp'; id: string } | null
+  connection?: {
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: string | null } | null
+    }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsListQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsListQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      name: string
+      state: LedgerState
+      type: AccountType
+      lastFourDigits?: string | null
+      metadata?: Record<string, unknown> | null
+      balance: {
+        __typename?: 'LedgerBalance'
+        current?: number | null
+        id: string
+        available?: number | null
+        limit?: number | null
+      }
+      sources?: Array<
+        | { __typename?: 'MockAccount' }
+        | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
+      > | null
+      connection?: {
+        __typename?: 'ConnectionType'
+        id: string
+        sources?: Array<
+          | { __typename?: 'MockConnection' }
+          | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+          | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+        > | null
+      } | null
+    } | null
+  } | null
+  connections?: Array<{
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: string | null } | null
+    }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  }> | null
+}
+
+export type RoundUpsBankConnectionsAccountsListQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+  bankConnectionId: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsAccountsListQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; current?: number | null }
+    } | null
+  } | null
+  connection?: {
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: string | null } | null
+    }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsAccountsListItemQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+  accountId: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsAccountsListItemQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; current?: number | null }
+    } | null
+    subscribedAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+    availableAccounts: Array<{ __typename?: 'Account'; id: string } | null>
+  } | null
+  account?: {
+    __typename?: 'Account'
+    id: string
+    name: string
+    lastFourDigits?: string | null
+    balance: { __typename?: 'LedgerBalance'; current?: number | null }
+  } | null
+}
+
+export type RoundUpsBankConnectionsListItemQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+  id: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsListItemQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      name: string
+      state: LedgerState
+      type: AccountType
+      lastFourDigits?: string | null
+      metadata?: Record<string, unknown> | null
+      balance: {
+        __typename?: 'LedgerBalance'
+        current?: number | null
+        id: string
+        available?: number | null
+        limit?: number | null
+      }
+      sources?: Array<
+        | { __typename?: 'MockAccount' }
+        | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
+      > | null
+      connection?: {
+        __typename?: 'ConnectionType'
+        id: string
+        sources?: Array<
+          | { __typename?: 'MockConnection' }
+          | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+          | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+        > | null
+      } | null
+    } | null
+  } | null
+  connection?: {
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: string | null } | null
+    }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsPageQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsPageQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; current?: number | null }
+    } | null
+  } | null
+  connections?: Array<{
+    __typename?: 'ConnectionType'
+    id: string
+    status: ConnectionStatus
+    institution: {
+      __typename?: 'Institution'
+      name: string
+      logo?: { __typename?: 'Image'; url?: string | null } | null
+    }
+    accounts: Array<{ __typename?: 'Account'; id: string }>
+    sources?: Array<
+      | { __typename?: 'MockConnection' }
+      | { __typename?: 'MxConnection'; _sourcename: ConnectionSourceType }
+      | { __typename?: 'PlaidConnection'; _sourcename: ConnectionSourceType }
+    > | null
+  }> | null
+}
+
+export type RoundUpsRecentActivityQueryVariables = Exact<{
+  roundUpId: Scalars['ID']
+  since: Scalars['Date']
+}>
+
+export type RoundUpsRecentActivityQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    recentActivity: { __typename?: 'LedgerBalance'; id: string; current?: number | null }
+  } | null
+}
+
+export type RoundUpTransactionsQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpTransactionsQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    transactionsConnection: {
+      __typename?: 'TransactionConnection'
+      edges?: Array<{
+        __typename?: 'TransactionEdge'
+        node?: {
+          __typename?: 'Transaction'
+          id: string
+          date: string
+          amount: number
+          description: string
+        } | null
+      } | null> | null
+    }
+  } | null
+}
+
+export type RoundUpHistoryQueryVariables = Exact<{
+  id: Scalars['ID']
+  day0: Scalars['Date']
+  day1: Scalars['Date']
+  day2: Scalars['Date']
+  day3: Scalars['Date']
+  day4: Scalars['Date']
+  day5: Scalars['Date']
+  day6: Scalars['Date']
+}>
+
+export type RoundUpHistoryQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    day0: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day1: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day2: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day3: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day4: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day5: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+    day6: { __typename?: 'LedgerBalance'; id: string; available?: number | null }
+  } | null
+}
+
+export type RoundUpSummaryQueryVariables = Exact<{
+  id: Scalars['ID']
+  startOfWeek?: InputMaybe<Scalars['Date']>
+}>
+
+export type RoundUpSummaryQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    totalAmount: {
+      __typename?: 'LedgerBalance'
+      id: string
+      available?: number | null
+      current?: number | null
+    }
+    thisWeek: {
+      __typename?: 'LedgerBalance'
+      id: string
+      available?: number | null
+      current?: number | null
+    }
+  } | null
+}
+
+export type RoundUpsPauseMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpsPauseMutation = {
+  __typename?: 'Mutation'
+  roundUpPause?: {
+    __typename?: 'RoundUpPausePayload'
+    record?: { __typename?: 'RoundUp'; id: string; state: LedgerState } | null
+  } | null
+}
+
+export type RoundUpsResumeMutationVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpsResumeMutation = {
+  __typename?: 'Mutation'
+  roundUpResume?: {
+    __typename?: 'RoundUpResumePayload'
+    record?: { __typename?: 'RoundUp'; id: string; state: LedgerState } | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsSummaryCardFooterQueryVariables = Exact<{
+  id: Scalars['ID']
+}>
+
+export type RoundUpsBankConnectionsSummaryCardFooterQuery = {
+  __typename?: 'Query'
+  roundUp?: {
+    __typename?: 'RoundUp'
+    id: string
+    fundingAccount?: {
+      __typename?: 'Account'
+      id: string
+      balance: { __typename?: 'LedgerBalance'; current?: number | null }
+    } | null
+  } | null
+}
+
+export type RoundUpsBankConnectionsSummaryCardHeaderQueryVariables = Exact<{ [key: string]: never }>
+
+export type RoundUpsBankConnectionsSummaryCardHeaderQuery = {
+  __typename?: 'Query'
+  connections?: Array<{ __typename?: 'ConnectionType'; id: string }> | null
+}
+
 export type TransactionsByAccountQueryVariables = Exact<{
   accountId: Scalars['ID']
   after?: InputMaybe<Scalars['String']>
@@ -2968,7 +3500,7 @@ export type TransactionsByAccountQuery = {
           date: string
           entryType: TransactionEntryType
           status: TransactionStatus
-          logo?: { __typename?: 'Image'; _sourcename: ImageSource; url?: URL | null } | null
+          logo?: { __typename?: 'Image'; _sourcename: ImageSource; url?: string | null } | null
         } | null
       } | null> | null
     }
@@ -3547,6 +4079,350 @@ export type ProfileUpdateMutationOptions = Apollo.BaseMutationOptions<
   ProfileUpdateMutation,
   ProfileUpdateMutationVariables
 >
+export const CreateRoundUpDocument = gql`
+  mutation CreateRoundUp($input: RoundUpCreateInput!) {
+    roundUpCreate(input: $input) {
+      success
+      record {
+        id
+        state
+      }
+    }
+  }
+`
+export type CreateRoundUpMutationFn = Apollo.MutationFunction<
+  CreateRoundUpMutation,
+  CreateRoundUpMutationVariables
+>
+
+/**
+ * __useCreateRoundUpMutation__
+ *
+ * To run a mutation, you first call `useCreateRoundUpMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRoundUpMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRoundUpMutation, { data, loading, error }] = useCreateRoundUpMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateRoundUpMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateRoundUpMutation, CreateRoundUpMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<CreateRoundUpMutation, CreateRoundUpMutationVariables>(
+    CreateRoundUpDocument,
+    options
+  )
+}
+export type CreateRoundUpMutationHookResult = ReturnType<typeof useCreateRoundUpMutation>
+export type CreateRoundUpMutationResult = Apollo.MutationResult<CreateRoundUpMutation>
+export type CreateRoundUpMutationOptions = Apollo.BaseMutationOptions<
+  CreateRoundUpMutation,
+  CreateRoundUpMutationVariables
+>
+export const RoundUpActivateDocument = gql`
+  mutation RoundUpActivate($id: ID!, $startAt: DateTime!, $startOn: Date) {
+    roundUpSetStartTime(input: { id: $id, startAt: $startAt }) {
+      success
+      record {
+        id
+        balance(filter: { date_gte: $startOn }) {
+          id
+          available
+        }
+        transactionsConnection(filter: { date_gte: $startOn }) {
+          nodes {
+            id
+            date
+            amount
+            description
+          }
+        }
+      }
+    }
+  }
+`
+export type RoundUpActivateMutationFn = Apollo.MutationFunction<
+  RoundUpActivateMutation,
+  RoundUpActivateMutationVariables
+>
+
+/**
+ * __useRoundUpActivateMutation__
+ *
+ * To run a mutation, you first call `useRoundUpActivateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpActivateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpActivateMutation, { data, loading, error }] = useRoundUpActivateMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      startAt: // value for 'startAt'
+ *      startOn: // value for 'startOn'
+ *   },
+ * });
+ */
+export function useRoundUpActivateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RoundUpActivateMutation,
+    RoundUpActivateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RoundUpActivateMutation, RoundUpActivateMutationVariables>(
+    RoundUpActivateDocument,
+    options
+  )
+}
+export type RoundUpActivateMutationHookResult = ReturnType<typeof useRoundUpActivateMutation>
+export type RoundUpActivateMutationResult = Apollo.MutationResult<RoundUpActivateMutation>
+export type RoundUpActivateMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpActivateMutation,
+  RoundUpActivateMutationVariables
+>
+export const RoundUpsBankConnectionsAddFundingDocument = gql`
+  mutation RoundUpsBankConnectionsAddFunding($roundUpId: ID!, $accountId: ID!) {
+    roundUpSetFundingAccount(input: { id: $roundUpId, accountId: $accountId }) {
+      success
+      record {
+        id
+      }
+    }
+    roundUpSubscribedAccountsAdd(input: { id: $roundUpId, accountIds: [$accountId] }) {
+      success
+      record {
+        id
+      }
+    }
+  }
+`
+export type RoundUpsBankConnectionsAddFundingMutationFn = Apollo.MutationFunction<
+  RoundUpsBankConnectionsAddFundingMutation,
+  RoundUpsBankConnectionsAddFundingMutationVariables
+>
+
+/**
+ * __useRoundUpsBankConnectionsAddFundingMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsBankConnectionsAddFundingMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsAddFundingMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsBankConnectionsAddFundingMutation, { data, loading, error }] = useRoundUpsBankConnectionsAddFundingMutation({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsAddFundingMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RoundUpsBankConnectionsAddFundingMutation,
+    RoundUpsBankConnectionsAddFundingMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RoundUpsBankConnectionsAddFundingMutation,
+    RoundUpsBankConnectionsAddFundingMutationVariables
+  >(RoundUpsBankConnectionsAddFundingDocument, options)
+}
+export type RoundUpsBankConnectionsAddFundingMutationHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAddFundingMutation
+>
+export type RoundUpsBankConnectionsAddFundingMutationResult =
+  Apollo.MutationResult<RoundUpsBankConnectionsAddFundingMutation>
+export type RoundUpsBankConnectionsAddFundingMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsBankConnectionsAddFundingMutation,
+  RoundUpsBankConnectionsAddFundingMutationVariables
+>
+export const RoundUpsBankConnectionsAddSubscriptionDocument = gql`
+  mutation RoundUpsBankConnectionsAddSubscription($roundUpId: ID!, $accountIds: [ID!]!) {
+    roundUpSubscribedAccountsAdd(input: { id: $roundUpId, accountIds: $accountIds }) {
+      success
+      record {
+        id
+      }
+    }
+  }
+`
+export type RoundUpsBankConnectionsAddSubscriptionMutationFn = Apollo.MutationFunction<
+  RoundUpsBankConnectionsAddSubscriptionMutation,
+  RoundUpsBankConnectionsAddSubscriptionMutationVariables
+>
+
+/**
+ * __useRoundUpsBankConnectionsAddSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsBankConnectionsAddSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsAddSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsBankConnectionsAddSubscriptionMutation, { data, loading, error }] = useRoundUpsBankConnectionsAddSubscriptionMutation({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      accountIds: // value for 'accountIds'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsAddSubscriptionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RoundUpsBankConnectionsAddSubscriptionMutation,
+    RoundUpsBankConnectionsAddSubscriptionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RoundUpsBankConnectionsAddSubscriptionMutation,
+    RoundUpsBankConnectionsAddSubscriptionMutationVariables
+  >(RoundUpsBankConnectionsAddSubscriptionDocument, options)
+}
+export type RoundUpsBankConnectionsAddSubscriptionMutationHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAddSubscriptionMutation
+>
+export type RoundUpsBankConnectionsAddSubscriptionMutationResult =
+  Apollo.MutationResult<RoundUpsBankConnectionsAddSubscriptionMutation>
+export type RoundUpsBankConnectionsAddSubscriptionMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsBankConnectionsAddSubscriptionMutation,
+  RoundUpsBankConnectionsAddSubscriptionMutationVariables
+>
+export const RoundUpsAccountsSubscribeDocument = gql`
+  mutation RoundUpsAccountsSubscribe($id: ID!, $accountId: ID!) {
+    roundUpSubscribedAccountsAdd(input: { id: $id, accountIds: [$accountId] }) {
+      record {
+        id
+        subscribedAccounts {
+          id
+        }
+        availableAccounts {
+          id
+        }
+      }
+    }
+  }
+`
+export type RoundUpsAccountsSubscribeMutationFn = Apollo.MutationFunction<
+  RoundUpsAccountsSubscribeMutation,
+  RoundUpsAccountsSubscribeMutationVariables
+>
+
+/**
+ * __useRoundUpsAccountsSubscribeMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsAccountsSubscribeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsAccountsSubscribeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsAccountsSubscribeMutation, { data, loading, error }] = useRoundUpsAccountsSubscribeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useRoundUpsAccountsSubscribeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RoundUpsAccountsSubscribeMutation,
+    RoundUpsAccountsSubscribeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RoundUpsAccountsSubscribeMutation,
+    RoundUpsAccountsSubscribeMutationVariables
+  >(RoundUpsAccountsSubscribeDocument, options)
+}
+export type RoundUpsAccountsSubscribeMutationHookResult = ReturnType<
+  typeof useRoundUpsAccountsSubscribeMutation
+>
+export type RoundUpsAccountsSubscribeMutationResult =
+  Apollo.MutationResult<RoundUpsAccountsSubscribeMutation>
+export type RoundUpsAccountsSubscribeMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsAccountsSubscribeMutation,
+  RoundUpsAccountsSubscribeMutationVariables
+>
+export const RoundUpsAccountsUnsubscribeDocument = gql`
+  mutation RoundUpsAccountsUnsubscribe($id: ID!, $accountId: ID!) {
+    roundUpSubscribedAccountsRemove(input: { id: $id, accountIds: [$accountId] }) {
+      record {
+        id
+        subscribedAccounts {
+          id
+        }
+        availableAccounts {
+          id
+        }
+      }
+    }
+  }
+`
+export type RoundUpsAccountsUnsubscribeMutationFn = Apollo.MutationFunction<
+  RoundUpsAccountsUnsubscribeMutation,
+  RoundUpsAccountsUnsubscribeMutationVariables
+>
+
+/**
+ * __useRoundUpsAccountsUnsubscribeMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsAccountsUnsubscribeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsAccountsUnsubscribeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsAccountsUnsubscribeMutation, { data, loading, error }] = useRoundUpsAccountsUnsubscribeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useRoundUpsAccountsUnsubscribeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RoundUpsAccountsUnsubscribeMutation,
+    RoundUpsAccountsUnsubscribeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<
+    RoundUpsAccountsUnsubscribeMutation,
+    RoundUpsAccountsUnsubscribeMutationVariables
+  >(RoundUpsAccountsUnsubscribeDocument, options)
+}
+export type RoundUpsAccountsUnsubscribeMutationHookResult = ReturnType<
+  typeof useRoundUpsAccountsUnsubscribeMutation
+>
+export type RoundUpsAccountsUnsubscribeMutationResult =
+  Apollo.MutationResult<RoundUpsAccountsUnsubscribeMutation>
+export type RoundUpsAccountsUnsubscribeMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsAccountsUnsubscribeMutation,
+  RoundUpsAccountsUnsubscribeMutationVariables
+>
 export const AccountDocument = gql`
   query Account($id: ID!) {
     account(id: $id) {
@@ -3725,6 +4601,1070 @@ export function useProfileLazyQuery(
 export type ProfileQueryHookResult = ReturnType<typeof useProfileQuery>
 export type ProfileLazyQueryHookResult = ReturnType<typeof useProfileLazyQuery>
 export type ProfileQueryResult = Apollo.QueryResult<ProfileQuery, ProfileQueryVariables>
+export const RoundUpsDocument = gql`
+  query RoundUps {
+    roundUps {
+      id
+    }
+  }
+`
+
+/**
+ * __useRoundUpsQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRoundUpsQuery(
+  baseOptions?: Apollo.QueryHookOptions<RoundUpsQuery, RoundUpsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpsQuery, RoundUpsQueryVariables>(RoundUpsDocument, options)
+}
+export function useRoundUpsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpsQuery, RoundUpsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpsQuery, RoundUpsQueryVariables>(RoundUpsDocument, options)
+}
+export type RoundUpsQueryHookResult = ReturnType<typeof useRoundUpsQuery>
+export type RoundUpsLazyQueryHookResult = ReturnType<typeof useRoundUpsLazyQuery>
+export type RoundUpsQueryResult = Apollo.QueryResult<RoundUpsQuery, RoundUpsQueryVariables>
+export const RoundUpHomeDocument = gql`
+  query RoundUpHome($id: ID!) {
+    roundUp(id: $id) {
+      id
+      state
+      fundingAccount {
+        id
+        balance {
+          current
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpHomeQuery__
+ *
+ * To run a query within a React component, call `useRoundUpHomeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpHomeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpHomeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpHomeQuery(
+  baseOptions: Apollo.QueryHookOptions<RoundUpHomeQuery, RoundUpHomeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpHomeQuery, RoundUpHomeQueryVariables>(RoundUpHomeDocument, options)
+}
+export function useRoundUpHomeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpHomeQuery, RoundUpHomeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpHomeQuery, RoundUpHomeQueryVariables>(
+    RoundUpHomeDocument,
+    options
+  )
+}
+export type RoundUpHomeQueryHookResult = ReturnType<typeof useRoundUpHomeQuery>
+export type RoundUpHomeLazyQueryHookResult = ReturnType<typeof useRoundUpHomeLazyQuery>
+export type RoundUpHomeQueryResult = Apollo.QueryResult<RoundUpHomeQuery, RoundUpHomeQueryVariables>
+export const RoundUpActivateDateSearchDocument = gql`
+  query RoundUpActivateDateSearch($id: ID!) {
+    roundUp(id: $id) {
+      id
+      subscribedAccounts {
+        id
+        transactions(limit: 15, filter: { amount_lt: 0 }) {
+          id
+          date
+          amount
+          status
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpActivateDateSearchQuery__
+ *
+ * To run a query within a React component, call `useRoundUpActivateDateSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpActivateDateSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpActivateDateSearchQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpActivateDateSearchQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpActivateDateSearchQuery,
+    RoundUpActivateDateSearchQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpActivateDateSearchQuery, RoundUpActivateDateSearchQueryVariables>(
+    RoundUpActivateDateSearchDocument,
+    options
+  )
+}
+export function useRoundUpActivateDateSearchLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpActivateDateSearchQuery,
+    RoundUpActivateDateSearchQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpActivateDateSearchQuery,
+    RoundUpActivateDateSearchQueryVariables
+  >(RoundUpActivateDateSearchDocument, options)
+}
+export type RoundUpActivateDateSearchQueryHookResult = ReturnType<
+  typeof useRoundUpActivateDateSearchQuery
+>
+export type RoundUpActivateDateSearchLazyQueryHookResult = ReturnType<
+  typeof useRoundUpActivateDateSearchLazyQuery
+>
+export type RoundUpActivateDateSearchQueryResult = Apollo.QueryResult<
+  RoundUpActivateDateSearchQuery,
+  RoundUpActivateDateSearchQueryVariables
+>
+export const RoundUpsBankConnectionsCardDocument = gql`
+  query RoundUpsBankConnectionsCard($roundUpId: ID!, $id: ID!) {
+    roundUp(id: $roundUpId) {
+      id
+    }
+    connection(id: $id) {
+      ...ConnectionAttributes
+    }
+  }
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useRoundUpsBankConnectionsCardQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsCardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsCardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsCardQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsCardQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsCardQuery,
+    RoundUpsBankConnectionsCardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsCardQuery,
+    RoundUpsBankConnectionsCardQueryVariables
+  >(RoundUpsBankConnectionsCardDocument, options)
+}
+export function useRoundUpsBankConnectionsCardLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsCardQuery,
+    RoundUpsBankConnectionsCardQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsCardQuery,
+    RoundUpsBankConnectionsCardQueryVariables
+  >(RoundUpsBankConnectionsCardDocument, options)
+}
+export type RoundUpsBankConnectionsCardQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsCardQuery
+>
+export type RoundUpsBankConnectionsCardLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsCardLazyQuery
+>
+export type RoundUpsBankConnectionsCardQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsCardQuery,
+  RoundUpsBankConnectionsCardQueryVariables
+>
+export const RoundUpsBankConnectionsListDocument = gql`
+  query RoundUpsBankConnectionsList($roundUpId: ID!) {
+    roundUp(id: $roundUpId) {
+      id
+      fundingAccount {
+        ...AccountAttributes
+        balance {
+          current
+        }
+      }
+    }
+    connections {
+      ...ConnectionAttributes
+    }
+  }
+  ${AccountAttributesFragmentDoc}
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useRoundUpsBankConnectionsListQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsListQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsListQuery,
+    RoundUpsBankConnectionsListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsListQuery,
+    RoundUpsBankConnectionsListQueryVariables
+  >(RoundUpsBankConnectionsListDocument, options)
+}
+export function useRoundUpsBankConnectionsListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsListQuery,
+    RoundUpsBankConnectionsListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsListQuery,
+    RoundUpsBankConnectionsListQueryVariables
+  >(RoundUpsBankConnectionsListDocument, options)
+}
+export type RoundUpsBankConnectionsListQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsListQuery
+>
+export type RoundUpsBankConnectionsListLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsListLazyQuery
+>
+export type RoundUpsBankConnectionsListQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsListQuery,
+  RoundUpsBankConnectionsListQueryVariables
+>
+export const RoundUpsBankConnectionsAccountsListDocument = gql`
+  query RoundUpsBankConnectionsAccountsList($roundUpId: ID!, $bankConnectionId: ID!) {
+    roundUp(id: $roundUpId) {
+      id
+      fundingAccount {
+        id
+        balance {
+          current
+        }
+      }
+    }
+    connection(id: $bankConnectionId) {
+      ...ConnectionAttributes
+    }
+  }
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useRoundUpsBankConnectionsAccountsListQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsAccountsListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsAccountsListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsAccountsListQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      bankConnectionId: // value for 'bankConnectionId'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsAccountsListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsAccountsListQuery,
+    RoundUpsBankConnectionsAccountsListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsAccountsListQuery,
+    RoundUpsBankConnectionsAccountsListQueryVariables
+  >(RoundUpsBankConnectionsAccountsListDocument, options)
+}
+export function useRoundUpsBankConnectionsAccountsListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsAccountsListQuery,
+    RoundUpsBankConnectionsAccountsListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsAccountsListQuery,
+    RoundUpsBankConnectionsAccountsListQueryVariables
+  >(RoundUpsBankConnectionsAccountsListDocument, options)
+}
+export type RoundUpsBankConnectionsAccountsListQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAccountsListQuery
+>
+export type RoundUpsBankConnectionsAccountsListLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAccountsListLazyQuery
+>
+export type RoundUpsBankConnectionsAccountsListQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsAccountsListQuery,
+  RoundUpsBankConnectionsAccountsListQueryVariables
+>
+export const RoundUpsBankConnectionsAccountsListItemDocument = gql`
+  query RoundUpsBankConnectionsAccountsListItem($roundUpId: ID!, $accountId: ID!) {
+    roundUp(id: $roundUpId) {
+      id
+      fundingAccount {
+        id
+        balance {
+          current
+        }
+      }
+      subscribedAccounts {
+        id
+      }
+      availableAccounts {
+        id
+      }
+    }
+    account(id: $accountId) {
+      id
+      name
+      lastFourDigits
+      balance {
+        current
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpsBankConnectionsAccountsListItemQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsAccountsListItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsAccountsListItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsAccountsListItemQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      accountId: // value for 'accountId'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsAccountsListItemQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsAccountsListItemQuery,
+    RoundUpsBankConnectionsAccountsListItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsAccountsListItemQuery,
+    RoundUpsBankConnectionsAccountsListItemQueryVariables
+  >(RoundUpsBankConnectionsAccountsListItemDocument, options)
+}
+export function useRoundUpsBankConnectionsAccountsListItemLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsAccountsListItemQuery,
+    RoundUpsBankConnectionsAccountsListItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsAccountsListItemQuery,
+    RoundUpsBankConnectionsAccountsListItemQueryVariables
+  >(RoundUpsBankConnectionsAccountsListItemDocument, options)
+}
+export type RoundUpsBankConnectionsAccountsListItemQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAccountsListItemQuery
+>
+export type RoundUpsBankConnectionsAccountsListItemLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsAccountsListItemLazyQuery
+>
+export type RoundUpsBankConnectionsAccountsListItemQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsAccountsListItemQuery,
+  RoundUpsBankConnectionsAccountsListItemQueryVariables
+>
+export const RoundUpsBankConnectionsListItemDocument = gql`
+  query RoundUpsBankConnectionsListItem($roundUpId: ID!, $id: ID!) {
+    roundUp(id: $roundUpId) {
+      id
+      fundingAccount {
+        ...AccountAttributes
+        balance {
+          current
+        }
+      }
+    }
+    connection(id: $id) {
+      ...ConnectionAttributes
+    }
+  }
+  ${AccountAttributesFragmentDoc}
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useRoundUpsBankConnectionsListItemQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsListItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsListItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsListItemQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsListItemQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsListItemQuery,
+    RoundUpsBankConnectionsListItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsListItemQuery,
+    RoundUpsBankConnectionsListItemQueryVariables
+  >(RoundUpsBankConnectionsListItemDocument, options)
+}
+export function useRoundUpsBankConnectionsListItemLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsListItemQuery,
+    RoundUpsBankConnectionsListItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsListItemQuery,
+    RoundUpsBankConnectionsListItemQueryVariables
+  >(RoundUpsBankConnectionsListItemDocument, options)
+}
+export type RoundUpsBankConnectionsListItemQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsListItemQuery
+>
+export type RoundUpsBankConnectionsListItemLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsListItemLazyQuery
+>
+export type RoundUpsBankConnectionsListItemQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsListItemQuery,
+  RoundUpsBankConnectionsListItemQueryVariables
+>
+export const RoundUpsBankConnectionsPageDocument = gql`
+  query RoundUpsBankConnectionsPage($id: ID!) {
+    roundUp(id: $id) {
+      id
+      fundingAccount {
+        id
+        balance {
+          current
+        }
+      }
+    }
+    connections {
+      ...ConnectionAttributes
+    }
+  }
+  ${ConnectionAttributesFragmentDoc}
+`
+
+/**
+ * __useRoundUpsBankConnectionsPageQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsPageQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsPageQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsPageQuery,
+    RoundUpsBankConnectionsPageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsPageQuery,
+    RoundUpsBankConnectionsPageQueryVariables
+  >(RoundUpsBankConnectionsPageDocument, options)
+}
+export function useRoundUpsBankConnectionsPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsPageQuery,
+    RoundUpsBankConnectionsPageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsPageQuery,
+    RoundUpsBankConnectionsPageQueryVariables
+  >(RoundUpsBankConnectionsPageDocument, options)
+}
+export type RoundUpsBankConnectionsPageQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsPageQuery
+>
+export type RoundUpsBankConnectionsPageLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsPageLazyQuery
+>
+export type RoundUpsBankConnectionsPageQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsPageQuery,
+  RoundUpsBankConnectionsPageQueryVariables
+>
+export const RoundUpsRecentActivityDocument = gql`
+  query RoundUpsRecentActivity($roundUpId: ID!, $since: Date!) {
+    roundUp(id: $roundUpId) {
+      id
+      recentActivity: balance(filter: { date_gte: $since }) {
+        id
+        current
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpsRecentActivityQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsRecentActivityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsRecentActivityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsRecentActivityQuery({
+ *   variables: {
+ *      roundUpId: // value for 'roundUpId'
+ *      since: // value for 'since'
+ *   },
+ * });
+ */
+export function useRoundUpsRecentActivityQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsRecentActivityQuery,
+    RoundUpsRecentActivityQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpsRecentActivityQuery, RoundUpsRecentActivityQueryVariables>(
+    RoundUpsRecentActivityDocument,
+    options
+  )
+}
+export function useRoundUpsRecentActivityLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsRecentActivityQuery,
+    RoundUpsRecentActivityQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpsRecentActivityQuery, RoundUpsRecentActivityQueryVariables>(
+    RoundUpsRecentActivityDocument,
+    options
+  )
+}
+export type RoundUpsRecentActivityQueryHookResult = ReturnType<
+  typeof useRoundUpsRecentActivityQuery
+>
+export type RoundUpsRecentActivityLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsRecentActivityLazyQuery
+>
+export type RoundUpsRecentActivityQueryResult = Apollo.QueryResult<
+  RoundUpsRecentActivityQuery,
+  RoundUpsRecentActivityQueryVariables
+>
+export const RoundUpTransactionsDocument = gql`
+  query RoundUpTransactions($id: ID!) {
+    roundUp(id: $id) {
+      id
+      transactionsConnection {
+        edges {
+          node {
+            id
+            date
+            amount
+            description
+          }
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpTransactionsQuery__
+ *
+ * To run a query within a React component, call `useRoundUpTransactionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpTransactionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpTransactionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpTransactionsQuery(
+  baseOptions: Apollo.QueryHookOptions<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>(
+    RoundUpTransactionsDocument,
+    options
+  )
+}
+export function useRoundUpTransactionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpTransactionsQuery,
+    RoundUpTransactionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpTransactionsQuery, RoundUpTransactionsQueryVariables>(
+    RoundUpTransactionsDocument,
+    options
+  )
+}
+export type RoundUpTransactionsQueryHookResult = ReturnType<typeof useRoundUpTransactionsQuery>
+export type RoundUpTransactionsLazyQueryHookResult = ReturnType<
+  typeof useRoundUpTransactionsLazyQuery
+>
+export type RoundUpTransactionsQueryResult = Apollo.QueryResult<
+  RoundUpTransactionsQuery,
+  RoundUpTransactionsQueryVariables
+>
+export const RoundUpHistoryDocument = gql`
+  query RoundUpHistory(
+    $id: ID!
+    $day0: Date!
+    $day1: Date!
+    $day2: Date!
+    $day3: Date!
+    $day4: Date!
+    $day5: Date!
+    $day6: Date!
+  ) {
+    roundUp(id: $id) {
+      id
+      day0: balance(filter: { date_gte: $day0 }) {
+        id
+        available
+      }
+      day1: balance(filter: { date_lt: $day0, date_gte: $day1 }) {
+        id
+        available
+      }
+      day2: balance(filter: { date_lt: $day1, date_gte: $day2 }) {
+        id
+        available
+      }
+      day3: balance(filter: { date_lt: $day2, date_gte: $day3 }) {
+        id
+        available
+      }
+      day4: balance(filter: { date_lt: $day3, date_gte: $day4 }) {
+        id
+        available
+      }
+      day5: balance(filter: { date_lt: $day4, date_gte: $day5 }) {
+        id
+        available
+      }
+      day6: balance(filter: { date_lt: $day5, date_gte: $day6 }) {
+        id
+        available
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpHistoryQuery__
+ *
+ * To run a query within a React component, call `useRoundUpHistoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpHistoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpHistoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      day0: // value for 'day0'
+ *      day1: // value for 'day1'
+ *      day2: // value for 'day2'
+ *      day3: // value for 'day3'
+ *      day4: // value for 'day4'
+ *      day5: // value for 'day5'
+ *      day6: // value for 'day6'
+ *   },
+ * });
+ */
+export function useRoundUpHistoryQuery(
+  baseOptions: Apollo.QueryHookOptions<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>(
+    RoundUpHistoryDocument,
+    options
+  )
+}
+export function useRoundUpHistoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpHistoryQuery, RoundUpHistoryQueryVariables>(
+    RoundUpHistoryDocument,
+    options
+  )
+}
+export type RoundUpHistoryQueryHookResult = ReturnType<typeof useRoundUpHistoryQuery>
+export type RoundUpHistoryLazyQueryHookResult = ReturnType<typeof useRoundUpHistoryLazyQuery>
+export type RoundUpHistoryQueryResult = Apollo.QueryResult<
+  RoundUpHistoryQuery,
+  RoundUpHistoryQueryVariables
+>
+export const RoundUpSummaryDocument = gql`
+  query RoundUpSummary($id: ID!, $startOfWeek: Date) {
+    roundUp(id: $id) {
+      id
+      totalAmount: balance {
+        id
+        available
+        current
+      }
+      thisWeek: balance(filter: { date_gte: $startOfWeek }) {
+        id
+        available
+        current
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpSummaryQuery__
+ *
+ * To run a query within a React component, call `useRoundUpSummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpSummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpSummaryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      startOfWeek: // value for 'startOfWeek'
+ *   },
+ * });
+ */
+export function useRoundUpSummaryQuery(
+  baseOptions: Apollo.QueryHookOptions<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>(
+    RoundUpSummaryDocument,
+    options
+  )
+}
+export function useRoundUpSummaryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<RoundUpSummaryQuery, RoundUpSummaryQueryVariables>(
+    RoundUpSummaryDocument,
+    options
+  )
+}
+export type RoundUpSummaryQueryHookResult = ReturnType<typeof useRoundUpSummaryQuery>
+export type RoundUpSummaryLazyQueryHookResult = ReturnType<typeof useRoundUpSummaryLazyQuery>
+export type RoundUpSummaryQueryResult = Apollo.QueryResult<
+  RoundUpSummaryQuery,
+  RoundUpSummaryQueryVariables
+>
+export const RoundUpsPauseDocument = gql`
+  mutation RoundUpsPause($id: ID!) {
+    roundUpPause(input: { id: $id }) {
+      record {
+        id
+        state
+      }
+    }
+  }
+`
+export type RoundUpsPauseMutationFn = Apollo.MutationFunction<
+  RoundUpsPauseMutation,
+  RoundUpsPauseMutationVariables
+>
+
+/**
+ * __useRoundUpsPauseMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsPauseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsPauseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsPauseMutation, { data, loading, error }] = useRoundUpsPauseMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsPauseMutation(
+  baseOptions?: Apollo.MutationHookOptions<RoundUpsPauseMutation, RoundUpsPauseMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RoundUpsPauseMutation, RoundUpsPauseMutationVariables>(
+    RoundUpsPauseDocument,
+    options
+  )
+}
+export type RoundUpsPauseMutationHookResult = ReturnType<typeof useRoundUpsPauseMutation>
+export type RoundUpsPauseMutationResult = Apollo.MutationResult<RoundUpsPauseMutation>
+export type RoundUpsPauseMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsPauseMutation,
+  RoundUpsPauseMutationVariables
+>
+export const RoundUpsResumeDocument = gql`
+  mutation RoundUpsResume($id: ID!) {
+    roundUpResume(input: { id: $id }) {
+      record {
+        id
+        state
+      }
+    }
+  }
+`
+export type RoundUpsResumeMutationFn = Apollo.MutationFunction<
+  RoundUpsResumeMutation,
+  RoundUpsResumeMutationVariables
+>
+
+/**
+ * __useRoundUpsResumeMutation__
+ *
+ * To run a mutation, you first call `useRoundUpsResumeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsResumeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [roundUpsResumeMutation, { data, loading, error }] = useRoundUpsResumeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsResumeMutation(
+  baseOptions?: Apollo.MutationHookOptions<RoundUpsResumeMutation, RoundUpsResumeMutationVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useMutation<RoundUpsResumeMutation, RoundUpsResumeMutationVariables>(
+    RoundUpsResumeDocument,
+    options
+  )
+}
+export type RoundUpsResumeMutationHookResult = ReturnType<typeof useRoundUpsResumeMutation>
+export type RoundUpsResumeMutationResult = Apollo.MutationResult<RoundUpsResumeMutation>
+export type RoundUpsResumeMutationOptions = Apollo.BaseMutationOptions<
+  RoundUpsResumeMutation,
+  RoundUpsResumeMutationVariables
+>
+export const RoundUpsBankConnectionsSummaryCardFooterDocument = gql`
+  query RoundUpsBankConnectionsSummaryCardFooter($id: ID!) {
+    roundUp(id: $id) {
+      id
+      fundingAccount {
+        id
+        balance {
+          current
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useRoundUpsBankConnectionsSummaryCardFooterQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsSummaryCardFooterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsSummaryCardFooterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsSummaryCardFooterQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsSummaryCardFooterQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsSummaryCardFooterQuery,
+    RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsSummaryCardFooterQuery,
+    RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+  >(RoundUpsBankConnectionsSummaryCardFooterDocument, options)
+}
+export function useRoundUpsBankConnectionsSummaryCardFooterLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsSummaryCardFooterQuery,
+    RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsSummaryCardFooterQuery,
+    RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+  >(RoundUpsBankConnectionsSummaryCardFooterDocument, options)
+}
+export type RoundUpsBankConnectionsSummaryCardFooterQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardFooterQuery
+>
+export type RoundUpsBankConnectionsSummaryCardFooterLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardFooterLazyQuery
+>
+export type RoundUpsBankConnectionsSummaryCardFooterQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsSummaryCardFooterQuery,
+  RoundUpsBankConnectionsSummaryCardFooterQueryVariables
+>
+export const RoundUpsBankConnectionsSummaryCardHeaderDocument = gql`
+  query RoundUpsBankConnectionsSummaryCardHeader {
+    connections {
+      id
+    }
+  }
+`
+
+/**
+ * __useRoundUpsBankConnectionsSummaryCardHeaderQuery__
+ *
+ * To run a query within a React component, call `useRoundUpsBankConnectionsSummaryCardHeaderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoundUpsBankConnectionsSummaryCardHeaderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoundUpsBankConnectionsSummaryCardHeaderQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRoundUpsBankConnectionsSummaryCardHeaderQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    RoundUpsBankConnectionsSummaryCardHeaderQuery,
+    RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<
+    RoundUpsBankConnectionsSummaryCardHeaderQuery,
+    RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+  >(RoundUpsBankConnectionsSummaryCardHeaderDocument, options)
+}
+export function useRoundUpsBankConnectionsSummaryCardHeaderLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RoundUpsBankConnectionsSummaryCardHeaderQuery,
+    RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<
+    RoundUpsBankConnectionsSummaryCardHeaderQuery,
+    RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+  >(RoundUpsBankConnectionsSummaryCardHeaderDocument, options)
+}
+export type RoundUpsBankConnectionsSummaryCardHeaderQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardHeaderQuery
+>
+export type RoundUpsBankConnectionsSummaryCardHeaderLazyQueryHookResult = ReturnType<
+  typeof useRoundUpsBankConnectionsSummaryCardHeaderLazyQuery
+>
+export type RoundUpsBankConnectionsSummaryCardHeaderQueryResult = Apollo.QueryResult<
+  RoundUpsBankConnectionsSummaryCardHeaderQuery,
+  RoundUpsBankConnectionsSummaryCardHeaderQueryVariables
+>
 export const TransactionsByAccountDocument = gql`
   query TransactionsByAccount(
     $accountId: ID!

@@ -16,7 +16,7 @@ export type MxConnectButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
   ConnectorMxInitializeInput & {
     widgetClassName?: string
-    onEvent?: (event: MxEvent) => void
+    onEvent?: (event: MessageEvent<MxEvent>) => void
     onSuccess?: (input: ConnectionMxCreateInput) => void
   }
 
@@ -68,7 +68,7 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
   }, [connectorMxInitializeMutation])
 
   const handleEvent = React.useCallback(
-    (event: MxEvent) => {
+    (event: MessageEvent<MxEvent>) => {
       if (onEvent) {
         onEvent(event)
         setInactive(true)
