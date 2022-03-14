@@ -1,6 +1,13 @@
 import * as React from 'react'
 
-import { ConnectorMxInitializeInput, useConnectorMxInitializeMutation } from '../../types/graphql'
+import { MxEvent } from 'types/mxEvents'
+
+import {
+  ConnectionMxCreateInput,
+  ConnectorMxInitializeInput,
+  ConnectorMxInitializeMutation,
+  useConnectorMxInitializeMutation,
+} from '../../types/graphql'
 import type { CustomComponentProps } from '../../utils/components'
 
 import MxWidget from './MxWidget'
@@ -9,7 +16,8 @@ export type MxConnectButtonProps = React.HTMLAttributes<HTMLElement> &
   CustomComponentProps &
   ConnectorMxInitializeInput & {
     widgetClassName?: string
-    onEvent?: (event: any) => void
+    onEvent?: (event: MxEvent) => void
+    onSuccess?: (input: ConnectionMxCreateInput) => void
   }
 
 const MxConnectButton: React.FC<MxConnectButtonProps> = ({
@@ -25,6 +33,7 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
   waitForFullAggregation = undefined,
   id,
   onEvent = () => {},
+  onSuccess = () => {},
   ...otherProps
 }) => {
   const [inactive, setInactive] = React.useState(false)
@@ -42,7 +51,7 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
         waitForFullAggregation,
       },
     },
-    onCompleted: (data) => {
+    onCompleted: (data: ConnectorMxInitializeMutation) => {
       if (data?.connectorMxInitialize?.record?.connectWidgetUrl) {
         setWidgetURL(data.connectorMxInitialize.record.connectWidgetUrl)
       } else {
@@ -59,7 +68,7 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
   }, [connectorMxInitializeMutation])
 
   const handleEvent = React.useCallback(
-    (event: any) => {
+    (event: MxEvent) => {
       if (onEvent) {
         onEvent(event)
         setInactive(true)
@@ -74,14 +83,10 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
     setLoadWidget(true)
   }
 
-  const handleClose = React.useCallback(
-    (event: any) => {
-      onEvent(event)
-      setLoadWidget(false)
-      connectorMxInitializeMutation()
-    },
-    [connectorMxInitializeMutation, onEvent]
-  )
+  const handleClose = React.useCallback(() => {
+    setLoadWidget(false)
+    connectorMxInitializeMutation()
+  }, [connectorMxInitializeMutation])
 
   const disabled = !widgetURL
 
@@ -96,6 +101,7 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
             alignItems: 'center',
             flexDirection: 'column',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            cursor: 'default',
             top: 0,
             left: 0,
             right: 0,
@@ -110,12 +116,26 @@ const MxConnectButton: React.FC<MxConnectButtonProps> = ({
         {children}
         {widgetURL && loadWidget && (
           <div className={widgetClassName} style={widgetStyle}>
-            <MxWidget url={widgetURL} onEvent={handleEvent} closeWidget={handleClose} />
+            <MxWidget
+              url={widgetURL}
+              onEvent={handleEvent}
+              onSuccess={onSuccess}
+              closeWidget={handleClose}
+            />
           </div>
         )}
       </>
     ),
-    [children, widgetURL, loadWidget, widgetClassName, widgetStyle, handleEvent, handleClose]
+    [
+      children,
+      widgetURL,
+      loadWidget,
+      widgetClassName,
+      widgetStyle,
+      handleEvent,
+      handleClose,
+      onSuccess,
+    ]
   )
 
   // Auto close modal after 30 seconds of inactivity

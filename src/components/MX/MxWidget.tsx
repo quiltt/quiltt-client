@@ -1,35 +1,49 @@
 import * as React from 'react'
 
 import { useOnClickOutside } from 'hooks'
+import { ConnectionMxCreateInput, MxEvent, MxPostMessageEventType } from 'types'
 
 type MxWidgetProps = {
   url: string
-  onEvent: (event: any) => void
-  closeWidget: (event?: any) => void
+  onEvent: (event: MxEvent) => void
+  onSuccess: (input: ConnectionMxCreateInput) => void
+  closeWidget: (event?: MxEvent) => void
 }
 
-const MxWidget: React.FC<MxWidgetProps> = ({ url, onEvent, closeWidget }) => {
+const MxWidget: React.FC<MxWidgetProps> = ({ url, onEvent, onSuccess, closeWidget }) => {
   const ref = React.useRef(null)
+
+  const handleEvent = React.useCallback(
+    (event: MessageEvent<MxEvent>) => {
+      switch (event.type) {
+        case MxPostMessageEventType.MEMBER_CONNECTED:
+          onSuccess(event.data)
+          onEvent(event.data)
+          closeWidget()
+          break
+        default:
+          onEvent(event.data)
+          break
+      }
+    },
+    [closeWidget, onEvent, onSuccess]
+  )
 
   /**
    * Handle MX Postmessages and call the event callback with the payload.
    * NOTE: this only looks for post messages with `ui_message_version: 4`
    */
   const onPostMessage = React.useCallback(
-    (event: MessageEvent) => {
+    (event: MessageEvent<MxEvent>) => {
       if (event.data && event.data.mx === true) {
-        onEvent(event.data)
+        handleEvent(event)
       }
     },
-    [onEvent]
+    [handleEvent]
   )
 
-  const handleClickOutside = (event?: any) => {
-    if (event) {
-      closeWidget(event)
-    } else {
-      closeWidget()
-    }
+  const handleClickOutside = () => {
+    closeWidget()
   }
 
   useOnClickOutside(ref, handleClickOutside)
