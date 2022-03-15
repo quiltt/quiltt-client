@@ -35,6 +35,8 @@ export type Account = {
   id: Scalars['ID']
   /** Last 4 numbers */
   lastFourDigits?: Maybe<Scalars['String']>
+  /** A mostly unique identifier, typically last 4 account numbers */
+  mask?: Maybe<Scalars['String']>
   /** Customizable metadata */
   metadata?: Maybe<Scalars['JSON']>
   /** Name */
@@ -84,8 +86,51 @@ export type AccountTransactionsConnectionArgs = {
 
 /** Options for Filtering Accounts */
 export type AccountFilter = {
+  source?: InputMaybe<AccountSourceFilter>
   /** Account classification */
   type?: InputMaybe<Array<AccountType>>
+}
+
+/** Source-specific filters */
+export type AccountSourceFilter = {
+  plaid?: InputMaybe<AccountSourcePlaidFilter>
+}
+
+/** Options for filtering inside Plaid's API payload */
+export type AccountSourcePlaidFilter = {
+  /** Plaid’s unique identifier for the account */
+  accountId?: InputMaybe<Scalars['String']>
+  /**
+   * The last 2-4 alphanumeric characters of an account's official account number.
+   * Note that the mask may be non-unique between an Item's accounts, and it may
+   * also not match the mask that the bank displays to the user.
+   */
+  mask?: InputMaybe<Scalars['String']>
+  /** The name of the account, either assigned by the user or by the financial institution itself */
+  name?: InputMaybe<Scalars['String']>
+  /** The official name of the account as given by the financial institution */
+  officialName?: InputMaybe<Scalars['String']>
+  /**
+   * Possible values: 401a, 401k, 403B, 457b, 529, brokerage, cash isa, education
+   * savings account, gic, health reimbursement arrangement, hsa, isa, ira, lif,
+   * lira, lrif, lrsp, non-taxable brokerage account, other, prif, rdsp, resp,
+   * rlif, rrif, pension, profit sharing plan, retirement, roth, roth 401k, rrsp,
+   * sep ira, simple ira, sipp, stock plan, thrift savings plan, tfsa, trust, ugma,
+   * utma, variable annuity, credit card, paypal, cd, checking, savings, money
+   * market, prepaid, auto, commercial, construction, consumer, home, home equity,
+   * loan, mortgage, overdraft, line of credit, student, cash management, keogh,
+   * mutual fund, recurring, rewards, safe deposit, sarsep, null
+   */
+  subtype?: InputMaybe<Scalars['String']>
+  /** Possible values: investment, credit, depository, loan, brokerage, other */
+  type?: InputMaybe<Scalars['String']>
+  /**
+   * The current verification status of an Auth Item initiated through Automated or
+   * Manual micro-deposits.  Returned for Auth Items only.
+   * Possible values: pending_automatic_verification, pending_manual_verification,
+   * manually_verified, verification_expired, verification_failed
+   */
+  verificationStatus?: InputMaybe<Scalars['String']>
 }
 
 /** Represents a data source for the Account */
@@ -98,7 +143,7 @@ export enum AccountSourceType {
   Plaid = 'PLAID',
 }
 
-export type AccountSources = MockAccount | PlaidAccount
+export type AccountSources = MockAccount | MxAccount | PlaidAccount
 
 /** Represents the classification of an Account */
 export enum AccountType {
@@ -167,7 +212,7 @@ export type ConnectionDeletePayload = {
 
 /** Options for Filtering Connections */
 export type ConnectionFilter = {
-  source?: InputMaybe<ConnectionSourceFilterInput>
+  source?: InputMaybe<ConnectionSourceFilter>
   /** Connection status */
   status?: InputMaybe<Array<ConnectionStatus>>
 }
@@ -185,8 +230,8 @@ export type ConnectionMxCreatePayload = {
   __typename?: 'ConnectionMxCreatePayload'
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>
-  /** List of errors from mutation */
-  errors?: Maybe<Array<Error>>
+  /** Mx API Error */
+  errors?: Maybe<Array<MxApiError>>
   /** Connection */
   record?: Maybe<ConnectionType>
   /** Status of the mutation */
@@ -240,12 +285,12 @@ export type ConnectionPlaidImportPayload = {
 }
 
 /** Source-specific filters */
-export type ConnectionSourceFilterInput = {
-  plaid?: InputMaybe<ConnectionSourceFilterPlaidInput>
+export type ConnectionSourceFilter = {
+  plaid?: InputMaybe<ConnectionSourcePlaidFilter>
 }
 
 /** Options for filtering inside Plaid's API payload */
-export type ConnectionSourceFilterPlaidInput = {
+export type ConnectionSourcePlaidFilter = {
   /** A list of products available for the Item that have not yet been accessed. */
   availableProducts?: InputMaybe<Array<Scalars['String']>>
   /**
@@ -385,8 +430,8 @@ export type ConnectorMxInitializePayload = {
   __typename?: 'ConnectorMxInitializePayload'
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>
-  /** List of errors from mutation */
-  errors?: Maybe<Array<Error>>
+  /** Mx API Error */
+  errors?: Maybe<Array<MxApiError>>
   record?: Maybe<MxConnector>
   /** Status of the mutation */
   success: Scalars['Boolean']
@@ -765,6 +810,144 @@ export type MutationRoundUpSubscribedAccountsRemoveArgs = {
 /** The top-level Mutation type. Mutations are used to make requests that create or modify data. */
 export type MutationTransactionUpdateArgs = {
   input: TransactionUpdateInput
+}
+
+/** Represents a Mx API Error */
+export type MxApiError = {
+  __typename?: 'MxAPIError'
+  /** A developer-friendly representation of the error */
+  message: Scalars['String']
+  /** A representation of the http status code */
+  status?: Maybe<Scalars['String']>
+  /** A categorization of the error */
+  type: Scalars['String']
+}
+
+/** MX Account Data */
+export type MxAccount = {
+  __typename?: 'MxAccount'
+  /** API Source */
+  _sourcename: AccountSourceType
+  /** The account number associated with the account. This will typically be a masked or partial account number. */
+  accountNumber?: Maybe<Scalars['String']>
+  /** The annual percentage rate associated with the account. */
+  apr?: Maybe<Scalars['Float']>
+  /** The annual percentage yield associated with the account. */
+  apy?: Maybe<Scalars['Float']>
+  /**
+   * The balance that is available for use in asset accounts like checking and
+   * savings. PENDING transactions are typically taken into account with the
+   * available balance, but this may not always be the case. available_balance will
+   * usually be a positive value for all account types, determined in the same way
+   * as the balance field.
+   */
+  availableBalance?: Maybe<Scalars['Float']>
+  /**
+   * The amount of credit available for use in liability accounts like credit cards
+   * and lines of credit. PENDING transactions are typically taken into account
+   * with available credit, but this may not always be the case. available_credit
+   * will usually be a positive value for all account types, determined in the same
+   * way as the balance field.
+   */
+  availableCredit?: Maybe<Scalars['Float']>
+  /**
+   * The current balance of the account. PENDING transactions are typically not
+   * taken into account with the current balance, but this may not always be the
+   * case. This is the value used for the account balance displayed in MX UIs. The
+   * balance will usually be a positive value for all account types. Asset-type
+   * accounts (CHECKING, SAVINGS, INVESTMENT) may have a negative balance if they
+   * are in overdraft. Debt-type accounts (CREDIT_CARD, LOAN, LINE_OF_CREDIT,
+   * MORTGAGE) may have a negative balance if they are overpaid.
+   */
+  balance?: Maybe<Scalars['Float']>
+  /** The cash balance of the account. */
+  cashBalance?: Maybe<Scalars['Float']>
+  /**
+   * The sum of money paid to the policyholder or annuity holder in the event the
+   * policy is voluntarily terminated before it matures, or the insured event occurs.
+   */
+  cashSurrenderValue?: Maybe<Scalars['Float']>
+  /** The date and time at which the account was created on the MX Platform. */
+  createdAt?: Maybe<Scalars['String']>
+  /** The credit limit associated with the account. */
+  creditLimit?: Maybe<Scalars['Float']>
+  /** The three-character ISO 4217 currency code. */
+  currencyCode?: Maybe<Scalars['String']>
+  /** The day of the month the payment is due. For example, the 14th is passed as 14. */
+  dayPaymentIsDue?: Maybe<Scalars['Int']>
+  /** The amount paid to the beneficiary of the account upon death of the account owner. */
+  deathBenefit?: Maybe<Scalars['Int']>
+  /** The unique identifier for the account. Defined by MX. */
+  guid?: Maybe<Scalars['String']>
+  /** The sum of all long holdings within this account, not including any that are shorted and not including cash. */
+  holdingsValue?: Maybe<Scalars['Float']>
+  /** The unique partner-defined identifier for the account */
+  id?: Maybe<Scalars['String']>
+  /** The date and time at which the account was last successfully aggregated and received data. */
+  importedAt?: Maybe<Scalars['String']>
+  /** A unique identifier for the institution associated with this account. Defined by MX. */
+  institutionCode?: Maybe<Scalars['String']>
+  /** The name of the insured individual. */
+  insuredName?: Maybe<Scalars['String']>
+  /** The interest rate associated with the account. */
+  interestRate?: Maybe<Scalars['Float']>
+  /** This indicates whether an account has been closed. */
+  isClosed?: Maybe<Scalars['Boolean']>
+  /** This indicates whether the account is hidden. Defaults to false. */
+  isHidden?: Maybe<Scalars['Boolean']>
+  /** The date and time of the most recent payment on the account. */
+  lastPayment?: Maybe<Scalars['Float']>
+  /** The amount of the most recent payment on the account. */
+  lastPaymentAt?: Maybe<Scalars['String']>
+  /** The amount of the loan associated with the account. */
+  loanAmount?: Maybe<Scalars['Float']>
+  /** The date on which the account matures. */
+  maturesOn?: Maybe<Scalars['String']>
+  /** The unique identifier for the member associated with the account. Defined by MX. */
+  memberGuid?: Maybe<Scalars['String']>
+  /** The unique, partner-defined, identifier for the member associated with this account. */
+  memberId?: Maybe<Scalars['String']>
+  /**
+   * This indicates whether the associated member is managed by the user or the MX
+   * partner. Members created with the managed member feature will have this field set to false.
+   */
+  memberIsManagedByUser?: Maybe<Scalars['Boolean']>
+  /** Additional information a partner can store on the account. */
+  metadata?: Maybe<Scalars['String']>
+  /** The minimum balance associated with the account. */
+  minimumBalance?: Maybe<Scalars['Float']>
+  /** The minimum payment required for an account. This can apply to any debt account. */
+  minimumPayment?: Maybe<Scalars['Float']>
+  /** The human-readable name for the account. */
+  name?: Maybe<Scalars['String']>
+  /** An alternate name for the account. */
+  nickname?: Maybe<Scalars['String']>
+  /** The original balance associated with the account. This will always be positive. */
+  originalBalance?: Maybe<Scalars['Float']>
+  /** The amount paid out to the insured individual or beneficiary under the conditions of the insurance policy. */
+  payOutAmount?: Maybe<Scalars['Float']>
+  /** The date and time at which the next payment is due on the account. */
+  paymentDueAt?: Maybe<Scalars['String']>
+  /** The payoff balance for a debt account. This will normally be a positive number. */
+  payoffBalance?: Maybe<Scalars['Float']>
+  /** The insurance policy’s premium amount. */
+  premiumAmount?: Maybe<Scalars['Float']>
+  /** The routing number for the account. */
+  routingNumber?: Maybe<Scalars['String']>
+  /** The date on which a debt account was started. */
+  startedOn?: Maybe<Scalars['String']>
+  /** The account’s subtype, e.g., PLAN_401_K, MONEY_MARKET, or HOME_EQUITY. */
+  subtype?: Maybe<Scalars['String']>
+  /** The total value of the account. */
+  totalAccountValue?: Maybe<Scalars['Float']>
+  /** The general or parent type of the account. */
+  type?: Maybe<Scalars['String']>
+  /** The date and time at which the account was most recently updated. */
+  updatedAt?: Maybe<Scalars['String']>
+  /** The unique identifier for the user associated with the account. Defined by MX. */
+  userGuid?: Maybe<Scalars['String']>
+  /** The unique, partner-defined, identifier for the user associated with this account. */
+  userId?: Maybe<Scalars['String']>
 }
 
 /** MX Member Data */
@@ -2201,7 +2384,7 @@ export type SpadeTransaction = {
    */
   category?: Maybe<Array<Scalars['String']>>
   /** Is likely a recurring transaction */
-  isRecurring?: Maybe<Scalars['String']>
+  isRecurring?: Maybe<Scalars['Boolean']>
   location?: Maybe<SpadeLocation>
   logo?: Maybe<SpadeLogo>
   /** 'Merchant Category Code' (Marqueta, Galileo, etc.) */
@@ -2344,18 +2527,27 @@ export type TransactionFilter = {
   /** Less than or equal to the Date */
   date_lte?: InputMaybe<Scalars['Date']>
   entryType?: InputMaybe<TransactionEntryType>
-  source?: InputMaybe<TransactionFilterSourceInput>
+  source?: InputMaybe<TransactionSourceFilter>
   /** Transaction status */
   status?: InputMaybe<Array<TransactionStatus>>
 }
 
+/** Options for Sorting Transactions */
+export enum TransactionSort {
+  /** Oldest First, Pending Last */
+  DateAsc = 'DATE_ASC',
+  /** Newest First, Pending First */
+  DateDesc = 'DATE_DESC',
+}
+
 /** Source-specific filters */
-export type TransactionFilterSourceInput = {
-  plaid?: InputMaybe<TransactionFilterSourcePlaidInput>
+export type TransactionSourceFilter = {
+  plaid?: InputMaybe<TransactionSourcePlaidFilter>
+  spade?: InputMaybe<TransactionSourceSpadeFilter>
 }
 
 /** Options for filtering inside Plaid's API payloads */
-export type TransactionFilterSourcePlaidInput = {
+export type TransactionSourcePlaidFilter = {
   /** The ID of the account in which this transaction occurred. */
   accountId?: InputMaybe<Scalars['String']>
   /** The name of the account owner. This field is not typically populated and only relevant when dealing with sub-accounts. */
@@ -2369,13 +2561,15 @@ export type TransactionFilterSourcePlaidInput = {
    */
   amount?: InputMaybe<Scalars['Float']>
   /** The date that the transaction was authorized. */
-  authorizedDate?: InputMaybe<Scalars['String']>
+  authorizedDate?: InputMaybe<Scalars['Date']>
   /** Date and time when a transaction was authorized */
-  authorizedDatetime?: InputMaybe<Scalars['String']>
+  authorizedDatetime?: InputMaybe<Scalars['DateTime']>
   /** A hierarchical array of the categories to which this transaction belongs. */
   category?: InputMaybe<Array<Scalars['String']>>
   /** The ID of the category to which this transaction belongs. */
   categoryId?: InputMaybe<Scalars['String']>
+  /** The check number of the transaction. This field is only populated for check transactions. */
+  checkNumber?: InputMaybe<Scalars['String']>
   /**
    * For pending transactions, the date that the transaction occurred; for posted
    * transactions, the date that the transaction posted.
@@ -2385,14 +2579,16 @@ export type TransactionFilterSourcePlaidInput = {
   datetime?: InputMaybe<Scalars['DateTime']>
   /** The ISO-4217 currency code of the transaction. Always null if unofficial_currency_code is non-null. */
   isoCurrencyCode?: InputMaybe<Scalars['String']>
-  location?: InputMaybe<TransactionFilterSourcePlaidLocationInput>
+  location?: InputMaybe<TransactionSourcePlaidPaymentMetaFilter>
   /** The merchant name, as extracted by Plaid from the name field. */
   merchantName?: InputMaybe<Scalars['String']>
   /** The merchant name or transaction description. */
   name?: InputMaybe<Scalars['String']>
+  /** The string returned by the financial institution to describe the transaction. */
+  originalDescription?: InputMaybe<Scalars['String']>
   /** The channel used to make a payment. Possible values: online, in store, other */
   paymentChannel?: InputMaybe<Scalars['String']>
-  paymentMeta?: InputMaybe<TransactionFilterSourcePlaidPaymentMetaInput>
+  paymentMeta?: InputMaybe<TransactionSourcePlaidLocationFilter>
   /**
    * When true, identifies the transaction as pending or unsettled. Pending
    * transaction details (name, type, amount, category ID) may change before they are settled.
@@ -2418,7 +2614,7 @@ export type TransactionFilterSourcePlaidInput = {
 }
 
 /** Options for filtering inside Plaid's Transaction Location data */
-export type TransactionFilterSourcePlaidLocationInput = {
+export type TransactionSourcePlaidLocationFilter = {
   /** The street address where the transaction occurred. */
   address?: InputMaybe<Scalars['String']>
   /** The city where the transaction occurred. */
@@ -2438,7 +2634,7 @@ export type TransactionFilterSourcePlaidLocationInput = {
 }
 
 /** Options for filtering inside Plaid's Transaction Payment Meta data */
-export type TransactionFilterSourcePlaidPaymentMetaInput = {
+export type TransactionSourcePlaidPaymentMetaFilter = {
   /** The party initiating a wire transfer. Will be null if the transaction is not a wire transfer. */
   byOrderOf?: InputMaybe<Scalars['String']>
   /** For transfers, the party that is receiving the transaction. */
@@ -2457,12 +2653,28 @@ export type TransactionFilterSourcePlaidPaymentMetaInput = {
   referenceNumber?: InputMaybe<Scalars['String']>
 }
 
-/** Options for Sorting Transactions */
-export enum TransactionSort {
-  /** Oldest First, Pending Last */
-  DateAsc = 'DATE_ASC',
-  /** Newest First, Pending First */
-  DateDesc = 'DATE_DESC',
+/** Options for filtering inside Spade's API payloads */
+export type TransactionSourceSpadeFilter = {
+  /**
+   * List of increasingly specific categories based off the given MCC or our
+   * merchant database. We reccomend using the second element as a reasonably
+   * specific starting point.
+   */
+  category?: InputMaybe<Array<Scalars['String']>>
+  /** Is likely a recurring transaction */
+  isRecurring?: InputMaybe<Scalars['Boolean']>
+  /** 'Merchant Category Code' (Marqueta, Galileo, etc.) */
+  mcc?: InputMaybe<Scalars['String']>
+  /** Name of the merchant */
+  merchantName?: InputMaybe<Scalars['String']>
+  /** Our best guess as to what the true merchant name is. Utilizing AI, our database of merchants, and geolocation providers. */
+  normalizedMerchantName?: InputMaybe<Scalars['String']>
+  /** 'category_id' from Plaid */
+  plaidCategoryId?: InputMaybe<Scalars['String']>
+  /** Description of the transaction (often just called 'name') */
+  transactionName?: InputMaybe<Scalars['String']>
+  /** Facilitator of transaction */
+  via?: InputMaybe<Scalars['String']>
 }
 
 /** Represents a data source for the Transaction */
@@ -2527,7 +2739,9 @@ export type AccountAttributesFragment = {
     limit?: number | null
   }
   sources?: Array<
-    { __typename?: 'MockAccount' } | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
+    | { __typename?: 'MockAccount' }
+    | { __typename?: 'MxAccount' }
+    | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
   > | null
   connection?: {
     __typename?: 'ConnectionType'
@@ -2737,9 +2951,10 @@ export type ConnectorMxInitializeMutation = {
       guid?: string | null
     } | null
     errors?: Array<{
-      __typename?: 'Error'
-      message?: string | null
-      path?: Array<string> | null
+      __typename?: 'MxAPIError'
+      message: string
+      status?: string | null
+      type: string
     }> | null
   } | null
 }
@@ -2770,9 +2985,10 @@ export type ConnectionMxCreateMutation = {
       > | null
     } | null
     errors?: Array<{
-      __typename?: 'Error'
-      message?: string | null
-      path?: Array<string> | null
+      __typename?: 'MxAPIError'
+      message: string
+      status?: string | null
+      type: string
     }> | null
   } | null
 }
@@ -2787,11 +3003,7 @@ export type ConnectionDeleteMutation = {
     __typename?: 'ConnectionDeletePayload'
     success: boolean
     record?: { __typename?: 'ConnectionType'; id: string } | null
-    errors?: Array<{
-      __typename?: 'Error'
-      message?: string | null
-      path?: Array<string> | null
-    }> | null
+    errors?: Array<{ __typename?: 'Error'; message?: string | null }> | null
   } | null
 }
 
@@ -2964,6 +3176,7 @@ export type AccountQuery = {
     }
     sources?: Array<
       | { __typename?: 'MockAccount' }
+      | { __typename?: 'MxAccount' }
       | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
     > | null
     connection?: {
@@ -3142,6 +3355,7 @@ export type RoundUpsBankConnectionsListQuery = {
       }
       sources?: Array<
         | { __typename?: 'MockAccount' }
+        | { __typename?: 'MxAccount' }
         | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
       > | null
       connection?: {
@@ -3261,6 +3475,7 @@ export type RoundUpsBankConnectionsListItemQuery = {
       }
       sources?: Array<
         | { __typename?: 'MockAccount' }
+        | { __typename?: 'MxAccount' }
         | { __typename?: 'PlaidAccount'; _sourcename: AccountSourceType }
       > | null
       connection?: {
@@ -3866,11 +4081,12 @@ export const ConnectorMxInitializeDocument = gql`
       }
       success
       errors {
-        ...ErrorAttributes
+        message
+        status
+        type
       }
     }
   }
-  ${ErrorAttributesFragmentDoc}
 `
 export type ConnectorMxInitializeMutationFn = Apollo.MutationFunction<
   ConnectorMxInitializeMutation,
@@ -3926,12 +4142,13 @@ export const ConnectionMxCreateDocument = gql`
       }
       success
       errors {
-        ...ErrorAttributes
+        message
+        status
+        type
       }
     }
   }
   ${ConnectionAttributesFragmentDoc}
-  ${ErrorAttributesFragmentDoc}
 `
 export type ConnectionMxCreateMutationFn = Apollo.MutationFunction<
   ConnectionMxCreateMutation,
@@ -3981,11 +4198,10 @@ export const ConnectionDeleteDocument = gql`
         id
       }
       errors {
-        ...ErrorAttributes
+        message
       }
     }
   }
-  ${ErrorAttributesFragmentDoc}
 `
 export type ConnectionDeleteMutationFn = Apollo.MutationFunction<
   ConnectionDeleteMutation,
