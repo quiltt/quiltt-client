@@ -12,10 +12,45 @@ declare module '*.svg' {
   export { svgComponent as ReactComponent }
 }
 
-declare module 'date-fns/locale/en-US/_lib/formatDistance/index.js'
+// WICG Spec: https://wicg.github.io/ua-client-hints
 
-declare module 'date-fns/locale/en-US/_lib/formatLong/index.js'
+// https://wicg.github.io/ua-client-hints/#navigatorua
+declare interface NavigatorUA {
+  readonly userAgentData?: NavigatorUAData
+}
 
-declare module 'date-fns/locale/en-US/_lib/localize/index.js'
+// https://wicg.github.io/ua-client-hints/#dictdef-navigatoruabrandversion
+interface NavigatorUABrandVersion {
+  readonly brand: string
+  readonly version: string
+}
 
-declare module 'date-fns/locale/en-US/_lib/match/index.js'
+// https://wicg.github.io/ua-client-hints/#dictdef-uadatavalues
+interface UADataValues {
+  readonly brands?: NavigatorUABrandVersion[]
+  readonly mobile?: boolean
+  readonly platform?: string
+  readonly architecture?: string
+  readonly bitness?: string
+  readonly model?: string
+  readonly platformVersion?: string
+  readonly uaFullVersion?: string
+}
+
+// https://wicg.github.io/ua-client-hints/#dictdef-ualowentropyjson
+interface UALowEntropyJSON {
+  readonly brands: NavigatorUABrandVersion[]
+  readonly mobile: boolean
+  readonly platform: string
+}
+
+// https://wicg.github.io/ua-client-hints/#navigatoruadata
+interface NavigatorUAData extends UALowEntropyJSON {
+  getHighEntropyValues(hints: string[]): Promise<UADataValues>
+  toJSON(): UALowEntropyJSON
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+declare interface Navigator extends NavigatorUA {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+declare interface WorkerNavigator extends NavigatorUA {}

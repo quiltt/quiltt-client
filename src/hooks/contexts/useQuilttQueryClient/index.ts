@@ -1,6 +1,8 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
+import { ApolloClient, gql as gqlTag, NormalizedCacheObject } from '@apollo/client'
 
-import useApolloClient from '../../queryClients/apollo/useApolloClient'
+import useApolloClient from '../../useApolloClient'
+
+export const gql = gqlTag
 
 const useQuilttQueryClient = (): ApolloClient<NormalizedCacheObject> => {
   const client = useApolloClient()

@@ -18,6 +18,7 @@ const CONFIG: AuthConfig = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
     Authorization: '',
+    'Quiltt-Version': '',
   } as AxiosRequestHeaders,
   validateStatus: (status: number) => status < 500,
 }
@@ -25,11 +26,15 @@ const CONFIG: AuthConfig = {
 export const QuilttAuth = React.createContext<QuilttAuthContext>({} as QuilttAuthContext)
 
 const useQuilttAuth = () => {
-  const { authBase, deploymentId } = useQuilttSettings()
+  const { authBase, deploymentId, apiVersion } = useQuilttSettings()
   const [authorizationToken, setAuthorizationToken] = useLocalStorage<string | null>(
     'QUILTT_SESSION',
     null
   )
+
+  if (apiVersion) {
+    CONFIG.headers['Quiltt-Version'] = apiVersion
+  }
 
   const authEndpoint = `${authBase}/v1/users/session`
 

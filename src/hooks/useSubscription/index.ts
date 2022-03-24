@@ -1,5 +1,5 @@
 import { useSubscription as useApolloSubscruseSubscription } from '@apollo/client'
 
-const useSubscription = () => useApolloSubscruseSubscription
+const useSubscription = useApolloSubscruseSubscription
 
 export default useSubscription

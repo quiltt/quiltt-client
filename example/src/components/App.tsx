@@ -1,23 +1,26 @@
 import * as React from 'react'
-import { useQuilttAuth } from '@quiltt/client'
+import { useQuilttAuth, useQuery, gql } from '@quiltt/client'
 import Auth from './Auth'
-import NewConnectionButton from './NewConnectionButton'
-import NewMXConnectionButton from './NewMXConnectionButton'
 
 const App: React.FC = () => {
   const auth = useQuilttAuth()
   const { authorizationToken } = auth
+  const CONNECTIONS_QUERY = gql`
+    query Connections {
+      connections {
+        id
+      }
+    }
+  `
+  const { data, loading, error } = useQuery(CONNECTIONS_QUERY)
+
+  console.log({ data, loading, error })
 
   if (!authorizationToken) {
     return <Auth />
   }
 
-  return (
-    <div>
-      <NewConnectionButton />
-      <NewMXConnectionButton />
-    </div>
-  )
+  return <div>App</div>
 }
 
 export default App

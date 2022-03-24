@@ -5,10 +5,10 @@ import useBatchLink from './useBatchLink'
 import useErrorLink from './useErrorLink'
 import usePreviewLink from './usePreviewLink'
 import useSubscriptionsLink from './useSubscriptionsLink'
-import useVersionLink from './useVersionLink'
+import useUserAgentLink from './useUserAgentLink'
 
 const useQuilttLink = () => {
-  const versionLink = useVersionLink()
+  const userAgentLink = useUserAgentLink()
   const errorLink = useErrorLink()
   const authLink = useAuthLink()
   const subscriptionsLink = useSubscriptionsLink()
@@ -16,7 +16,7 @@ const useQuilttLink = () => {
   const batchLink = useBatchLink()
 
   const quilttLink = ApolloLink.from([
-    versionLink,
+    userAgentLink,
     errorLink,
     authLink,
     subscriptionsLink,

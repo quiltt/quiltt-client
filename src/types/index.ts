@@ -1,6 +1,5 @@
 export * from './auth'
 export * from './client'
 export * from './graphql'
-export * from './mxEvents'
 export * from './plaid'
 export * from './settings'

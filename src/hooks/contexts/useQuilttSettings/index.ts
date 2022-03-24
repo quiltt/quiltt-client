@@ -7,12 +7,10 @@ export const QuilttSettings = React.createContext<QuilttSettingsContext>({
   authBase: '',
   apiBase: '',
   apiVersion: '',
-  wsBase: '',
   setDeploymentId: () => {},
   setAuthBase: () => {},
   setApiBase: () => {},
   setApiVersion: () => {},
-  setWsBase: () => {},
 } as QuilttSettingsContext)
 
 const useQuilttSettings = () => {
