@@ -29,10 +29,7 @@ export type Account = {
   connection?: Maybe<ConnectionType>
   /** ID */
   id: Scalars['ID']
-  /**
-   * Last 4 numbers
-   * @deprecated Use `mask` instead.
-   */
+  /** @deprecated Use `mask` instead. */
   lastFourDigits?: Maybe<Scalars['String']>
   /** A mostly unique identifier, typically last 4 account numbers */
   mask?: Maybe<Scalars['String']>
@@ -373,6 +370,8 @@ export type ConnectionType = {
   metadata?: Maybe<Scalars['JSON']>
   /** API Connection Data Source */
   source?: Maybe<ConnectionSources>
+  /** Source type */
+  sourceType: ConnectionSourceType
   /** API Connection Data Sources */
   sources?: Maybe<Array<ConnectionSources>>
   /** Status */
@@ -1142,7 +1141,7 @@ export type PlaidAccount = {
    * Possible values: pending_automatic_verification, pending_manual_verification,
    * manually_verified, verification_expired, verification_failed
    */
-  verificationStatus: Scalars['String']
+  verificationStatus?: Maybe<Scalars['String']>
 }
 
 /** A set of fields describing the balance for an account. */
