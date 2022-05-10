@@ -7,6 +7,7 @@ type QuilttSettingsProviderProps = {
   authBase: string
   apiBase: string
   apiVersion?: string
+  children: React.ReactNode
 }
 
 const QuilttSettingsProvider: React.FC<QuilttSettingsProviderProps> = ({

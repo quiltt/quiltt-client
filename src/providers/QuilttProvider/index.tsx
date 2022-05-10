@@ -12,6 +12,7 @@ type QuilttProviderProps = {
   apiBase?: string
   apiVersion?: string
   authorizationToken?: string
+  children: React.ReactNode
 }
 
 const QuilttProvider: React.FC<QuilttProviderProps> = ({

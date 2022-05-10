@@ -4,6 +4,7 @@ import { QuilttAuth } from '../../hooks'
 
 type QuilttAuthProviderProps = {
   authorizationToken?: string
+  children: React.ReactNode
 }
 
 const QuilttAuthProvider: React.FC<QuilttAuthProviderProps> = ({
